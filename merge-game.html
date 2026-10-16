@@ -170,6 +170,7 @@ let lang='he', toastTimer=0, drag=null, selected=null, ghost=null, dragRaf=0, dr
 let state=loadState();
 function defaultState(){const b=Array(SIZE).fill(null);b[12]={type:'gen',level:1};b[6]={type:'wild',level:1};b[8]={type:'wild',level:1};b[10]={type:'wild',level:2};b[14]={type:'wild',level:2};b[16]={type:'wild',level:3};b[18]={type:'wild',level:3};b[21]={type:'wild',level:4};return {board:b,energy:100,coins:800,gems:12,xp:0,merges:0,summons:0,genUpgrades:0,claimed:{},ownedItems:[],equipped:{boardSkin:'forest',mergeFx:'leaf',companionAura:'none',generatorLook:'classic',companionCharm:'none'},boosters:{luckySummons:0,coinRush:0},lastEnergyAt:Date.now(),music:false,effects:true,lang:'he',created:Date.now()}}
  
+
 function normalizeBoardItem(item) {
   if (!item || typeof item !== 'object' || item.type !== 'wild') {
     return item;
@@ -177,15 +178,13 @@ function normalizeBoardItem(item) {
 
   const normalized = { ...item };
 
-  // רמות 6–8: ביצת דרקון ודרקונים מתפתחים.
-  if (Number(normalized.level) >= 6) {
-    const speciesId =
-      typeof normalized.speciesId === 'string' && normalized.speciesId
-        ? normalized.speciesId
-        : 'forest_dragon';
+  if (
+    typeof normalized.speciesId === 'string' &&
+    normalized.speciesId
+  ) {
+    normalized.familyId =
+      normalized.familyId || normalized.speciesId;
 
-    normalized.speciesId = speciesId;
-    normalized.familyId = normalized.familyId || speciesId;
     normalized.evolutionStage = Math.max(
       1,
       Number(normalized.level) - 5
@@ -198,6 +197,7 @@ function normalizeBoardItem(item) {
 
   return normalized;
 }
+
 
 function mergedBoardItem(item) {
   const nextLevel = Number(item.level) + 1;
