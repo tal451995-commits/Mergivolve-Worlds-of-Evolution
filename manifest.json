@@ -2,6 +2,7 @@
 {
   "name": "Mergivolve — Worlds of Evolution",
   "short_name": "Mergivolve",
+  "id": "./merge-game.html",
   "start_url": "./merge-game.html",
   "scope": "./",
   "display": "standalone",
