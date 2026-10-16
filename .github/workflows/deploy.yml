@@ -23,7 +23,9 @@ jobs:
         run: npm install
 
       - name: Build Project
-        run: npm run build
+        run: |
+          npm run build
+          cp monster-lab.html dist/monster-lab.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
