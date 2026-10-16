@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mergivolve-v1';
+const CACHE_NAME = 'mergivolve-v4';
 const ASSETS = [
   './index.html',
   './manifest.json'
