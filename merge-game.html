@@ -245,5 +245,14 @@ if(state.energy<ENERGY_MAX){const elapsed=Date.now()-(state.lastEnergyAt||Date.n
 lang=state.lang||'he';render();save();setInterval(regenerate,15000);
 })();
 </script>
+  
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(console.error);
+  });
+}
+</script>
+
 </body>
 </html>
