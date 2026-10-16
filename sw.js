@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'mergivolve-v7';
+const CACHE_NAME = 'mergivolve-v8';
 
 const ASSETS = [
   './',
@@ -10,37 +10,49 @@ const ASSETS = [
   './icon-512-1.png'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.addAll(ASSETS);
+    await self.skipWaiting();
+  })());
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key.startsWith('mergivolve-') && key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(
+      keys
+        .filter(key => key.startsWith('mergivolve-') && key !== CACHE_NAME)
+        .map(key => caches.delete(key))
+    );
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+
   if (
-    event.request.method !== 'GET' ||
-    new URL(event.request.url).origin !== self.location.origin
-  ) {
+    request.method !== 'GET' ||
+    url.origin !== self.location.origin
+  ) return;
+
+  if (url.pathname.endsWith('/manifest.json') ||
+      url.pathname.endsWith('/sw.js')) {
+    event.respondWith(fetch(request, { cache: 'no-store' }));
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request);
-    })
-  );
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(request);
+
+    if (cached) return cached;
+
+    const response = await fetch(request);
+    if (response.ok) await cache.put(request, response.clone());
+    return response;
+  })());
 });
