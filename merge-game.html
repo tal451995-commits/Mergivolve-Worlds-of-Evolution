@@ -149,7 +149,95 @@ function stopMusic(update=true){clearInterval(musicTimer);musicTimer=null;musicN
 function toggleMusic(){state.music=!state.music;if(state.music)startMusic();else stopMusic(false);save();render();if(state.music)showToast(lang==='he'?'מוזיקת היער התחילה':'Forest music started')}
 $('#board').addEventListener('pointerdown',pointerDown);window.addEventListener('pointermove',pointerMove,{passive:false});window.addEventListener('pointerup',pointerUp);window.addEventListener('pointercancel',pointerUp);
 $('#summonBtn').addEventListener('click',summonButton);$('#shopBtn').addEventListener('click',shopModal);$('#missionsBtn').addEventListener('click',missionsModal);$('#collectionBtn').addEventListener('click',collectionModal);$('#settingsBtn').addEventListener('click',settingsModal);$('#soundBtn').addEventListener('click',toggleMusic);$('#languageBtn').addEventListener('click',()=>{lang=lang==='he'?'en':'he';state.lang=lang;save();render();if($('#modalBackdrop').classList.contains('open'))settingsModal()});$('#closeModal').addEventListener('click',closeModal);$('#modalBackdrop').addEventListener('click',e=>{if(e.target===$('#modalBackdrop'))closeModal()});
-$('#modalBody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.buy){buy(b.dataset.buy);return}if(b.dataset.claim){claim(b.dataset.claim);return}if(b.dataset.setlang){lang=b.dataset.setlang;state.lang=lang;save();render();settingsModal();return}if(b.dataset.sound==='music'){toggleMusic();settingsModal();return}if(b.dataset.sound==='effects'){state.effects=!state.effects;save();settingsModal();return}if(b.dataset.test==='energy'){restoreEnergy(50);showToast(t('testEnergy'));settingsModal();return}if(b.dataset.test==='coins'){state.coins+=500;save();render();showToast(t('testCoins'));settingsModal();return}if(b.dataset.reset){if(confirm(t('resetConfirm'))){stopMusic(false);localStorage.removeItem(SAVE_KEY);state=defaultState();lang=state.lang;save();render();closeModal();showToast(lang==='he'?'המשחק אופס':'Game reset')}}});
+
+$('#modalBody').addEventListener('click',e=>{
+  const b=e.target.closest('button');
+  if(!b)return;
+
+  if(b.dataset.gemPack){
+    pendingDemoGemPack=b.dataset.gemPack;
+    const p=DEMO_GEM_PACKS[pendingDemoGemPack];
+    if(!p)return;
+    openModal(t('confirmDemoTitle'),
+      `<div class="modal-desc">${t('confirmDemoText')}</div>
+       <div class="shop-row"><div class="shop-art">💎</div>
+       <div class="shop-info"><div class="shop-title">${t(p.nameKey)}</div>
+       <div class="shop-desc">${fmt(p.gems)} ${t('crystals')} · ${p.price}</div></div></div>
+       <button class="buy-btn" data-demo-confirm="yes">${t('confirmDemoButton')}</button>
+       <button class="buy-btn" data-demo-cancel="yes">${t('cancelButton')}</button>`);
+    return;
+  }
+
+  if(b.dataset.demoConfirm){
+    const p=DEMO_GEM_PACKS[pendingDemoGemPack];
+    if(!p)return;
+    state.gems+=p.gems;
+    pendingDemoGemPack=null;
+    save();
+    render();
+    playSfx('merge');
+    showToast(t('purchaseDemoSuccess'));
+    shopModal();
+    return;
+  }
+
+  if(b.dataset.demoCancel){
+    pendingDemoGemPack=null;
+    shopModal();
+    return;
+  }
+
+  if(b.dataset.buy){buy(b.dataset.buy);return}
+  if(b.dataset.claim){claim(b.dataset.claim);return}
+  if(b.dataset.setlang){
+    lang=b.dataset.setlang;
+    state.lang=lang;
+    save();
+    render();
+    settingsModal();
+    return;
+  }
+  if(b.dataset.sound==='music'){toggleMusic();settingsModal();return}
+  if(b.dataset.sound==='effects'){
+    state.effects=!state.effects;
+    save();
+    settingsModal();
+    return;
+  }
+  if(b.dataset.test==='energy'){
+    restoreEnergy(50);
+    showToast(t('testEnergy'));
+    settingsModal();
+    return;
+  }
+  if(b.dataset.test==='coins'){
+    state.coins+=500;
+    save();
+    render();
+    showToast(t('testCoins'));
+    settingsModal();
+    return;
+  }
+  if(b.dataset.test==='gems'){
+    state.gems+=1000;
+    save();
+    render();
+    showToast(t('testGems'));
+    settingsModal();
+    return;
+  }
+  if(b.dataset.reset&&confirm(t('resetConfirm'))){
+    stopMusic(false);
+    localStorage.removeItem(SAVE_KEY);
+    state=defaultState();
+    lang=state.lang;
+    save();
+    render();
+    closeModal();
+    showToast(lang==='he'?'המשחק אופס':'Game reset');
+  }
+});
+
 let regenTick=0;function regenerate(){const now=Date.now();if(state.energy<ENERGY_MAX){const elapsed=now-(state.lastEnergyAt||now);const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS;save()}}if(++regenTick%4===0)render();}
 // Reconcile saved energy timestamp, and restore energy earned while the game was closed.
 if(state.energy<ENERGY_MAX){const elapsed=Date.now()-(state.lastEnergyAt||Date.now());const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS}}
