@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'mergivolve-v8';
+const CACHE_NAME = 'mergivolve-v9';
 
 const ASSETS = [
   './',
@@ -13,7 +13,15 @@ const ASSETS = [
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    await cache.addAll(ASSETS);
+
+    for (const asset of ASSETS) {
+      const response = await fetch(asset, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Failed to cache ${asset}: ${response.status}`);
+      }
+      await cache.put(asset, response);
+    }
+
     await self.skipWaiting();
   })());
 });
@@ -21,11 +29,16 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
+
     await Promise.all(
       keys
-        .filter(key => key.startsWith('mergivolve-') && key !== CACHE_NAME)
+        .filter(key =>
+          key.startsWith('mergivolve-') &&
+          key !== CACHE_NAME
+        )
         .map(key => caches.delete(key))
     );
+
     await self.clients.claim();
   })());
 });
@@ -37,10 +50,14 @@ self.addEventListener('fetch', event => {
   if (
     request.method !== 'GET' ||
     url.origin !== self.location.origin
-  ) return;
+  ) {
+    return;
+  }
 
-  if (url.pathname.endsWith('/manifest.json') ||
-      url.pathname.endsWith('/sw.js')) {
+  if (
+    url.pathname.endsWith('/manifest.json') ||
+    url.pathname.endsWith('/sw.js')
+  ) {
     event.respondWith(fetch(request, { cache: 'no-store' }));
     return;
   }
@@ -51,8 +68,6 @@ self.addEventListener('fetch', event => {
 
     if (cached) return cached;
 
-    const response = await fetch(request);
-    if (response.ok) await cache.put(request, response.clone());
-    return response;
+    return fetch(request);
   })());
 });
