@@ -2,7 +2,7 @@
 {
   "name": "Mergivolve — Worlds of Evolution",
   "short_name": "Mergivolve",
-  "id": "./mergivolve-app-v2",
+  "id": "./mergivolve-app-v3",
   "start_url": "./merge-game.html",
   "scope": "./",
   "display": "standalone",
