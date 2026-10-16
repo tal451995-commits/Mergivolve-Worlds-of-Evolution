@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101b26">
+  <meta name="description" content="Mergivolve Art Lab — a separate visual prototype for original evolving fantasy creatures and worlds.">
+  <title>Mergivolve — Art Lab</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
+  </script>
+</head>
+<body>
+  <main id="app" aria-label="Mergivolve Art Lab prototype">
+    <div id="scene-wrap" aria-label="Interactive 3D fantasy scene">
+      <canvas id="scene"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">M</div>
+      <div class="brand-copy">
+        <div class="eyebrow">WORLDS OF EVOLUTION</div>
+        <h1>MERGIVOLVE</h1>
+      </div>
+      <div class="lab-pill"><span class="live-dot"></span> ART LAB · SEPARATE TEST</div>
+    </header>
+
+    <section class="world-panel panel" aria-label="Choose a world">
+      <div class="section-heading"><span>EXPLORE WORLDS</span><span class="muted">01 / 05</span></div>
+      <div class="world-tabs" id="world-tabs">
+        <button class="world-tab active" data-world="verdant"><span class="tab-icon">✦</span><span>Verdant Wilds</span></button>
+        <button class="world-tab" data-world="tidal"><span class="tab-icon">≈</span><span>Tidal Kingdom</span></button>
+        <button class="world-tab" data-world="crystal"><span class="tab-icon">◇</span><span>Crystal Dunes</span></button>
+        <button class="world-tab" data-world="sky"><span class="tab-icon">☁</span><span>Skybound Isles</span></button>
+        <button class="world-tab" data-world="ancient"><span class="tab-icon">⌂</span><span>Ancient Lumina</span></button>
+      </div>
+    </section>
+
+    <div class="creature-caption" aria-live="polite">
+      <div class="creature-label"><span class="rarity-dot" id="rarity-dot"></span><span id="creature-family">EMBERKIN · DRAGON</span></div>
+      <h2 id="creature-name">Emberling</h2>
+      <p id="creature-description">A tiny spark with a brave heart.</p>
+      <div class="stage-track" aria-label="Evolution stage"><span class="stage-step current"></span><span class="stage-step"></span><span class="stage-step"></span><span class="stage-text" id="stage-label">STAGE 1 · SPROUT</span></div>
+    </div>
+
+    <section class="bottom-panel panel" aria-label="Creature selection and evolution">
+      <div class="selector-heading"><span>CHOOSE YOUR CREATURE</span><span class="muted">ORIGINAL SPECIES</span></div>
+      <div class="creature-tabs" id="creature-tabs">
+        <button class="creature-tab active" data-creature="emberkin"><span class="creature-symbol ember">✦</span><span>Emberkin</span></button>
+        <button class="creature-tab" data-creature="tideling"><span class="creature-symbol tide">≈</span><span>Tideling</span></button>
+        <button class="creature-tab" data-creature="mossling"><span class="creature-symbol moss">❧</span><span>Mossling</span></button>
+        <button class="creature-tab" data-creature="voltkit"><span class="creature-symbol volt">ϟ</span><span>Voltkit</span></button>
+        <button class="creature-tab" data-creature="crystalis"><span class="creature-symbol crystal">◇</span><span>Crystalis</span></button>
+        <button class="creature-tab" data-creature="umbrawisp"><span class="creature-symbol umbra">☾</span><span>Umbrawisp</span></button>
+      </div>
+      <div class="action-row">
+        <div class="evolution-note"><span class="sparkle">✧</span><span><b>Every merge brings change</b><small>Shape · color · aura · scale</small></span></div>
+        <button id="evolve-button" class="evolve-button"><span class="evolve-icon">✦</span><span><b>EVOLVE</b><small id="evolve-subtitle">Reach next form</small></span><span class="arrow">↗</span></button>
+      </div>
+      <div class="footnote">VISUAL PROTOTYPE ONLY · NOT CONNECTED TO YOUR SAVE OR MERGE BOARD</div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <noscript>This visual prototype needs JavaScript enabled.</noscript>
+  </main>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
