@@ -1,23 +1,52 @@
-
 /*
- * Mergivolve Creature Sprite Adapter
- * Connects creature PNG assets to the existing merge board.
- * Keeps the existing merge/game logic untouched.
+ * Mergivolve — JPG Creature Image Adapter
+ * Uses the existing JPG files in the repository root.
+ * Keeps the original merge logic unchanged.
  */
 (() => {
   'use strict';
 
-  const ASSET_BASE = './assets/creatures/';
+  // merge-game.html is in the repository root.
+  // Therefore these image URLs are relative to that page.
+  const IMAGE_BASE = './';
 
+  // TEMPORARY VISUAL TEST:
+  // These are existing images in the repository.
+  // This mapping tests image loading; it is not yet
+  // a complete character-specific evolution system.
   const CREATURES_BY_LEVEL = {
-    1: { file: 'sprig.png', alt: 'Sprig — דרקון היער' },
-    2: { file: 'emberflit.png', alt: 'Emberflit — לטאת האש' },
-    3: { file: 'luma.png', alt: 'Luma — חד־קרן האור' },
-    4: { file: 'mossy.png', alt: 'Mossy — שומר האבן' },
-    5: { file: 'bubbles.png', alt: 'Bubbles — יצור המעמקים' },
-    6: { file: 'nocti.png', alt: 'Nocti — שועל הירח' },
-    7: { file: 'volt.png', alt: 'Volt — דרקון הברק' },
-    8: { file: 'prisma.png', alt: 'Prisma — דרקון הגביש' }
+    1: {
+      file: 'cozy_crystal_dragon.jpg',
+      alt: 'Cozy Crystal Dragon'
+    },
+    2: {
+      file: 'forest_hatchling.jpg',
+      alt: 'Forest Hatchling'
+    },
+    3: {
+      file: 'red_hatchling.jpg',
+      alt: 'Red Hatchling'
+    },
+    4: {
+      file: 'volcanic_baby_dino.jpg',
+      alt: 'Volcanic Baby Dino'
+    },
+    5: {
+      file: 'ember_heart.jpg',
+      alt: 'Ember Heart'
+    },
+    6: {
+      file: 'coral_sentinel.jpg',
+      alt: 'Coral Sentinel'
+    },
+    7: {
+      file: 'geode_dragon.jpg',
+      alt: 'Geode Dragon'
+    },
+    8: {
+      file: 'celestial_wyrm.jpg',
+      alt: 'Celestial Wyrm'
+    }
   };
 
   const style = document.createElement('style');
@@ -30,13 +59,19 @@
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
-      filter: drop-shadow(0 2px 2px rgba(25,49,34,.13));
+      filter: drop-shadow(0 2px 3px rgba(25,49,34,.18));
       animation: creatureEnter .22s ease-out both;
     }
 
     @keyframes creatureEnter {
-      from { transform: translateY(3px) scale(.94); opacity: .75; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
+      from {
+        transform: translateY(3px) scale(.94);
+        opacity: .75;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -48,11 +83,14 @@
         const level = Number(node.dataset.level || 1);
         const creature = CREATURES_BY_LEVEL[level];
 
+        if (!creature) return;
+
         if (
-          !creature ||
           node.dataset.creatureSprite === creature.file ||
           node.dataset.creatureError === creature.file
-        ) return;
+        ) {
+          return;
+        }
 
         const svg = node.querySelector('svg');
         if (!svg) return;
@@ -61,16 +99,27 @@
         const img = document.createElement('img');
 
         img.className = 'creature-portrait';
-        img.src = ASSET_BASE + creature.file;
+        img.src = IMAGE_BASE + creature.file;
         img.alt = creature.alt;
         img.draggable = false;
         img.decoding = 'async';
         img.loading = 'eager';
 
+        img.addEventListener('load', () => {
+          delete node.dataset.creatureError;
+        }, { once: true });
+
         img.addEventListener('error', () => {
-          if (img.isConnected) img.replaceWith(fallbackSvg);
+          if (img.isConnected) {
+            img.replaceWith(fallbackSvg);
+          }
+
           delete node.dataset.creatureSprite;
           node.dataset.creatureError = creature.file;
+          console.warn(
+            '[Mergivolve] Could not load creature image:',
+            img.src
+          );
         }, { once: true });
 
         svg.replaceWith(img);
@@ -80,10 +129,13 @@
   }
 
   function start() {
-    enhanceBoard();
-
     const board = document.querySelector('#board');
-    if (!board) return;
+    if (!board) {
+      console.warn('[Mergivolve] Board not found.');
+      return;
+    }
+
+    enhanceBoard();
 
     const observer = new MutationObserver(enhanceBoard);
     observer.observe(board, {
@@ -95,7 +147,9 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
+    document.addEventListener('DOMContentLoaded', start, {
+      once: true
+    });
   } else {
     start();
   }
