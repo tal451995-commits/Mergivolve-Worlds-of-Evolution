@@ -1,13 +1,13 @@
 
-const CACHE_NAME = 'mergivolve-v5';
+const CACHE_NAME = 'mergivolve-v6';
 
 const ASSETS = [
   './',
   './index.html',
   './merge-game.html',
   './manifest.json',
-  './icon-192.svg',
-  './icon-512.svg'
+  './icon-192-1.png',
+  './icon-512-1.png'
 ];
 
 self.addEventListener('install', (event) => {
