@@ -1,8 +1,9 @@
+
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ animation-engine-development, main ]
+    branches: [animation-engine-development, main]
 
 permissions:
   contents: write
@@ -10,22 +11,17 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
+      - name: Prepare site files
         run: |
-          npm run build
-          cp monster-lab.html dist/monster-lab.html
+          mkdir -p dist
+          cp ./*.html dist/
+          cp -R public/. dist/
+          cp manifest.json sw.js dist/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
