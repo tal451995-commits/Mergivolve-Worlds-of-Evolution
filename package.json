@@ -1,0 +1,15 @@
+{
+  "name": "mergivolve",
+  "version": "1.0.0",
+  "description": "Mergivolve — Worlds of Evolution",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["game", "merge", "evolution", "pwa"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
