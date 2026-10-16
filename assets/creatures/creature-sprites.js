@@ -14,7 +14,7 @@
   // These are existing images in the repository.
   // This mapping tests image loading; it is not yet
   // a complete character-specific evolution system.
-  const CREATURES_BY_LEVEL = {};
+  /* const CREATURES_BY_LEVEL = {};
     1: {
       file: 'cozy_crystal_dragon.jpg',
       alt: 'Cozy Crystal Dragon'
@@ -47,7 +47,7 @@
       file: 'celestial_wyrm.jpg',
       alt: 'Celestial Wyrm'
     }
-  };
+    */ const CREATURES_BY_LEVEL = {};
 
   const style = document.createElement('style');
   style.textContent = `
