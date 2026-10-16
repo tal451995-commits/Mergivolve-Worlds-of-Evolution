@@ -1,0 +1,27 @@
+Mergivolve-Worlds-of-Evolution/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── public/
+│   └── manifest.json
+├── src/
+│   ├── animation/
+│   │   ├── AnimationManager.js
+│   │   ├── EvolutionEffects.js
+│   │   ├── ItemAnimations.js
+│   │   ├── MergeEffects.js
+│   │   └── ParticleEffects.js
+│   ├── data/
+│   │   └── items.js
+│   ├── game/
+│   │   ├── GameScene.js
+│   │   └── MergeLogic.js
+│   ├── input/
+│   │   └── DragController.js
+│   ├── ui/
+│   │   └── Interface.js
+│   ├── main.js
+│   └── style.css
+├── index.html
+├── package.json
+└── vite.config.js
