@@ -199,7 +199,27 @@ function normalizeBoardItem(item) {
 }
 
 
+
 function mergedBoardItem(item) {
+  const nextLevel = Number(item.level) + 1;
+  const next = {
+    ...item,
+    type: item.type,
+    level: nextLevel
+  };
+
+  if (item.type === 'wild' && item.speciesId) {
+    next.familyId = item.familyId || item.speciesId;
+    next.evolutionStage = Math.max(1, nextLevel - 5);
+  } else {
+    delete next.speciesId;
+    delete next.familyId;
+    delete next.evolutionStage;
+  }
+
+  return next;
+}
+
   const nextLevel = Number(item.level) + 1;
   const next = {
     ...item,
