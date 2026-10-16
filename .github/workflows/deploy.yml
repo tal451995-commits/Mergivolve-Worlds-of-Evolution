@@ -22,7 +22,7 @@ jobs:
           cp ./*.html dist/
           cp -R public/. dist/
           cp manifest.json sw.js dist/
-
+cp icon-192-1.png icon-512-1.png dist/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
