@@ -208,8 +208,30 @@ function mergedBoardItem(item) {
     level: nextLevel
   };
 
-  if (item.type === 'wild' && item.speciesId) {
-    next.familyId = item.familyId || item.speciesId;
+  if (item.type !== 'wild') {
+    delete next.speciesId;
+    delete next.familyId;
+    delete next.evolutionStage;
+    return next;
+  }
+
+  const catalog = window.MERGIVOLVE_SPECIES || {};
+  let speciesId = item.speciesId;
+
+  if (
+    !speciesId &&
+    nextLevel === 7 &&
+    Object.keys(catalog).length > 0
+  ) {
+    const speciesIds = Object.keys(catalog);
+    speciesId =
+      speciesIds[Math.floor(Math.random() * speciesIds.length)];
+  }
+
+  if (speciesId && catalog[speciesId]) {
+    next.speciesId = speciesId;
+    next.familyId =
+      item.familyId || catalog[speciesId].familyId || speciesId;
     next.evolutionStage = Math.max(1, nextLevel - 5);
   } else {
     delete next.speciesId;
@@ -219,7 +241,6 @@ function mergedBoardItem(item) {
 
   return next;
 }
-
   
 
 function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?normalizeBoardItem(x):null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
