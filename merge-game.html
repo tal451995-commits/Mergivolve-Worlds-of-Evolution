@@ -167,7 +167,62 @@ const TEXT={
 let lang='he', toastTimer=0, drag=null, selected=null, ghost=null, dragRaf=0, dragTarget=null, audioCtx=null, musicNodes=[], musicTimer=null, lastMergeAt=0, mergeCombo=0;
 let state=loadState();
 function defaultState(){const b=Array(SIZE).fill(null);b[12]={type:'gen',level:1};b[6]={type:'wild',level:1};b[8]={type:'wild',level:1};b[10]={type:'wild',level:2};b[14]={type:'wild',level:2};b[16]={type:'wild',level:3};b[18]={type:'wild',level:3};b[21]={type:'wild',level:4};return {board:b,energy:100,coins:800,gems:12,xp:0,merges:0,summons:0,genUpgrades:0,claimed:{},ownedItems:[],equipped:{boardSkin:'forest',mergeFx:'leaf',companionAura:'none',generatorLook:'classic',companionCharm:'none'},boosters:{luckySummons:0,coinRush:0},lastEnergyAt:Date.now(),music:false,effects:true,lang:'he',created:Date.now()}}
-function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?x:null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
+ 
+function normalizeBoardItem(item) {
+  if (!item || typeof item !== 'object' || item.type !== 'wild') {
+    return item;
+  }
+
+  const normalized = { ...item };
+
+  // רמות 6–8: ביצת דרקון ודרקונים מתפתחים.
+  if (Number(normalized.level) >= 6) {
+    const speciesId =
+      typeof normalized.speciesId === 'string' && normalized.speciesId
+        ? normalized.speciesId
+        : 'forest_dragon';
+
+    normalized.speciesId = speciesId;
+    normalized.familyId = normalized.familyId || speciesId;
+    normalized.evolutionStage = Math.max(
+      1,
+      Number(normalized.level) - 5
+    );
+  } else {
+    delete normalized.speciesId;
+    delete normalized.familyId;
+    delete normalized.evolutionStage;
+  }
+
+  return normalized;
+}
+
+function mergedBoardItem(item) {
+  const nextLevel = Number(item.level) + 1;
+  const next = {
+    ...item,
+    type: item.type,
+    level: nextLevel
+  };
+
+  if (item.type === 'wild') {
+    if (nextLevel >= 6) {
+      const speciesId = item.speciesId || 'forest_dragon';
+
+      next.speciesId = speciesId;
+      next.familyId = item.familyId || speciesId;
+      next.evolutionStage = Math.max(1, nextLevel - 5);
+    } else {
+      delete next.speciesId;
+      delete next.familyId;
+      delete next.evolutionStage;
+    }
+  }
+
+  return next;
+}
+
+function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?normalizeBoardItem(x):null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
 function save(){try{state.lastEnergyAt=state.lastEnergyAt||Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
 function t(key){return (TEXT[lang]&&TEXT[lang][key])||TEXT.en[key]||key}
 function storeText(key){return (STORE_WORDS[lang]&&STORE_WORDS[lang][key])||STORE_WORDS.en[key]||key}
