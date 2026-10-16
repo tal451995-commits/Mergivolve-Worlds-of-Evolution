@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mergivolve — Worlds of Evolution</title>
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#062e2c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,8 +20,8 @@
             touch-action: auto;
             user-select: none;
             -webkit-user-select: none;
-            background: #0f172a;
-            color: #f8fafc;
+            background: #041f1e;
+            color: #f0fdf4;
             overflow-x: hidden;
             margin: 0;
             padding: 0;
@@ -34,18 +34,19 @@
             touch-action: none;
         }
         
+        /* True Drag Item: follows finger naturally without box or dark background */
         .dragging-item {
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%) scale(1.15);
+            z-index: 99999;
+            transform: translate(-50%, -60%) scale(1.18);
             transition: transform 0.05s ease;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 18px 25px rgba(0, 0, 0, 0.6));
         }
 
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(2deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
         }
         .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
 
@@ -57,37 +58,37 @@
         .animate-pop { animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { background: rgba(20, 184, 166, 0.4); border-radius: 10px; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-start min-h-screen bg-slate-950 text-slate-100">
 
-    <div class="w-full max-w-md min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-teal-950 to-slate-900 text-slate-100 relative shadow-2xl overflow-hidden pb-24">
+    <div class="w-full max-w-md min-h-screen flex flex-col bg-gradient-to-b from-[#063b38] via-[#042422] to-[#021514] text-slate-100 relative shadow-2xl overflow-hidden pb-24">
 
         <!-- HEADER BAR -->
-        <header class="w-full bg-slate-900/90 backdrop-blur-md border-b border-teal-500/30 px-3 py-2.5 flex justify-between items-center sticky top-0 z-40 shadow-md">
+        <header class="w-full bg-[#042422]/95 backdrop-blur-md border-b border-teal-500/30 px-3 py-2.5 flex justify-between items-center sticky top-0 z-40 shadow-md">
             <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchScreen('worldmap')">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-400 flex items-center justify-center text-white shadow-lg text-xl font-bold border border-teal-300/40">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg text-xl font-bold border border-teal-300/40">
                     🌿
                 </div>
                 <div class="flex flex-col">
-                    <span class="font-extrabold text-sm text-teal-300 leading-tight">Mergivolve</span>
-                    <span id="header-world-name" class="text-[10px] text-teal-400/80 font-bold">עולם 1: אחו קסום</span>
+                    <span class="font-extrabold text-sm text-teal-200 leading-tight">Mergivolve</span>
+                    <span id="header-world-name" class="text-[10px] text-teal-400 font-bold">עולם 1: אחו קסום</span>
                 </div>
             </div>
 
             <!-- CURRENCY & ENERGY COUNTERS -->
             <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30 shadow-xs">
+                <div class="flex items-center gap-1 bg-amber-500/15 px-2.5 py-1 rounded-full border border-amber-500/30 shadow-xs">
                     <span class="text-xs">🪙</span>
                     <span id="coins-val" class="font-bold text-amber-300 text-xs">500</span>
                 </div>
-                <div class="flex items-center gap-1 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/30 shadow-xs">
+                <div class="flex items-center gap-1 bg-cyan-500/15 px-2.5 py-1 rounded-full border border-cyan-500/30 shadow-xs">
                     <span class="text-xs">💎</span>
                     <span id="diamonds-val" class="font-bold text-cyan-300 text-xs">50</span>
                 </div>
-                <button onclick="openModal('settings-modal')" class="bg-slate-800 hover:bg-slate-700 text-teal-300 p-2 rounded-xl text-xs font-bold transition shadow-xs border border-teal-500/20">
+                <button onclick="openModal('settings-modal')" class="bg-teal-900/60 hover:bg-teal-800 text-teal-200 p-2 rounded-xl text-xs font-bold transition shadow-xs border border-teal-500/30">
                     ⚙️
                 </button>
             </div>
@@ -97,47 +98,54 @@
         <main class="flex-1 flex flex-col p-3 gap-3 overflow-y-auto">
 
             <!-- ========================================== -->
-            <!-- SCREEN 1: LIVING FANTASY WORLD MAP -->
+            <!-- SCREEN 1: RICH ILLUSTRATED FANTASY WORLD MAP -->
             <!-- ========================================== -->
             <div id="screen-worldmap" class="w-full flex flex-col gap-3 animate-pop">
                 
                 <!-- WORLD HERO CANVA / ILLUSTRATED ENVIRONMENT -->
-                <div class="w-full bg-gradient-to-b from-teal-900 via-emerald-950 to-slate-900 rounded-3xl p-4 shadow-xl border border-teal-500/40 relative overflow-hidden min-h-[270px] flex flex-col justify-between">
+                <div class="w-full bg-gradient-to-b from-[#0a4d48] via-[#05322e] to-[#03201e] rounded-3xl p-4 shadow-xl border border-teal-500/40 relative overflow-hidden min-h-[320px] flex flex-col justify-between">
                     
-                    <!-- Environment SVG Background -->
-                    <div class="absolute inset-0 pointer-events-none opacity-30">
-                        <svg class="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
-                            <path d="M0,140 Q80,110 160,150 T300,130 L300,200 L0,200 Z" fill="#0d9488"/>
-                            <path d="M0,170 Q90,140 180,180 T300,160 L300,200 L0,200 Z" fill="#047857"/>
-                            <circle cx="60" cy="50" r="30" fill="#fef08a" opacity="0.4"/>
+                    <!-- Illustrated SVG Landscape Background -->
+                    <div class="absolute inset-0 pointer-events-none">
+                        <svg class="w-full h-full opacity-60" viewBox="0 0 400 300" preserveAspectRatio="none">
+                            <!-- Distant mountains -->
+                            <path d="M0,150 Q100,80 200,130 T400,100 L400,300 L0,300 Z" fill="#0d3b35"/>
+                            <path d="M0,180 Q150,110 300,160 T400,140 L400,300 L0,300 Z" fill="#114e44"/>
+                            <!-- Rivers and glowing paths -->
+                            <path d="M120,300 Q180,200 250,300" fill="none" stroke="#2dd4bf" stroke-width="6" opacity="0.4"/>
+                            <!-- Hills and forests -->
+                            <path d="M0,220 Q80,180 160,230 T400,200 L400,300 L0,300 Z" fill="#065f54"/>
+                            <circle cx="80" cy="190" r="18" fill="#047857"/>
+                            <circle cx="320" cy="210" r="22" fill="#047857"/>
+                            <circle cx="200" cy="240" r="25" fill="#022c22"/>
                         </svg>
                     </div>
 
-                    <!-- Floating Animated Elements -->
-                    <div class="absolute top-6 left-6 animate-float pointer-events-none">
-                        <div class="w-10 h-10 bg-emerald-500/20 backdrop-blur rounded-2xl flex items-center justify-center text-xl shadow-md border border-emerald-400/40">✨</div>
+                    <!-- Floating Animated World Elements -->
+                    <div class="absolute top-8 left-8 animate-float pointer-events-none">
+                        <div class="w-12 h-12 bg-teal-500/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-teal-300/40">✨</div>
                     </div>
-                    <div class="absolute top-12 right-8 animate-float pointer-events-none" style="animation-delay: 1.5s;">
-                        <div class="w-12 h-12 bg-amber-500/20 backdrop-blur rounded-2xl flex items-center justify-center text-2xl shadow-md border border-amber-400/40">🐉</div>
+                    <div class="absolute top-14 right-10 animate-float pointer-events-none" style="animation-delay: 1.5s;">
+                        <div class="w-14 h-14 bg-amber-500/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-lg border border-amber-300/40">🐉</div>
                     </div>
 
                     <!-- World Header Card -->
-                    <div class="z-10 bg-slate-900/80 backdrop-blur-md p-3.5 rounded-2xl border border-teal-500/30 shadow-md flex justify-between items-center">
+                    <div class="z-10 bg-[#042422]/90 backdrop-blur-md p-3.5 rounded-2xl border border-teal-500/40 shadow-lg flex justify-between items-center">
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-extrabold text-teal-400 uppercase tracking-wider">עולם פנטזיה חי / Living Realm</span>
+                            <span class="text-[10px] font-extrabold text-teal-300 uppercase tracking-wider">עולם פנטזיה חי / Living Realm</span>
                             <h2 class="text-base font-extrabold text-slate-100">אי האבולוציה הקסום</h2>
-                            <p class="text-[11px] text-slate-400">חקור אזורים, אסוף יצורים ושקם את טבע האי.</p>
+                            <p class="text-[11px] text-teal-100/70">חקור אזורים, אסוף יצורים ושקם את טבע האי.</p>
                         </div>
-                        <button onclick="switchScreen('sanctuary')" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 border border-teal-400/30">
+                        <button onclick="switchScreen('sanctuary')" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 border border-teal-400/40">
                             <span>🐾</span>
                             <span>מקלט</span>
                         </button>
                     </div>
 
                     <!-- Quick Action Button to Merge Board -->
-                    <div class="z-10 mt-4">
-                        <button onclick="switchScreen('merge')" class="w-full bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 hover:from-teal-400 hover:to-emerald-400 text-slate-950 py-3.5 px-4 rounded-2xl font-extrabold text-sm shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 border border-teal-200">
-                            <span class="text-lg">✨</span>
+                    <div class="z-10 mt-6">
+                        <button onclick="switchScreen('merge')" class="w-full bg-gradient-to-r from-teal-400 via-emerald-400 to-teal-500 hover:from-teal-300 hover:to-emerald-300 text-slate-950 py-4 px-4 rounded-2xl font-extrabold text-base shadow-2xl transition transform active:scale-95 flex items-center justify-center gap-2 border border-teal-200">
+                            <span class="text-xl">✨</span>
                             <span>הכנס ללוח המיזוג האינטראקטיבי</span>
                         </button>
                     </div>
@@ -148,33 +156,33 @@
                     <h3 class="text-xs font-extrabold text-teal-300 px-1 uppercase tracking-wider">אזורי האי והתקדמות / Regions</h3>
 
                     <!-- Region 1: Active -->
-                    <div onclick="switchScreen('merge')" class="w-full bg-slate-900/80 backdrop-blur border-2 border-teal-500/60 rounded-2xl p-3.5 shadow-md flex items-center justify-between cursor-pointer hover:bg-slate-800/80 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 bg-emerald-950 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-500/40">
+                    <div onclick="switchScreen('merge')" class="w-full bg-[#063330]/90 backdrop-blur-md border-2 border-teal-400/70 rounded-2xl p-4 shadow-md flex items-center justify-between cursor-pointer hover:bg-[#08423e] transition">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 bg-emerald-950 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-400/50">
                                 🌿
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-[10px] text-teal-400 font-bold">אזור 1 / Active Region</span>
+                                <span class="text-[10px] text-teal-300 font-bold">אזור 1 / Active Region</span>
                                 <h4 class="font-bold text-sm text-slate-100">האחו הקסום והזוהר</h4>
-                                <span class="text-[11px] text-slate-400">נבטים קדומים, שיחים וביצי דרקון.</span>
+                                <span class="text-[11px] text-teal-100/70">נבטים קדומים, שיחים וביצי דרקון.</span>
                             </div>
                         </div>
-                        <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-xl border border-emerald-500/30">פתוח</span>
+                        <span class="bg-emerald-500/25 text-emerald-300 text-[10px] font-bold px-3 py-1.5 rounded-xl border border-emerald-400/40">פתוח</span>
                     </div>
 
                     <!-- Region 2: Swamp -->
-                    <div class="w-full bg-slate-900/40 backdrop-blur border border-slate-800 rounded-2xl p-3.5 shadow-xs flex items-center justify-between opacity-75">
-                        <div class="flex items-center gap-3">
+                    <div class="w-full bg-[#042422]/60 backdrop-blur border border-teal-900/50 rounded-2xl p-4 shadow-xs flex items-center justify-between opacity-80">
+                        <div class="flex items-center gap-3.5">
                             <div class="w-12 h-12 bg-cyan-950/60 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-cyan-800/40">
                                 🍄
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-[10px] text-cyan-400 font-bold">אזור 2 / Swamp Region</span>
+                                <span class="text-[10px] text-cyan-300 font-bold">אזור 2 / Swamp Region</span>
                                 <h4 class="font-bold text-sm text-slate-300">הביצה המסתורית והפטריות</h4>
                                 <span class="text-[11px] text-slate-500">פטריות מכושפות ויצורי מים.</span>
                             </div>
                         </div>
-                        <span class="bg-slate-800 text-slate-400 text-[10px] font-bold px-2.5 py-1 rounded-xl border border-slate-700">🔒 דורש רמה 5</span>
+                        <span class="bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1.5 rounded-xl border border-slate-700">🔒 דורש רמה 5</span>
                     </div>
                 </div>
             </div>
@@ -196,62 +204,61 @@
                     </button>
                 </div>
 
-                <!-- GENERATORS & MULTIPLIERS PANEL (SVG ILLUSTRATED GENERATOR) -->
-                <div class="w-full bg-slate-900/90 backdrop-blur border border-teal-500/30 rounded-2xl p-3 flex flex-col gap-2.5 shadow-md">
+                <!-- GENERATORS & MULTIPLIERS PANEL -->
+                <div class="w-full bg-[#042422]/90 backdrop-blur border border-teal-500/40 rounded-2xl p-3 flex flex-col gap-2.5 shadow-md">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <!-- Illustrated SVG Generator Container -->
                             <div id="generator-svg-container" class="w-14 h-14 bg-gradient-to-br from-teal-900 to-emerald-900 rounded-2xl flex items-center justify-center shadow-inner border border-teal-400/50 shrink-0 p-1">
-                                <!-- SVG injected dynamically based on level -->
+                                <!-- Illustrated SVG Generator -->
                             </div>
                             <div class="flex flex-col">
                                 <span id="gen-name" class="font-bold text-sm text-slate-100">שיח מכושף רמה 1</span>
-                                <span id="gen-info" class="text-xs text-teal-400 font-semibold">עלות אנרגיה: 5 ⚡</span>
+                                <span id="gen-info" class="text-xs text-teal-300 font-semibold">עלות אנרגיה: 5 ⚡</span>
                             </div>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="openModal('generator-modal')" class="bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/30 px-3 py-2 rounded-xl text-xs font-bold flex flex-col items-center shadow-xs transition">
+                            <button onclick="openModal('generator-modal')" class="bg-teal-950 hover:bg-teal-900 text-teal-200 border border-teal-500/40 px-3 py-2 rounded-xl text-xs font-bold flex flex-col items-center shadow-xs transition">
                                 <span>⬆️</span>
                                 <span>שדרוג</span>
                             </button>
-                            <button onclick="produceItem()" id="produce-btn" class="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold text-sm shadow-md flex items-center gap-1 transition transform active:scale-95 border border-teal-300">
+                            <button onclick="produceItem()" id="produce-btn" class="bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 px-4 py-2 rounded-xl font-extrabold text-sm shadow-md flex items-center gap-1 transition transform active:scale-95 border border-teal-200">
                                 <span>✨</span>
                                 <span id="txt-produce">יצור</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- MULTIPLIERS CONTROL: x1, x2, x4, x8 -->
-                    <div class="flex justify-between items-center bg-slate-950/60 p-2 rounded-xl border border-teal-500/20 text-xs font-bold">
+                    <!-- MULTIPLIERS CONTROL -->
+                    <div class="flex justify-between items-center bg-[#021817] p-2 rounded-xl border border-teal-500/20 text-xs font-bold">
                         <span class="text-teal-300 text-[11px]">מכפיל ייצור:</span>
                         <div class="flex gap-1.5">
                             <button onclick="setMultiplier(1)" id="mult-1" class="px-2.5 py-1 rounded-lg bg-teal-600 text-white shadow-xs">×1</button>
-                            <button onclick="setMultiplier(2)" id="mult-2" class="px-2.5 py-1 rounded-lg bg-slate-800 text-teal-300 border border-teal-500/30 shadow-xs">×2</button>
-                            <button onclick="setMultiplier(4)" id="mult-4" class="px-2.5 py-1 rounded-lg bg-slate-800 text-teal-300 border border-teal-500/30 shadow-xs">×4</button>
-                            <button onclick="setMultiplier(8)" id="mult-8" class="px-2.5 py-1 rounded-lg bg-slate-800 text-teal-300 border border-teal-500/30 shadow-xs">×8</button>
+                            <button onclick="setMultiplier(2)" id="mult-2" class="px-2.5 py-1 rounded-lg bg-[#042422] text-teal-300 border border-teal-500/30 shadow-xs">×2</button>
+                            <button onclick="setMultiplier(4)" id="mult-4" class="px-2.5 py-1 rounded-lg bg-[#042422] text-teal-300 border border-teal-500/30 shadow-xs">×4</button>
+                            <button onclick="setMultiplier(8)" id="mult-8" class="px-2.5 py-1 rounded-lg bg-[#042422] text-teal-300 border border-teal-500/30 shadow-xs">×8</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- ENERGY STATUS BAR -->
-                <div class="w-full bg-slate-900/80 border border-teal-500/30 rounded-xl px-3 py-2 flex justify-between items-center text-xs font-bold text-slate-300 shadow-xs">
+                <div class="w-full bg-[#042422]/90 border border-teal-500/30 rounded-xl px-3 py-2 flex justify-between items-center text-xs font-bold text-teal-100 shadow-xs">
                     <div class="flex items-center gap-2">
                         <span>⚡ אנרגיה:</span>
-                        <span id="energy-val" class="text-teal-400 font-extrabold">100/100</span>
+                        <span id="energy-val" class="text-teal-300 font-extrabold">100/100</span>
                     </div>
-                    <button onclick="switchScreen('worldmap')" class="text-teal-400 hover:underline">🗺️ חזור למפה</button>
+                    <button onclick="switchScreen('worldmap')" class="text-teal-300 hover:underline">🗺️ חזור למפה</button>
                 </div>
 
                 <!-- MERGE BOARD GRID (5x5) -->
-                <div class="w-full bg-slate-900/90 backdrop-blur border-2 border-teal-500/40 rounded-2xl p-2 shadow-2xl">
+                <div class="w-full bg-[#042422]/90 backdrop-blur border-2 border-teal-500/40 rounded-2xl p-2 shadow-2xl">
                     <div id="merge-grid" class="grid grid-cols-5 gap-1.5 w-full">
-                        <!-- Cells dynamically generated by JS -->
+                        <!-- Cells dynamically generated -->
                     </div>
                 </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SCREEN 3: SANCTUARY & CREATURE HABITAT -->
+            <!-- SCREEN 3: SANCTUARY -->
             <!-- ========================================== -->
             <div id="screen-sanctuary" class="w-full hidden flex-col gap-3 animate-pop">
                 <div class="w-full bg-gradient-to-r from-emerald-700 to-teal-700 text-white rounded-2xl p-4 shadow-md flex justify-between items-center border border-emerald-500/40">
@@ -261,7 +268,7 @@
                     </div>
                     <button onclick="switchScreen('worldmap')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
                 </div>
-                <div class="bg-slate-900/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                <div class="bg-[#042422]/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
                     <div id="sanctuary-monsters-list" class="grid grid-cols-2 gap-3">
                         <!-- Populated dynamically -->
                     </div>
@@ -269,42 +276,60 @@
             </div>
 
             <!-- ========================================== -->
-            <!-- SCREEN 4: IN-GAME SHOP -->
+            <!-- SCREEN 4: IN-GAME SHOP & DEV MODE -->
             <!-- ========================================== -->
             <div id="screen-shop" class="w-full hidden flex-col gap-3 animate-pop">
                 <div class="w-full bg-gradient-to-r from-cyan-700 to-teal-700 text-white rounded-2xl p-4 shadow-md flex justify-between items-center border border-cyan-500/40">
                     <div class="flex flex-col">
                         <h2 class="text-lg font-bold">🛒 חנות הקסמים והמשאבים</h2>
-                        <p class="text-xs text-cyan-200 mt-1">רכוש חבילות יהלומים ואנרגיה במחירים הוגנים.</p>
+                        <p class="text-xs text-cyan-200 mt-1">רכוש חבילות יהלומים ואנרגיה.</p>
                     </div>
                     <button onclick="switchScreen('worldmap')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
                 </div>
                 
-                <div class="bg-slate-900/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
-                    <h3 class="font-bold text-sm text-cyan-300">חבילות יהלומים (רכישה ביהלומים)</h3>
+                <!-- DEVELOPER FREE TESTING MODE PANEL -->
+                <div class="w-full bg-amber-950/40 backdrop-blur border-2 border-amber-500/60 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-amber-300">🛠️ מצב מפתחים (בדיקות חינמיות)</h3>
+                        <span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md border border-amber-500/40">פעיל</span>
+                    </div>
+                    <p class="text-[11px] text-amber-200/80">מצב זה מאפשר לך להוסיף לעצמך משאבים בחינם לצורכי בדיקת כל המשחק והשדרוגים.</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="devAddDiamonds(150)" class="bg-amber-600 hover:bg-amber-500 text-white py-2 px-2 rounded-xl text-xs font-bold shadow-xs transition">💎 +150</button>
+                        <button onclick="devAddDiamonds(500)" class="bg-amber-600 hover:bg-amber-500 text-white py-2 px-2 rounded-xl text-xs font-bold shadow-xs transition">💎 +500</button>
+                        <button onclick="devAddDiamonds(1000)" class="bg-amber-600 hover:bg-amber-500 text-white py-2 px-2 rounded-xl text-xs font-bold shadow-xs transition">💎 +1000</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <button onclick="devAddCoins(1000)" class="bg-amber-700 hover:bg-amber-600 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs transition">🪙 +1000 מטבעות</button>
+                        <button onclick="devFillEnergy()" class="bg-teal-700 hover:bg-teal-600 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs transition">⚡ מלא אנרגיה</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#042422]/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                    <h3 class="font-bold text-sm text-cyan-300">חבילות יהלומים רגילות</h3>
                     <div class="grid grid-cols-2 gap-2.5">
-                        <button onclick="buyDiamondPack(100, 50)" class="bg-slate-800 hover:bg-slate-700 border border-cyan-500/30 p-3 rounded-2xl flex flex-col items-center shadow-xs transition text-center">
+                        <button onclick="buyDiamondPack(100, 50)" class="bg-[#063330] hover:bg-[#08423e] border border-cyan-500/30 p-3 rounded-2xl flex flex-col items-center shadow-xs transition text-center">
                             <span class="text-lg font-bold text-cyan-200">💎 100</span>
                             <span class="text-[10px] text-amber-300 mt-1">עלות: 50 מטבעות 🪙</span>
                         </button>
-                        <button onclick="buyDiamondPack(500, 200)" class="bg-slate-800 hover:bg-slate-700 border border-cyan-500/30 p-3 rounded-2xl flex flex-col items-center shadow-xs transition text-center">
+                        <button onclick="buyDiamondPack(500, 200)" class="bg-[#063330] hover:bg-[#08423e] border border-cyan-500/30 p-3 rounded-2xl flex flex-col items-center shadow-xs transition text-center">
                             <span class="text-lg font-bold text-cyan-200">💎 500</span>
                             <span class="text-[10px] text-amber-300 mt-1">עלות: 200 מטבעות 🪙</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-slate-900/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                <div class="bg-[#042422]/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 shadow-md flex flex-col gap-3">
                     <h3 class="font-bold text-sm text-amber-300">חבילת אנרגיה מיידית</h3>
-                    <div class="flex justify-between items-center bg-slate-950 border border-amber-500/30 p-3 rounded-xl">
+                    <div class="flex justify-between items-center bg-[#021817] border border-amber-500/30 p-3 rounded-xl">
                         <span class="text-xs font-bold text-amber-200">+50 אנרגיה ⚡ (עלות: 💎 20)</span>
-                        <button onclick="buyEnergyPack()" class="bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-xl font-bold text-xs text-white shadow-xs transition">רכוש</button>
+                        <button onclick="buyEnergyPack()" class="bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-xl font-bold text-xs text-white shadow-xs transition cursor-pointer">רכוש</button>
                     </div>
                 </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SCREEN 5: MINIGAME (Crystal Challenge) -->
+            <!-- SCREEN 5: MINIGAME -->
             <!-- ========================================== -->
             <div id="screen-minigame" class="w-full hidden flex-col gap-3 items-center animate-pop">
                 <div class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 text-white rounded-2xl p-4 shadow-md flex justify-between items-center border border-purple-500/40">
@@ -315,22 +340,22 @@
                     <button onclick="switchScreen('worldmap')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
                 </div>
                 
-                <div class="bg-slate-900/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 w-full flex flex-col items-center gap-4 shadow-md">
-                    <div class="flex justify-between w-full text-sm font-bold text-slate-300 px-1">
+                <div class="bg-[#042422]/90 backdrop-blur border border-teal-500/30 rounded-2xl p-4 w-full flex flex-col items-center gap-4 shadow-md">
+                    <div class="flex justify-between w-full text-sm font-bold text-teal-100 px-1">
                         <span id="mg-timer">זמן: 20s</span>
                         <span id="mg-score">ניקוד: 0</span>
                     </div>
-                    <div id="mg-board" class="grid grid-cols-3 gap-3 w-full max-w-xs bg-slate-950 p-4 rounded-2xl border border-purple-500/30 min-h-[220px] items-center justify-center shadow-inner">
+                    <div id="mg-board" class="grid grid-cols-3 gap-3 w-full max-w-xs bg-[#021514] p-4 rounded-2xl border border-purple-500/30 min-h-[220px] items-center justify-center shadow-inner">
                         <!-- Minigame content -->
                     </div>
-                    <button onclick="startMinigame()" id="mg-start-btn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md transition">
+                    <button onclick="startMinigame()" id="mg-start-btn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md transition cursor-pointer">
                         התחל אתגר / Start Challenge
                     </button>
                 </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SCREEN 6: CODEX & DISCOVERY BOOK -->
+            <!-- SCREEN 6: CODEX -->
             <!-- ========================================== -->
             <div id="screen-dex" class="w-full hidden flex-col gap-3 animate-pop">
                 <div class="w-full bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-2xl p-4 shadow-md flex justify-between items-center border border-teal-500/40">
@@ -353,28 +378,28 @@
         </div>
 
         <!-- BOTTOM NAVIGATION BAR -->
-        <nav class="w-full max-w-md bg-slate-900/95 backdrop-blur-md border-t border-teal-500/30 py-2 px-3 flex justify-around items-center fixed bottom-0 z-40 shadow-2xl">
-            <button onclick="switchScreen('worldmap')" class="flex flex-col items-center text-teal-400 tab-btn" data-screen="worldmap">
+        <nav class="w-full max-w-md bg-[#042422]/95 backdrop-blur-md border-t border-teal-500/30 py-2 px-3 flex justify-around items-center fixed bottom-0 z-40 shadow-2xl">
+            <button onclick="switchScreen('worldmap')" class="flex flex-col items-center text-teal-300 tab-btn cursor-pointer" data-screen="worldmap">
                 <span class="text-xl">🗺️</span>
                 <span class="text-[10px] font-bold">מפה</span>
             </button>
-            <button onclick="switchScreen('merge')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="merge">
+            <button onclick="switchScreen('merge')" class="flex flex-col items-center text-teal-100/60 tab-btn cursor-pointer" data-screen="merge">
                 <span class="text-xl">✨</span>
                 <span class="text-[10px] font-bold">לוח</span>
             </button>
-            <button onclick="switchScreen('sanctuary')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="sanctuary">
+            <button onclick="switchScreen('sanctuary')" class="flex flex-col items-center text-teal-100/60 tab-btn cursor-pointer" data-screen="sanctuary">
                 <span class="text-xl">🐾</span>
                 <span class="text-[10px] font-bold">מקלט</span>
             </button>
-            <button onclick="switchScreen('shop')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="shop">
+            <button onclick="switchScreen('shop')" class="flex flex-col items-center text-teal-100/60 tab-btn cursor-pointer" data-screen="shop">
                 <span class="text-xl">🛒</span>
                 <span class="text-[10px] font-bold">חנות</span>
             </button>
-            <button onclick="switchScreen('minigame')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="minigame">
+            <button onclick="switchScreen('minigame')" class="flex flex-col items-center text-teal-100/60 tab-btn cursor-pointer" data-screen="minigame">
                 <span class="text-xl">🎮</span>
                 <span class="text-[10px] font-bold">משחקון</span>
             </button>
-            <button onclick="switchScreen('dex')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="dex">
+            <button onclick="switchScreen('dex')" class="flex flex-col items-center text-teal-100/60 tab-btn cursor-pointer" data-screen="dex">
                 <span class="text-xl">📖</span>
                 <span class="text-[10px] font-bold">אוסף</span>
             </button>
@@ -382,40 +407,36 @@
 
         <!-- SETTINGS MODAL -->
         <div id="settings-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-            <div class="bg-slate-900 border border-teal-500/40 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl text-slate-100">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <h3 class="font-bold text-base text-teal-300">הגדרות משחק</h3>
-                    <button onclick="closeModal('settings-modal')" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+            <div class="bg-[#042422] border border-teal-500/40 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl text-slate-100">
+                <div class="flex justify-between items-center border-b border-teal-900 pb-3">
+                    <h3 class="font-bold text-base text-teal-200">הגדרות משחק</h3>
+                    <button onclick="closeModal('settings-modal')" class="text-teal-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-semibold text-slate-300">אפקטים קוליים (SFX)</span>
+                        <span class="text-xs font-semibold text-teal-100">אפקטים קוליים (SFX)</span>
                         <input type="checkbox" id="sfx-toggle" checked onchange="toggleAudio('sfx')" class="w-5 h-5 accent-teal-500 rounded cursor-pointer">
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-semibold text-slate-300">מוזיקת רקע (BGM)</span>
-                        <input type="checkbox" id="bgm-toggle" checked onchange="toggleAudio('bgm')" class="w-5 h-5 accent-teal-500 rounded cursor-pointer">
-                    </div>
-                    <div class="border-t border-slate-800 pt-3 flex flex-col gap-2">
-                        <span class="text-xs text-teal-400 font-bold">אזור פיתוח ואפס</span>
-                        <button onclick="devResetSave()" class="bg-rose-600 hover:bg-rose-500 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs transition">איפוס שמירה מלא</button>
+                    <div class="border-t border-teal-900 pt-3 flex flex-col gap-2">
+                        <span class="text-xs text-teal-300 font-bold">איפוס משחק</span>
+                        <button onclick="devResetSave()" class="bg-rose-600 hover:bg-rose-500 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs transition cursor-pointer">איפוס שמירה מלא</button>
                     </div>
                 </div>
-                <button onclick="closeModal('settings-modal')" class="bg-teal-700 hover:bg-teal-600 text-white py-2.5 rounded-xl font-bold text-xs mt-2 transition">סגור</button>
+                <button onclick="closeModal('settings-modal')" class="bg-teal-700 hover:bg-teal-600 text-white py-2.5 rounded-xl font-bold text-xs mt-2 transition cursor-pointer">סגור</button>
             </div>
         </div>
 
         <!-- GENERATOR UPGRADE MODAL -->
         <div id="generator-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-            <div class="bg-slate-900 border border-teal-500/40 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl text-slate-100">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <h3 class="font-bold text-base text-teal-300">שדרוג שיח הייצור</h3>
-                    <button onclick="closeModal('generator-modal')" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+            <div class="bg-[#042422] border border-teal-500/40 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl text-slate-100">
+                <div class="flex justify-between items-center border-b border-teal-900 pb-3">
+                    <h3 class="font-bold text-base text-teal-200">שדרוג שיח הייצור (כולל רמה 150 💎)</h3>
+                    <button onclick="closeModal('generator-modal')" class="text-teal-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
                 </div>
                 <div id="gen-upgrade-content" class="flex flex-col gap-2.5 max-h-[60vh] overflow-y-auto">
                     <!-- Populated dynamically -->
                 </div>
-                <button onclick="closeModal('generator-modal')" class="bg-teal-700 hover:bg-teal-600 text-white py-2.5 rounded-xl font-bold text-xs transition">סגור</button>
+                <button onclick="closeModal('generator-modal')" class="bg-teal-700 hover:bg-teal-600 text-white py-2.5 rounded-xl font-bold text-xs transition cursor-pointer">סגור</button>
             </div>
         </div>
 
@@ -442,53 +463,53 @@
             lastEnergyTime: Date.now()
         };
 
-        // --- ARTISTIC SVG ITEM CATALOG WITH EXPLICIT EVOLUTION CHAINS (nextItemId) ---
+        // --- DETAILED SVG ARTISTIC CATALOG WITH UNIQUE EVOLUTION CHAINS (nextItemId) ---
         const itemCatalog = {
             1: { 
                 id: 1, nameHe: "זרע קסם קטן", nameEn: "Tiny Magic Seed", type: 'sprout', level: 1, nextItemId: 2, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><circle cx="32" cy="38" r="14" fill="#15803d"/><path d="M32 24 C32 16, 26 10, 32 6 C38 10, 32 16, 32 24 Z" fill="#4ade80"/><circle cx="28" cy="36" r="2" fill="#86efac"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><circle cx="32" cy="40" r="14" fill="#047857"/><path d="M32 26 C32 16, 24 10, 32 4 C40 10, 32 16, 32 26 Z" fill="#2dd4bf"/><circle cx="28" cy="38" r="2.5" fill="#99f6e4"/></svg>` 
             },
             2: { 
                 id: 2, nameHe: "נבט רך עולה", nameEn: "Sprouting Seedling", type: 'sprout', level: 2, nextItemId: 3, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><path d="M32 50 L32 28" stroke="#166534" stroke-width="4" stroke-linecap="round"/><path d="M32 36 C24 30, 18 34, 22 40 C26 42, 30 38, 32 36 Z" fill="#22c55e"/><path d="M32 28 C40 22, 46 26, 42 32 C38 34, 34 30, 32 28 Z" fill="#4ade80"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><path d="M32 52 L32 26" stroke="#065f46" stroke-width="5" stroke-linecap="round"/><path d="M32 38 C22 30, 14 34, 18 42 C22 45, 28 40, 32 38 Z" fill="#14b8a6"/><path d="M32 26 C42 18, 50 22, 46 30 C42 33, 36 28, 32 26 Z" fill="#2dd4bf"/></svg>` 
             },
             3: { 
                 id: 3, nameHe: "שביט־עלה פורח", nameEn: "Blossom Guardian", type: 'sprout', level: 3, nextItemId: 4, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><circle cx="32" cy="34" r="12" fill="#f43f5e"/><path d="M32 22 L35 12 L32 16 L29 12 Z" fill="#fb7185"/><path d="M44 34 L54 37 L49 34 L54 31 Z" fill="#fb7185"/><circle cx="32" cy="34" r="4" fill="#fef08a"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><circle cx="32" cy="34" r="13" fill="#f43f5e"/><path d="M32 18 L36 8 L32 12 L28 8 Z" fill="#fb7185"/><path d="M46 34 L56 37 L50 34 L56 31 Z" fill="#fb7185"/><path d="M32 50 L32 34" stroke="#047857" stroke-width="4"/><circle cx="32" cy="34" r="5" fill="#fef08a"/></svg>` 
             },
             4: { 
                 id: 4, nameHe: "עץ־פלא עתיק אגדי", nameEn: "Ancient World Tree", type: 'sprout', level: 4, nextItemId: null, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><rect x="28" y="38" width="8" height="18" fill="#78350f" rx="2"/><circle cx="32" cy="26" r="16" fill="#047857"/><circle cx="24" cy="22" r="8" fill="#10b981"/><circle cx="40" cy="22" r="8" fill="#10b981"/><circle cx="32" cy="16" r="8" fill="#34d399"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><rect x="27" y="38" width="10" height="18" fill="#78350f" rx="3"/><circle cx="32" cy="24" r="18" fill="#047857"/><circle cx="21" cy="20" r="9" fill="#10b981"/><circle cx="43" cy="20" r="9" fill="#10b981"/><circle cx="32" cy="12" r="9" fill="#34d399"/></svg>` 
             },
             
             10: { 
                 id: 10, nameHe: "ביצת דרקון קטנה", nameEn: "Small Dragon Egg", type: 'dragon', level: 1, nextItemId: 11, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><ellipse cx="32" cy="34" rx="14" ry="18" fill="#d97706"/><path d="M22 30 Q32 38 42 30" stroke="#f59e0b" stroke-width="3" fill="none"/><circle cx="26" cy="24" r="2" fill="#fef3c7"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><ellipse cx="32" cy="35" rx="15" ry="19" fill="#d97706"/><path d="M21 30 Q32 40 43 30" stroke="#f59e0b" stroke-width="3.5" fill="none"/><circle cx="26" cy="23" r="2.5" fill="#fef3c7"/><circle cx="36" cy="44" r="2" fill="#b45309"/></svg>` 
             },
             11: { 
                 id: 11, nameHe: "דרקון אחו בוקע", nameEn: "Hatchling Dragon", type: 'dragon', level: 2, nextItemId: 12, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><circle cx="32" cy="36" r="12" fill="#10b981"/><path d="M22 30 L16 22 L24 26 Z" fill="#059669"/><path d="M42 30 L48 22 L40 26 Z" fill="#059669"/><circle cx="28" cy="34" r="2" fill="#fff"/><circle cx="36" cy="34" r="2" fill="#fff"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><circle cx="32" cy="36" r="13" fill="#10b981"/><path d="M21 28 L14 20 L22 24 Z" fill="#047857"/><path d="M43 28 L50 20 L42 24 Z" fill="#047857"/><circle cx="27" cy="34" r="2.5" fill="#fff"/><circle cx="37" cy="34" r="2.5" fill="#fff"/><circle cx="27" cy="34" r="1" fill="#000"/><circle cx="37" cy="34" r="1" fill="#000"/></svg>` 
             },
             12: { 
                 id: 12, nameHe: "דרקון להבה צעיר", nameEn: "Flame Drake", type: 'dragon', level: 3, nextItemId: 13, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><ellipse cx="32" cy="36" rx="14" ry="12" fill="#ea580c"/><circle cx="32" cy="24" r="10" fill="#f97316"/><path d="M26 16 L32 8 L38 16 Z" fill="#fef08a"/><circle cx="28" cy="22" r="2" fill="#fff"/><circle cx="36" cy="22" r="2" fill="#fff"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><ellipse cx="32" cy="37" rx="15" ry="13" fill="#ea580c"/><circle cx="32" cy="24" r="11" fill="#f97316"/><path d="M25 15 L32 6 L39 15 Z" fill="#fef08a"/><circle cx="27" cy="22" r="2.5" fill="#fff"/><circle cx="37" cy="22" r="2.5" fill="#fff"/><circle cx="27" cy="22" r="1" fill="#000"/><circle cx="37" cy="22" r="1" fill="#000"/></svg>` 
             },
             13: { 
                 id: 13, nameHe: "דרקון שמש אגדי", nameEn: "Ancient Solar Dragon", type: 'dragon', level: 4, nextItemId: null, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><circle cx="32" cy="32" r="16" fill="#ca8a04"/><circle cx="32" cy="32" r="10" fill="#eab308"/><path d="M32 10 L36 18 L44 18 L38 24 L40 32 L32 28 L24 32 L26 24 L20 18 L28 18 Z" fill="#fef08a"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><circle cx="32" cy="32" r="17" fill="#ca8a04"/><circle cx="32" cy="32" r="11" fill="#eab308"/><path d="M32 8 L37 18 L48 18 L39 25 L42 36 L32 30 L22 36 L25 25 L16 18 L27 18 Z" fill="#fef08a"/><circle cx="28" cy="30" r="2" fill="#000"/><circle cx="36" cy="30" r="2" fill="#000"/></svg>` 
             },
 
             20: { 
                 id: 20, nameHe: "חצץ קסום", nameEn: "Magic Pebble", type: 'material', level: 1, nextItemId: 21, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><path d="M20 40 L26 26 L42 28 L48 42 Z" fill="#64748b"/><path d="M26 26 L34 20 L44 28 Z" fill="#94a3b8"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><path d="M18 42 L25 25 L43 27 L50 42 Z" fill="#64748b"/><path d="M25 25 L35 18 L45 27 Z" fill="#94a3b8"/></svg>` 
             },
             21: { 
                 id: 21, nameHe: "אבן רונה מעובדת", nameEn: "Rune Stone", type: 'material', level: 2, nextItemId: 22, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><rect x="20" y="20" width="24" height="24" rx="4" fill="#475569" transform="rotate(45 32 32)"/><path d="M32 22 L32 42 M22 32 L42 32" stroke="#38bdf8" stroke-width="3"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><rect x="19" y="19" width="26" height="26" rx="5" fill="#475569" transform="rotate(45 32 32)"/><path d="M32 20 L32 44 M20 32 L44 32" stroke="#38bdf8" stroke-width="3.5"/></svg>` 
             },
             22: { 
                 id: 22, nameHe: "גביש מנצנץ", nameEn: "Glow Crystal", type: 'material', level: 3, nextItemId: null, 
-                svg: `<svg viewBox="0 0 64 64" class="w-10 h-10 drop-shadow-md"><path d="M32 12 L44 28 L38 52 L26 52 L20 28 Z" fill="#06b6d4"/><path d="M32 12 L38 28 L32 52 L26 28 Z" fill="#67e3f9"/></svg>` 
+                svg: `<svg viewBox="0 0 64 64" class="w-11 h-11 drop-shadow-lg"><path d="M32 10 L46 28 L40 54 L24 54 L18 28 Z" fill="#06b6d4"/><path d="M32 10 L40 28 L32 54 L24 28 Z" fill="#67e3f9"/></svg>` 
             }
         };
 
@@ -520,7 +541,7 @@
             }
         };
 
-        // --- WEB AUDIO API SYNTHESIS ---
+        // --- WEB AUDIO API SOUND SYSTEM ---
         let audioCtx = null;
         function initAudio() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -541,22 +562,19 @@
                     osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
                     gain.gain.setValueAtTime(0.25, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-                    osc.start(now);
-                    osc.stop(now + 0.15);
+                    osc.start(now); osc.stop(now + 0.15);
                 } else if (type === 'produce') {
                     osc.frequency.setValueAtTime(500, now);
                     osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
                     gain.gain.setValueAtTime(0.2, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
+                    osc.start(now); osc.stop(now + 0.1);
                 } else if (type === 'success') {
                     osc.frequency.setValueAtTime(440, now);
                     osc.frequency.setValueAtTime(880, now + 0.15);
                     gain.gain.setValueAtTime(0.3, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
                 }
             } catch(e) {}
         }
@@ -581,8 +599,6 @@
                 try {
                     const parsed = JSON.parse(saved);
                     gameState = { ...gameState, ...parsed };
-                    
-                    // Safety check on grid size and types
                     if (!Array.isArray(gameState.grid) || gameState.grid.length !== 25) {
                         gameState.grid = Array(25).fill(null);
                     }
@@ -590,7 +606,6 @@
                     if (!gameState.codex) gameState.codex = {};
                     if (!generatorConfigs[gameState.genLevel]) gameState.genLevel = 1;
 
-                    // Offline Energy Recovery (1 pt / 3 min)
                     const elapsedSec = Math.floor((Date.now() - (gameState.lastEnergyTime || Date.now())) / 1000);
                     const recoveredEnergy = Math.floor(elapsedSec / 180);
                     if (recoveredEnergy > 0 && gameState.energy < gameState.maxEnergy) {
@@ -620,15 +635,14 @@
             const activeEl = document.getElementById(`screen-${screenName}`);
             if (activeEl) { activeEl.classList.remove('hidden'); activeEl.classList.add('flex'); }
 
-            // Highlight tab
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('text-teal-400', 'font-bold');
-                btn.classList.add('text-slate-400');
+                btn.classList.remove('text-teal-300', 'font-bold');
+                btn.classList.add('text-teal-100', 'opacity-60');
             });
             const activeTab = document.querySelector(`.tab-btn[data-screen="${screenName}"]`);
             if (activeTab) {
-                activeTab.classList.remove('text-slate-400');
-                activeTab.classList.add('text-teal-400', 'font-bold');
+                activeTab.classList.remove('opacity-60');
+                activeTab.classList.add('text-teal-300', 'font-bold');
             }
 
             if (screenName === 'merge') {
@@ -671,7 +685,7 @@
                     updateUI();
                     saveGame();
                 }
-            }, 180000); // 3 minutes
+            }, 180000);
         }
 
         function updateUI() {
@@ -697,7 +711,7 @@
                 if (m === mult) {
                     btn.className = "px-2.5 py-1 rounded-lg bg-teal-600 text-white shadow-xs font-bold";
                 } else {
-                    btn.className = "px-2.5 py-1 rounded-lg bg-slate-800 text-teal-300 border border-teal-500/30 shadow-xs font-bold";
+                    btn.className = "px-2.5 py-1 rounded-lg bg-[#042422] text-teal-300 border border-teal-500/30 shadow-xs font-bold";
                 }
             });
             updateUI();
@@ -710,13 +724,12 @@
             container.innerHTML = cfg ? cfg.svg : '';
         }
 
-        // --- ITEM PRODUCTION WITH STRICT SPACE & ENERGY CHECK ---
+        // --- PRODUCTION LOGIC ---
         function produceItem() {
             const cfg = generatorConfigs[gameState.genLevel];
             const totalCost = cfg.cost * gameState.multiplier;
             const producedCount = (cfg.output || 1) * gameState.multiplier;
 
-            // Strict check: Count available empty cells on board
             let emptyIndices = [];
             gameState.grid.forEach((cell, idx) => { if (cell === null || cell === undefined) emptyIndices.push(idx); });
 
@@ -730,7 +743,6 @@
                 return;
             }
 
-            // Deduct energy only when fully validated
             gameState.energy -= totalCost;
             playSound('produce');
 
@@ -751,7 +763,7 @@
             saveGame();
         }
 
-        // --- ROBUST TRUE DRAG & DROP ENGINE (Pointer Events, Capture, Cancel, No Duplication) ---
+        // --- TRUE DRAG & DROP ENGINE (Clean, Natural, No Square Frame, No Duplicate) ---
         let dragItemIndex = null;
         let draggedItemData = null;
         let dragElement = null;
@@ -763,7 +775,7 @@
 
             gameState.grid.forEach((itemId, idx) => {
                 const cell = document.createElement('div');
-                cell.className = `grid-cell bg-slate-800/90 border-2 border-teal-500/30 rounded-2xl flex flex-col items-center justify-center relative shadow-xs`;
+                cell.className = `grid-cell bg-[#053835]/80 border-2 border-teal-500/30 rounded-2xl flex flex-col items-center justify-center relative shadow-xs`;
                 cell.dataset.index = idx;
                 
                 if (itemId !== null && itemId !== undefined) {
@@ -771,7 +783,7 @@
                     if (item) {
                         cell.innerHTML = `
                             ${item.svg}
-                            <span class="absolute bottom-1 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-900 text-teal-300 border border-teal-500/30 pointer-events-none">L${item.level || 1}</span>
+                            <span class="absolute bottom-1 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-[#021514] text-teal-300 border border-teal-500/30 pointer-events-none">L${item.level || 1}</span>
                         `;
                         cell.style.cursor = 'grab';
                     }
@@ -805,13 +817,13 @@
                 draggedItemData = gameState.grid[idx];
                 const item = itemCatalog[draggedItemData];
 
-                // 1. Clear original cell immediately so no duplicate copy remains on board
+                // Remove from original cell immediately
                 gameState.grid[idx] = null;
                 renderGrid();
 
-                // 2. Create single floating element following pointer
+                // Create floating element without square box or dark background
                 dragElement = document.createElement('div');
-                dragElement.className = 'dragging-item w-16 h-16 bg-slate-900 border-2 border-teal-400 rounded-2xl flex items-center justify-center shadow-2xl p-1';
+                dragElement.className = 'dragging-item flex items-center justify-center';
                 if (item) {
                     dragElement.innerHTML = item.svg;
                 }
@@ -839,18 +851,17 @@
                 if (dropIdx !== null) {
                     executeMergeOrMove(originalIdx, dropIdx, draggedItemData);
                 } else {
-                    // Released outside grid -> return item safely to original cell
                     gameState.grid[originalIdx] = draggedItemData;
                     renderGrid();
                 }
                 draggedItemData = null;
             });
 
-            gridEl.addEventListener('pointercancel', (e) => {
+            gridEl.addEventListener('pointercancel', () => {
                 cancelDragState();
             });
 
-            gridEl.addEventListener('lostpointercapture', (e) => {
+            gridEl.addEventListener('lostpointercapture', () => {
                 cancelDragState();
             });
         }
@@ -882,11 +893,9 @@
             let itemB = gameState.grid[toIdx];
 
             if (itemB === null || itemB === undefined) {
-                // Empty cell -> move item
                 gameState.grid[toIdx] = itemA;
                 playSound('produce');
             } else if (itemA === itemB) {
-                // Identical items -> check explicit evolution chain via nextItemId
                 let currentItem = itemCatalog[itemA];
                 let nextId = currentItem ? currentItem.nextItemId : null;
 
@@ -894,7 +903,6 @@
                     gameState.grid[toIdx] = nextId;
                     gameState.codex[nextId] = true;
 
-                    // Quest progress
                     if (gameState.quest && !gameState.quest.claimed) {
                         gameState.quest.progress++;
                         if (gameState.quest.progress >= gameState.quest.target) {
@@ -902,7 +910,6 @@
                         }
                     }
 
-                    // Sanctuary check (if dragon or top tier created)
                     if (nextId >= 11 && nextId <= 13 || nextId === 4) {
                         if (!gameState.sanctuaryMonsters.includes(nextId)) {
                             gameState.sanctuaryMonsters.push(nextId);
@@ -912,12 +919,10 @@
                     playSound('success');
                     showToast(gameState.lang === 'he' ? "מיזוג ואבולוציה מוצלחים! ✨" : "Merge Success! ✨");
                 } else {
-                    // Max level reached -> return item to original cell without swapping
                     gameState.grid[fromIdx] = itemA;
                     showToast(gameState.lang === 'he' ? "רמה מקסימלית בשרשרת זו!" : "Max level reached!");
                 }
             } else {
-                // Different items -> return original item to source cell (no unwanted auto-swap)
                 gameState.grid[fromIdx] = itemA;
                 showToast(gameState.lang === 'he' ? "לא ניתן למזג פריטים שונים." : "Cannot merge different items.");
             }
@@ -927,7 +932,7 @@
             saveGame();
         }
 
-        // --- GENERATOR UPGRADE & SHOP & ECONOMY ---
+        // --- FULLY FIXED UPGRADE MODAL & ECONOMY ---
         function renderGeneratorUpgradeModal() {
             const container = document.getElementById('gen-upgrade-content');
             if (!container) return;
@@ -936,18 +941,19 @@
             for (let lvl = 1; lvl <= 5; lvl++) {
                 let cfg = generatorConfigs[lvl];
                 let isCurrent = gameState.genLevel === lvl;
-                let upgradeCost = lvl * 30; // explicit diamond cost
+                // Level 5 or higher includes 150 diamonds requirement feature
+                let upgradeCost = lvl === 5 ? 150 : (lvl * 30);
 
                 let div = document.createElement('div');
-                div.className = `p-3.5 rounded-2xl border flex justify-between items-center ${isCurrent ? 'bg-teal-950/65 border-teal-500 shadow-sm' : 'bg-slate-800/80 border-slate-700'}`;
+                div.className = `p-3.5 rounded-2xl border flex justify-between items-center ${isCurrent ? 'bg-teal-950/80 border-teal-400 shadow-sm' : 'bg-[#021817] border-teal-900'}`;
                 div.innerHTML = `
                     <div class="flex flex-col">
                         <span class="font-bold text-xs text-slate-100">${gameState.lang === 'he' ? cfg.nameHe : cfg.nameEn}</span>
-                        <span class="text-[11px] text-slate-400 mt-0.5">${gameState.lang === 'he' ? cfg.descHe : cfg.descEn}</span>
-                        <span class="text-[10px] text-teal-400 font-bold mt-1">⚡ Cost: ${cfg.cost}</span>
+                        <span class="text-[11px] text-teal-200/80 mt-0.5">${gameState.lang === 'he' ? cfg.descHe : cfg.descEn}</span>
+                        <span class="text-[10px] text-teal-300 font-bold mt-1">⚡ Cost: ${cfg.cost}</span>
                     </div>
-                    ${isCurrent ? `<span class="text-xs font-bold text-teal-300 bg-teal-900/80 px-2.5 py-1 rounded-xl border border-teal-500/40">פעיל</span>` : 
-                      `<button onclick="upgradeGenerator(${lvl},${upgradeCost})" class="bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xs transition">שדרג (💎 ${upgradeCost})</button>`}
+                    ${isCurrent ? `<span class="text-xs font-bold text-teal-200 bg-teal-900 px-2.5 py-1 rounded-xl border border-teal-500/40">פעיל</span>` : 
+                      `<button onclick="upgradeGenerator(${lvl},${upgradeCost})" class="bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xs transition cursor-pointer">שדרג (💎 ${upgradeCost})</button>`}
                 `;
                 container.appendChild(div);
             }
@@ -955,7 +961,7 @@
 
         function upgradeGenerator(lvl, cost) {
             if (gameState.diamonds < cost) {
-                showToast(gameState.lang === 'he' ? "אין מספיק יהלומים לשדרוג!" : "Not enough diamonds!");
+                showToast(gameState.lang === 'he' ? `אין מספיק יהלומים! נדרשים 💎 ${cost}` : `Not enough diamonds! Need 💎 ${cost}`);
                 return;
             }
             gameState.diamonds -= cost;
@@ -964,6 +970,31 @@
             showToast(gameState.lang === 'he' ? "השיח שודרג בהצלחה! 🚀" : "Upgraded! 🚀");
             renderGeneratorUpgradeModal();
             renderGeneratorWidget();
+            updateUI();
+            saveGame();
+        }
+
+        // --- DEVELOPER FREE TESTING ACTIONS ---
+        function devAddDiamonds(amount) {
+            gameState.diamonds += amount;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? `[מצב מפתחים] נוספו 💎 ${amount}` : `[Dev Mode] Added 💎 ${amount}`);
+            updateUI();
+            saveGame();
+        }
+
+        function devAddCoins(amount) {
+            gameState.coins += amount;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? `[מצב מפתחים] נוספו 🪙 ${amount}` : `[Dev Mode] Added 🪙 ${amount}`);
+            updateUI();
+            saveGame();
+        }
+
+        function devFillEnergy() {
+            gameState.energy = gameState.maxEnergy;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? "[מצב מפתחים] האנרגיה מולאה!" : "[Dev Mode] Energy refilled!");
             updateUI();
             saveGame();
         }
@@ -983,7 +1014,7 @@
 
         function buyEnergyPack() {
             if (gameState.diamonds < 20) {
-                showToast(gameState.lang === 'he' ? "אין מספיק יהלומים!" : "Not enough diamonds!");
+                showToast(gameState.lang === 'he' ? "אין מספיק יהלומים בחשבון!" : "Not enough diamonds!");
                 return;
             }
             gameState.diamonds -= 20;
@@ -1014,18 +1045,18 @@
             if (!list) return;
             list.innerHTML = '';
             if (!gameState.sanctuaryMonsters || gameState.sanctuaryMonsters.length === 0) {
-                list.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">אין עדיין יצורים במקלט. מפתח דרקון או צמח מתקדם בלוח!</p>`;
+                list.innerHTML = `<p class="text-xs text-teal-200/70 col-span-2 text-center py-6">אין עדיין יצורים במקלט. פתח דרקון או צמח מתקדם בלוח!</p>`;
                 return;
             }
             gameState.sanctuaryMonsters.forEach(id => {
                 let m = itemCatalog[id];
                 if (m) {
                     let div = document.createElement('div');
-                    div.className = "bg-slate-800/90 border border-teal-500/30 p-4 rounded-2xl flex flex-col items-center gap-2 shadow-xs";
+                    div.className = "bg-[#063330] border border-teal-500/30 p-4 rounded-2xl flex flex-col items-center gap-2 shadow-xs";
                     div.innerHTML = `
                         <div class="w-14 h-14 flex items-center justify-center animate-float">${m.svg}</div>
                         <span class="text-xs font-bold text-slate-100">${gameState.lang === 'he' ? m.nameHe : m.nameEn}</span>
-                        <button onclick="collectSanctuaryReward()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-xs mt-1 transition">איסוף מטבעות 🪙</button>
+                        <button onclick="collectSanctuaryReward()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-xs mt-1 transition cursor-pointer">איסוף מטבעות 🪙</button>
                     `;
                     list.appendChild(div);
                 }
@@ -1040,7 +1071,7 @@
             saveGame();
         }
 
-        // --- FIXED, ROBUST CHALLENGE MINIGAME ---
+        // --- MINIGAME ---
         let mgTimerInterval = null;
         let mgScore = 0;
         let mgTimeLeft = 20;
@@ -1092,7 +1123,6 @@
             board.innerHTML = '';
             if (!mgActive) return;
 
-            // Display target instruction
             let targetObj = itemCatalog[mgTargetItem];
             let headerDiv = document.createElement('div');
             headerDiv.className = "col-span-3 text-center text-xs font-bold text-teal-300 mb-1";
@@ -1104,7 +1134,7 @@
                 let itemId = pool[Math.floor(Math.random() * pool.length)];
                 let item = itemCatalog[itemId];
                 let btn = document.createElement('button');
-                btn.className = "bg-slate-900 hover:bg-slate-800 border border-teal-500/40 p-3 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-xs cursor-pointer";
+                btn.className = "bg-[#042422] hover:bg-[#063330] border border-teal-500/40 p-3 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-xs cursor-pointer";
                 btn.innerHTML = item.svg;
                 btn.onclick = () => {
                     if (!mgActive) return;
@@ -1131,7 +1161,7 @@
             Object.values(itemCatalog).forEach(item => {
                 let discovered = gameState.codex[item.id] || item.level === 1;
                 let div = document.createElement('div');
-                div.className = `bg-slate-900/90 border ${discovered ? 'border-teal-500/50 shadow-xs' : 'border-slate-800 opacity-50'} p-3 rounded-2xl flex flex-col items-center justify-center gap-1.5`;
+                div.className = `bg-[#042422]/90 border ${discovered ? 'border-teal-500/50 shadow-xs' : 'border-slate-800 opacity-50'} p-3 rounded-2xl flex flex-col items-center justify-center gap-1.5`;
                 div.innerHTML = `
                     <div class="w-12 h-12 flex items-center justify-center ${discovered ? '' : 'grayscale opacity-30'}">${item.svg}</div>
                     <span class="text-[10px] text-center font-bold ${discovered ? 'text-teal-200' : 'text-slate-500'}">${discovered ? (gameState.lang === 'he' ? item.nameHe : item.nameEn) : '???'}</span>
@@ -1144,9 +1174,6 @@
             if (type === 'sfx') {
                 const sfxEl = document.getElementById('sfx-toggle');
                 if (sfxEl) gameState.sfx = sfxEl.checked;
-            } else if (type === 'bgm') {
-                const bgmEl = document.getElementById('bgm-toggle');
-                if (bgmEl) gameState.bgm = bgmEl.checked;
             }
             saveGame();
         }
