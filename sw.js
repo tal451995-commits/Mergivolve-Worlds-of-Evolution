@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'mergivolve-v9';
+const CACHE_NAME = 'mergivolve-v10';
 
 const ASSETS = [
   './',
