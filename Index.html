@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mergivolve — Worlds of Evolution</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#14b8a6">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 50%, #fef3c7 100%);
+            color: #1e293b;
+        }
+        .grid-cell {
+            aspect-ratio: 1;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .grid-cell:active {
+            transform: scale(0.92);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .floating { animation: float 3s ease-in-out infinite; }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .swaying { animation: sway 4s ease-in-out infinite; transform-origin: bottom center; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen m-0 p-0 overflow-x-hidden">
+
+    <!-- TOP HEADER BAR -->
+    <header class="w-full max-w-md bg-white/90 backdrop-blur-md border-b border-teal-100 p-3 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="switchScreen('worldmap')">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-teal-400 to-emerald-400 flex items-center justify-center text-white shadow-md text-lg">🌱</div>
+            <div class="flex flex-col">
+                <span id="txt-game-title" class="font-bold text-xs text-teal-800 leading-tight">Mergivolve</span>
+                <span id="txt-world-subtitle" class="text-[10px] text-teal-600 font-medium">עולם 1: נבטים קדומים</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 shadow-inner">
+                <span class="text-xs">🪙</span>
+                <span id="coins-val" class="font-bold text-amber-700 text-xs">500</span>
+            </div>
+            <div class="flex items-center gap-1 bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-200 shadow-inner">
+                <span class="text-xs">💎</span>
+                <span id="diamonds-val" class="font-bold text-cyan-700 text-xs">50</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+            <button onclick="toggleLanguage()" class="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-xs" id="lang-btn">EN</button>
+            <button onclick="openModal('settings-modal')" class="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 p-1.5 rounded-lg text-sm transition shadow-xs">⚙️</button>
+        </div>
+    </header>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main class="w-full max-w-md flex-1 flex flex-col items-center p-3 pb-24 gap-3 relative">
+
+        <!-- SCREEN 1: IMMERSIVE LIVING WORLD MAP -->
+        <div id="screen-worldmap" class="w-full flex flex-col gap-3">
+            <!-- Living Fantasy World Art Banner -->
+            <div class="w-full bg-gradient-to-b from-sky-200 via-emerald-100 to-emerald-300 rounded-3xl p-5 text-slate-800 shadow-lg relative overflow-hidden border-2 border-teal-300/60 min-h-[220px] flex flex-col justify-between">
+                <div class="absolute top-3 left-4 text-3xl floating">☁️</div>
+                <div class="absolute top-6 right-8 text-3xl floating" style="animation-delay: 1.5s;">☀️</div>
+                <div class="absolute bottom-2 left-6 text-4xl swaying">🌳</div>
+                <div class="absolute bottom-1 right-10 text-4xl swaying" style="animation-delay: 0.8s;">🍄</div>
+                
+                <div class="flex flex-col z-10 bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-teal-200 shadow-sm">
+                    <span id="txt-sanctuary-title" class="text-[11px] font-bold text-teal-700 uppercase tracking-wider">עולם חי ופעיל / Living World</span>
+                    <h2 id="txt-sanctuary-heading" class="text-base font-extrabold text-teal-900">אי הנבטים הקדומים</h2>
+                    <p id="txt-sanctuary-sub" class="text-[11px] text-slate-600 mt-0.5">חקור את הטבע, גלה יצורים נדירים ושקם את ההביטט.</p>
+                </div>
+
+                <div class="flex gap-2 z-10 mt-2">
+                    <button onclick="switchScreen('merge')" class="flex-1 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white py-3 px-4 rounded-2xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+                        <span>✨</span>
+                        <span id="txt-enter-merge">הכנס ללוח המיזוג</span>
+                    </button>
+                    <button onclick="switchScreen('sanctuary')" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-4 py-3 rounded-2xl font-bold text-xs shadow-sm transition flex items-center gap-1">
+                        <span>🐾</span>
+                        <span id="txt-sanctuary-btn">מקלט</span>
+                    </button>
+                </div>
+            </div>
+
+            <h3 id="txt-worlds-header" class="text-xs font-bold text-teal-900 px-1 uppercase tracking-wider">אזורי האי וההתקדמות / Island Regions</h3>
+
+            <!-- Region 1: Sunny Grassland (Active) -->
+            <div class="w-full bg-white/90 backdrop-blur border-2 border-teal-400 rounded-2xl p-4 shadow-md flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-200">🌱</div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-teal-600 font-bold">אזור 1 / Active Region</span>
+                        <h4 class="font-bold text-sm text-slate-800">מרחבי הדשא המאירים</h4>
+                        <span class="text-[11px] text-slate-500">ביתם של צמחי הנבט הקדומים.</span>
+                    </div>
+                </div>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-xl">פתוח</span>
+            </div>
+
+            <!-- Region 2: Magical Swamp (Unlocked via progression) -->
+            <div class="w-full bg-white/70 backdrop-blur border border-teal-200 rounded-2xl p-4 shadow-xs flex items-center justify-between opacity-85">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-cyan-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-cyan-200">🌿</div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-cyan-700 font-bold">אזור 2 / Swamp Region</span>
+                        <h4 class="font-bold text-sm text-slate-800">הביצה הקסומה והפוספורית</h4>
+                        <span class="text-[11px] text-slate-500">פטריות זוהרות ומים זורמים.</span>
+                    </div>
+                </div>
+                <span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2.5 py-1 rounded-xl">🔒 נעול</span>
+            </div>
+
+            <!-- Region 3: Crystal Cave -->
+            <div class="w-full bg-white/70 backdrop-blur border border-teal-200 rounded-2xl p-4 shadow-xs flex items-center justify-between opacity-85">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-indigo-200">💎</div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-indigo-700 font-bold">אזור 3 / Crystal Cave</span>
+                        <h4 class="font-bold text-sm text-slate-800">מערת הקריסטלים הנוצצים</h4>
+                        <span class="text-[11px] text-slate-500">מינרלים עתיקים ויצורי אבן.</span>
+                    </div>
+                </div>
+                <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2.5 py-1 rounded-xl">🔒 נעול</span>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: MERGE BOARD (Core Gameplay) -->
+        <div id="screen-merge" class="w-full hidden flex-col gap-3">
+            
+            <!-- Active Quest Banner -->
+            <div id="quest-banner" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl p-3.5 flex justify-between items-center shadow-md relative overflow-hidden">
+                <div class="absolute -right-3 -top-3 text-5xl opacity-15">📜</div>
+                <div class="flex flex-col z-10">
+                    <span id="quest-title" class="text-[10px] text-amber-100 font-bold">משימה פעילה / Active Quest</span>
+                    <span id="quest-desc" class="text-xs font-bold">מזג 3 פריטי צמחים או ביצים / Merge 3 items</span>
+                </div>
+                <button onclick="claimQuest()" id="quest-claim-btn" class="bg-white text-orange-700 hover:bg-orange-50 px-3 py-1.5 rounded-xl text-xs font-bold shadow transition z-10 disabled:opacity-50">
+                    איסוף / Claim
+                </button>
+            </div>
+
+            <!-- Generator & Action Controls -->
+            <div class="w-full bg-white/90 backdrop-blur border border-teal-200 rounded-2xl p-3.5 flex items-center justify-between shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner text-white floating border border-teal-300">
+                        🌱
+                    </div>
+                    <div class="flex flex-col">
+                        <span id="gen-name" class="font-bold text-sm text-slate-800">מחולל נבטים רמה 1</span>
+                        <span id="gen-info" class="text-xs text-teal-600 font-semibold">עלות אנרגיה: 5 ⚡</span>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="openModal('generator-modal')" class="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 px-3 py-2 rounded-xl text-xs font-bold flex flex-col items-center shadow-xs">
+                        <span>⬆️</span>
+                        <span id="txt-upgrade">שדרוג</span>
+                    </button>
+                    <button onclick="produceItem()" id="produce-btn" class="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-md flex items-center gap-1 transition">
+                        <span>✨</span>
+                        <span id="txt-produce">יצור</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Energy Bar & Quick Info -->
+            <div class="w-full bg-white/80 border border-teal-100 rounded-xl px-3 py-2 flex justify-between items-center text-xs font-bold text-slate-700 shadow-xs">
+                <div class="flex items-center gap-2">
+                    <span>⚡ אנרגיה / Energy:</span>
+                    <span id="energy-val" class="text-teal-700 font-extrabold">100/100</span>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="text-teal-600 hover:underline">🗺️ חזור למפה / Map</button>
+            </div>
+
+            <!-- MERGE BOARD (5x5 Grid) -->
+            <div class="w-full bg-white/90 backdrop-blur border border-teal-200 rounded-2xl p-2.5 shadow-xl">
+                <div id="merge-grid" class="grid grid-cols-5 gap-2 w-full">
+                    <!-- Dynamically populated cells -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: SANCTUARY -->
+        <div id="screen-sanctuary" class="w-full hidden flex-col gap-3">
+            <div class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl p-4 shadow-md flex justify-between items-center">
+                <div class="flex flex-col">
+                    <h2 id="sanctuary-header-title" class="text-lg font-bold">🐾 מקלט המפלצות והחיים</h2>
+                    <p id="sanctuary-desc" class="text-xs text-emerald-100 mt-1">כאן מפלצות הדרגה־4 המפותחות שלך חיים ומייצרים משאבים.</p>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
+            </div>
+            <div class="bg-white/90 backdrop-blur border border-teal-200 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                <div id="sanctuary-monsters-list" class="grid grid-cols-2 gap-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: SHOP -->
+        <div id="screen-shop" class="w-full hidden flex-col gap-3">
+            <div class="w-full bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl p-4 shadow-md flex justify-between items-center">
+                <div class="flex flex-col">
+                    <h2 id="shop-header-title" class="text-lg font-bold">🛒 חנות המשחק הרשמית</h2>
+                    <p class="text-xs text-cyan-100 mt-1">רכוש משאבים, אנרגיה וחבילות יהלומים.</p>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
+            </div>
+            
+            <div class="bg-white/90 backdrop-blur border border-teal-200 rounded-2xl p-4 shadow-md flex flex-col gap-3">
+                <h3 class="font-bold text-sm text-cyan-800" id="shop-diamonds-title">חבילות יהלומים (מצב פיתוח פעיל 💎)</h3>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button onclick="buyDiamondPack(100)" class="bg-gradient-to-br from-cyan-50 to-teal-50 hover:from-cyan-100 hover:to-teal-100 border border-cyan-200 p-3 rounded-2xl flex flex-col items-center shadow-xs transition">
+                        <span class="text-xl">💎 100</span>
+                        <span class="text-[11px] text-cyan-700 font-bold mt-1">TEST GRANT (חינם)</span>
+                    </button>
+                    <button onclick="buyDiamondPack(500)" class="bg-gradient-to-br from-cyan-50 to-teal-50 hover:from-cyan-100 hover:to-teal-100 border border-cyan-200 p-3 rounded-2xl flex flex-col items-center shadow-xs transition">
+                        <span class="text-xl">💎 500</span>
+                        <span class="text-[11px] text-cyan-700 font-bold mt-1">TEST GRANT (חינם)</span>
+                    </button>
+                    <button onclick="buyDiamondPack(1000)" class="bg-gradient-to-br from-cyan-50 to-teal-50 hover:from-cyan-100 hover:to-teal-100 border border-cyan-200 p-3 rounded-2xl flex flex-col items-center shadow-xs transition">
+                        <span class="text-xl">💎 1,000</span>
+                        <span class="text-[11px] text-cyan-700 font-bold mt-1">TEST GRANT (חינם)</span>
+                    </button>
+                    <button onclick="buyDiamondPack(5000)" class="bg-gradient-to-br from-cyan-50 to-teal-50 hover:from-cyan-100 hover:to-teal-100 border border-cyan-200 p-3 rounded-2xl flex flex-col items-center shadow-xs transition">
+                        <span class="text-xl">💎 5,000</span>
+                        <span class="text-[11px] text-cyan-700 font-bold mt-1">TEST GRANT (חינם)</span>
+                    </button>
+                </div>
+                <p class="text-[10px] text-slate-500 text-center" id="txt-payment-note">תשלומים אמיתיים אינם פעילים בגרסה זו. מענקי בדיקה פתוחים למפתחים.</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: MINIGAME -->
+        <div id="screen-minigame" class="w-full hidden flex-col gap-3 items-center">
+            <div class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl p-4 shadow-md flex justify-between items-center">
+                <div class="flex flex-col">
+                    <h2 id="minigame-header-title" class="text-lg font-bold">🎮 אתגר קריסטלי האבולוציה</h2>
+                    <p class="text-xs text-purple-100 mt-1">אסוף כמה שיותר קריסטלים ב-30 שניות!</p>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
+            </div>
+            
+            <div class="bg-white/90 backdrop-blur border border-teal-200 rounded-2xl p-4 w-full flex flex-col items-center gap-4 shadow-md">
+                <div class="flex justify-between w-full text-sm font-bold text-slate-700 px-1">
+                    <span id="mg-timer">זמן: 30s</span>
+                    <span id="mg-score">ניקוד: 0</span>
+                </div>
+                <div id="mg-board" class="grid grid-cols-4 gap-2.5 w-full max-w-xs bg-slate-50 p-3.5 rounded-2xl border border-teal-200 min-h-[220px] items-center justify-center shadow-inner">
+                    <!-- Minigame content -->
+                </div>
+                <button onclick="startMinigame()" id="mg-start-btn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md transition">
+                    התחל משחק / Start Game
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: CODEX -->
+        <div id="screen-dex" class="w-full hidden flex-col gap-3">
+            <div class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-2xl p-4 shadow-md flex justify-between items-center">
+                <div class="flex flex-col">
+                    <h2 id="dex-header-title" class="text-lg font-bold">📖 ספר גילויים ואוסף</h2>
+                    <p class="text-xs text-teal-100 mt-1">גלה את כל משפחות המפלצות והפריטים בעולם.</p>
+                </div>
+                <button onclick="switchScreen('worldmap')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">חזור</button>
+            </div>
+            <div id="dex-grid" class="grid grid-cols-3 gap-2.5">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <!-- NOTIFICATION TOAST -->
+        <div id="toast" class="fixed bottom-20 bg-slate-900/95 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-bold transition-all duration-300 opacity-0 pointer-events-none z-50 border border-teal-500/50">
+            Notification
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="w-full max-w-md bg-white/90 backdrop-blur-md border-t border-teal-100 py-2 px-4 flex justify-around items-center fixed bottom-0 z-40 shadow-2xl">
+        <button onclick="switchScreen('worldmap')" class="flex flex-col items-center text-teal-600 tab-btn" data-screen="worldmap">
+            <span class="text-xl">🗺️</span>
+            <span class="text-[10px] font-bold" id="nav-world">מפה</span>
+        </button>
+        <button onclick="switchScreen('merge')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="merge">
+            <span class="text-xl">✨</span>
+            <span class="text-[10px] font-bold" id="nav-merge">לוח</span>
+        </button>
+        <button onclick="switchScreen('sanctuary')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="sanctuary">
+            <span class="text-xl">🐾</span>
+            <span class="text-[10px] font-bold" id="nav-sanctuary">מקלט</span>
+        </button>
+        <button onclick="switchScreen('shop')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="shop">
+            <span class="text-xl">🛒</span>
+            <span class="text-[10px] font-bold" id="nav-shop">חנות</span>
+        </button>
+        <button onclick="switchScreen('minigame')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="minigame">
+            <span class="text-xl">🎮</span>
+            <span class="text-[10px] font-bold" id="nav-minigame">מיני-משחק</span>
+        </button>
+        <button onclick="switchScreen('dex')" class="flex flex-col items-center text-slate-400 tab-btn" data-screen="dex">
+            <span class="text-xl">📖</span>
+            <span class="text-[10px] font-bold" id="nav-dex">אוסף</span>
+        </button>
+    </nav>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-teal-100 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-base text-teal-900" id="modal-settings-title">הגדרות משחק / Settings</h3>
+                <button onclick="closeModal('settings-modal')" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-semibold text-slate-700" id="txt-audio-sfx">אפקטים קוליים (SFX)</span>
+                    <input type="checkbox" id="sfx-toggle" checked onchange="toggleAudio('sfx')" class="w-5 h-5 accent-teal-600 rounded">
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-semibold text-slate-700" id="txt-audio-bg">מוזיקת רקע (BGM)</span>
+                    <input type="checkbox" id="bgm-toggle" checked onchange="toggleAudio('bgm')" class="w-5 h-5 accent-teal-600 rounded">
+                </div>
+                <div class="border-t border-slate-100 pt-3 flex flex-col gap-2">
+                    <span class="text-xs text-teal-800 font-bold" id="txt-dev-mode-title">מצב פיתוח (Developer Testing)</span>
+                    <div class="flex gap-2">
+                        <button onclick="devAddDiamonds()" class="bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs">+1000 💎 (Test)</button>
+                        <button onclick="devResetSave()" class="bg-rose-500 hover:bg-rose-600 text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs" id="txt-reset-save">איפוס שמירה</button>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeModal('settings-modal')" class="bg-teal-100 hover:bg-teal-200 text-teal-900 py-2.5 rounded-xl font-bold text-xs mt-2 transition" id="txt-close">סגור</button>
+        </div>
+    </div>
+
+    <!-- GENERATOR UPGRADE MODAL -->
+    <div id="generator-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-teal-100 w-full max-w-sm rounded-3xl p-5 flex flex-col gap-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-base text-teal-900" id="modal-gen-title">שדרוג מחולל נבטים</h3>
+                <button onclick="closeModal('generator-modal')" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+            </div>
+            <div id="gen-upgrade-content" class="flex flex-col gap-2.5 max-h-[60vh] overflow-y-auto">
+                <!-- Populated dynamically -->
+            </div>
+            <button onclick="closeModal('generator-modal')" class="bg-teal-100 hover:bg-teal-200 text-teal-900 py-2.5 rounded-xl font-bold text-xs transition" id="txt-close-2">סגור</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT GAME LOGIC -->
+    <script>
+        const i18n = {
+            he: {
+                "txt-game-title": "Mergivolve",
+                "txt-world-subtitle": "עולם 1: נבטים קדומים",
+                "txt-sanctuary-title": "עולם חי ופעיל / Living World",
+                "txt-sanctuary-heading": "אי הנבטים הקדומים",
+                "txt-sanctuary-sub": "חקור את הטבע, גלה יצורים נדירים ושקם את ההביטט.",
+                "txt-enter-merge": "הכנס ללוח המיזוג",
+                "txt-sanctuary-btn": "מקלט",
+                "txt-worlds-header": "אזורי האי וההתקדמות / Island Regions",
+                "txt-upgrade": "שדרוג",
+                "txt-produce": "יצור",
+                "nav-world": "מפה",
+                "nav-merge": "לוח",
+                "nav-sanctuary": "מקלט",
+                "nav-shop": "חנות",
+                "nav-minigame": "מיני-משחק",
+                "nav-dex": "אוסף",
+                "modal-settings-title": "הגדרות משחק",
+                "txt-audio-sfx": "אפקטים קוליים (SFX)",
+                "txt-audio-bg": "מוזיקת רקע (BGM)",
+                "txt-dev-mode-title": "מצב פיתוח (Developer Testing)",
+                "txt-reset-save": "איפוס שמירה",
+                "txt-close": "סגור",
+                "txt-close-2": "סגור",
+                "modal-gen-title": "שדרוג מחולל נבטים",
+                "shop-header-title": "🛒 חנות המשחק הרשמית",
+                "shop-diamonds-title": "חבילות יהלומים (מצב פיתוח פעיל 💎)",
+                "shop-energy-title": "חבילת אנרגיה מיידית",
+                "txt-payment-note": "תשלומים אמיתיים אינם פעילים בגרסה זו. מענקי בדיקה פתוחים למפתחים.",
+                "sanctuary-header-title": "🐾 מקלט המפלצות והחיים",
+                "sanctuary-desc": "כאן מפלצות הדרגה־4 המפותחות שלך חיים ומייצרים משאבים.",
+                "minigame-header-title": "🎮 אתגר קריסטלי האבולוציה",
+                "dex-header-title": "📖 ספר גילויים ואוסף",
+                "quest-title": "משימה פעילה / Active Quest",
+                "quest-claim": "איסוף / Claim"
+            },
+            en: {
+                "txt-game-title": "Mergivolve",
+                "txt-world-subtitle": "World 1: Ancient Sproutlands",
+                "txt-sanctuary-title": "Living World",
+                "txt-sanctuary-heading": "Ancient Sprout Isle",
+                "txt-sanctuary-sub": "Explore nature, discover rare creatures, and restore habitats.",
+                "txt-enter-merge": "Enter Merge Board",
+                "txt-sanctuary-btn": "Sanctuary",
+                "txt-worlds-header": "Island Regions",
+                "txt-upgrade": "Upgrade",
+                "txt-produce": "Produce",
+                "nav-world": "Map",
+                "nav-merge": "Board",
+                "nav-sanctuary": "Sanctuary",
+                "nav-shop": "Shop",
+                "nav-minigame": "Minigame",
+                "nav-dex": "Codex",
+                "modal-settings-title": "Game Settings",
+                "txt-audio-sfx": "Sound Effects (SFX)",
+                "txt-audio-bg": "Background Music (BGM)",
+                "txt-dev-mode-title": "Developer Testing",
+                "txt-reset-save": "Reset Save",
+                "txt-close": "Close",
+                "txt-close-2": "Close",
+                "modal-gen-title": "Upgrade Sprout Generator",
+                "shop-header-title": "🛒 Official Game Shop",
+                "shop-diamonds-title": "Diamond Bundles (Dev Test Mode 💎)",
+                "shop-energy-title": "Instant Energy Pack",
+                "txt-payment-note": "Real payments are inactive in this version. Test grants active for developers.",
+                "sanctuary-header-title": "🐾 Monster & Life Sanctuary",
+                "sanctuary-desc": "Your stage-4 evolved monsters live here and generate resources.",
+                "minigame-header-title": "🎮 Crystal Evolution Challenge",
+                "dex-header-title": "📖 Monster Codex & Collection",
+                "quest-title": "Active Quest",
+                "quest-claim": "Claim"
+            }
+        };
+
+        let gameState = {
+            lang: 'he',
+            activeScreen: 'worldmap',
+            energy: 100,
+            maxEnergy: 100,
+            coins: 500,
+            diamonds: 50,
+            genLevel: 1,
+            sfx: true,
+            bgm: true,
+            grid: Array(25).fill(null),
+            quest: { id: 1, descHe: "מזג 3 פריטי צמחים או ביצים", descEn: "Merge 3 sprout items or eggs", target: 3, progress: 0, reward: { type: 'coins', amount: 150 }, claimed: false },
+            sanctuaryMonsters: [],
+            codex: {},
+            selectedCell: null
+        };
+
+        const itemCatalog = {
+            1: { id: 1, nameHe: "זרע קסם קטן", nameEn: "Tiny Magic Seed", type: 'creature', level: 1, icon: '🌱', family: 'sprout', stage: 1 },
+            2: { id: 2, nameHe: "נבט רך עולה", nameEn: "Sprouting Seedling", type: 'creature', level: 2, icon: '🌿', family: 'sprout', stage: 2 },
+            3: { id: 3, nameHe: "שביט־עלה פורח", nameEn: "Blossom Guardian", type: 'creature', level: 3, icon: '🌳', family: 'sprout', stage: 3 },
+            4: { id: 4, nameHe: "עץ־פלא עתיק אגדי", nameEn: "Ancient World Tree", type: 'creature', level: 4, icon: '🌲', family: 'sprout', stage: 4 },
+            20: { id: 20, nameHe: "חצץ קסום", nameEn: "Magic Pebble", type: 'material', level: 1, icon: '🪨' },
+            21: { id: 21, nameHe: "אבן רונה מעובדת", nameEn: "Rune Stone", type: 'material', level: 2, icon: '🧱' }
+        };
+
+        const generatorConfigs = {
+            1: { nameHe: "מחולל נבטים רמה 1", nameEn: "Sprout Gen Lv 1", cost: 5, output: 1, descHe: "מפיק זרעי קסם וחצץ בסיסי.", descEn: "Produces basic seeds & pebbles." },
+            2: { nameHe: "מחולל נבטים משופר רמה 2", nameEn: "Enhanced Gen Lv 2", cost: 8, output: 1, descHe: "סיכוי גבוה להפקת פריטים מתקדמים.", descEn: "Higher chance for advanced items." },
+            3: { nameHe: "מחולל טורבו רמה 3", nameEn: "Turbo Sprout Gen Lv 3", cost: 10, output: 2, descHe: "מפיק שני פריטים בכל הפעלה!", descEn: "Produces 2 items per activation!" },
+            4: { nameHe: "מחולל פלזמה רמה 4", nameEn: "Plasma Gen Lv 4", cost: 12, output: 2, descHe: "יעילות גבוהה ואנרגיה משופרת.", descEn: "High efficiency & energy boost." },
+            5: { nameHe: "מחולל עולמי אלוהי רמה 5", nameEn: "Divine World Gen Lv 5", cost: 15, output: 3, descHe: "תפוקה משולשת ויכולות ייצור נדירות.", descEn: "Triple output & rare spawn capabilities." }
+        };
+
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        function playSound(type) {
+            if (!gameState.sfx) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                let now = audioCtx.currentTime;
+
+                if (type === 'merge') {
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(750, now + 0.18);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'produce') {
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(880, now + 0.15);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGame();
+            renderGrid();
+            updateUI();
+            startEnergyRegen();
+        });
+
+        function saveGame() {
+            localStorage.setItem('mergivolve_save_v1', JSON.stringify(gameState));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('mergivolve_save_v1');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    gameState = { ...gameState, ...parsed };
+                } catch(e) { console.error("Save load error", e); }
+            } else {
+                gameState.grid[10] = 1;
+                gameState.grid[11] = 1;
+                gameState.grid[12] = 20;
+            }
+            applyLanguage();
+        }
+
+        function devResetSave() {
+            if (confirm("האם לאפס את כל ההתקדמות? / Reset all progress?")) {
+                localStorage.removeItem('mergivolve_save_v1');
+                location.reload();
+            }
+        }
+
+        function toggleLanguage() {
+            gameState.lang = gameState.lang === 'he' ? 'en' : 'he';
+            applyLanguage();
+            saveGame();
+        }
+
+        function applyLanguage() {
+            const root = document.getElementById('html-root');
+            root.lang = gameState.lang;
+            root.dir = gameState.lang === 'he' ? 'rtl' : 'ltr';
+            document.getElementById('lang-btn').innerText = gameState.lang === 'he' ? 'EN' : 'עב';
+
+            const dict = i18n[gameState.lang];
+            for (let key in dict) {
+                const el = document.getElementById(key);
+                if (el) el.innerText = dict[key];
+            }
+
+            const qDesc = document.getElementById('quest-desc');
+            if (qDesc) qDesc.innerText = gameState.lang === 'he' ? gameState.quest.descHe : gameState.quest.descEn;
+        }
+
+        function switchScreen(screenName) {
+            gameState.activeScreen = screenName;
+            const screens = ['worldmap', 'merge', 'sanctuary', 'shop', 'minigame', 'dex'];
+            screens.forEach(s => {
+                const el = document.getElementById(`screen-${s}`);
+                if (el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+
+            const activeEl = document.getElementById(`screen-${screenName}`);
+            if (activeEl) {
+                activeEl.classList.remove('hidden');
+                activeEl.classList.add('flex');
+            }
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-teal-600', 'font-bold');
+                btn.classList.add('text-slate-400');
+            });
+            const activeBtn = document.querySelector(`[data-screen="${screenName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400');
+                activeBtn.classList.add('text-teal-600', 'font-bold');
+            }
+
+            if (screenName === 'merge') renderGrid();
+            else if (screenName === 'sanctuary') renderSanctuary();
+            else if (screenName === 'dex') renderCodex();
+
+            saveGame();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2600);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+            if (id === 'generator-modal') renderGeneratorUpgradeModal();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        function startEnergyRegen() {
+            setInterval(() => {
+                if (gameState.energy < gameState.maxEnergy) {
+                    gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 1);
+                    updateUI();
+                    saveGame();
+                }
+            }, 3000);
+        }
+
+        function updateUI() {
+            document.getElementById('energy-val').innerText = `${gameState.energy}/${gameState.maxEnergy}`;
+            document.getElementById('coins-val').innerText = gameState.coins;
+            document.getElementById('diamonds-val').innerText = gameState.diamonds;
+            
+            const cfg = generatorConfigs[gameState.genLevel];
+            document.getElementById('gen-name').innerText = gameState.lang === 'he' ? cfg.nameHe : cfg.nameEn;
+            document.getElementById('gen-info').innerText = `${gameState.lang === 'he' ? 'עלות אנרגיה:' : 'Energy Cost:'} ${cfg.cost} ⚡`;
+        }
+
+        function produceItem() {
+            const cfg = generatorConfigs[gameState.genLevel];
+            if (gameState.energy < cfg.cost) {
+                showToast(gameState.lang === 'he' ? "אין מספיק אנרגיה!" : "Not enough energy!");
+                return;
+            }
+
+            let emptyIndices = [];
+            gameState.grid.forEach((cell, idx) => { if (cell === null) emptyIndices.push(idx); });
+
+            if (emptyIndices.length === 0) {
+                showToast(gameState.lang === 'he' ? "הלוח מלא!" : "Board is full!");
+                return;
+            }
+
+            gameState.energy -= cfg.cost;
+            playSound('produce');
+
+            let producedCount = cfg.output || 1;
+            for (let i = 0; i < producedCount; i++) {
+                let currentEmpties = [];
+                gameState.grid.forEach((cell, idx) => { if (cell === null) currentEmpties.push(idx); });
+                if (currentEmpties.length === 0) break;
+
+                let targetIdx = currentEmpties[Math.floor(Math.random() * currentEmpties.length)];
+                let itemPool = [1, 20];
+                let itemId = itemPool[Math.floor(Math.random() * itemPool.length)];
+                gameState.grid[targetIdx] = itemId;
+            }
+
+            renderGrid();
+            updateUI();
+            saveGame();
+        }
+
+        function renderGrid() {
+            const gridEl = document.getElementById('merge-grid');
+            gridEl.innerHTML = '';
+
+            gameState.grid.forEach((itemId, idx) => {
+                const cell = document.createElement('div');
+                cell.className = `grid-cell bg-white/80 border-2 border-teal-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer relative shadow-xs hover:border-teal-400`;
+                
+                if (itemId !== null) {
+                    const item = itemCatalog[itemId];
+                    if (item) {
+                        cell.innerHTML = `
+                            <span class="text-3xl floating">${item.icon}</span>
+                            <span class="absolute bottom-1 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200">L${item.level || 1}</span>
+                        `;
+                        if (gameState.selectedCell === idx) {
+                            cell.classList.add('border-teal-500', 'ring-2', 'ring-teal-400', 'bg-teal-50');
+                        }
+                    }
+                }
+
+                cell.onclick = () => handleCellClick(idx);
+                gridEl.appendChild(cell);
+            });
+        }
+
+        function handleCellClick(idx) {
+            playSound('merge');
+            if (gameState.selectedCell === null) {
+                if (gameState.grid[idx] !== null) {
+                    gameState.selectedCell = idx;
+                    renderGrid();
+                }
+            } else {
+                let fromIdx = gameState.selectedCell;
+                gameState.selectedCell = null;
+
+                if (fromIdx === idx) {
+                    renderGrid();
+                    return;
+                }
+
+                let itemA = gameState.grid[fromIdx];
+                let itemB = gameState.grid[idx];
+
+                if (itemB === null) {
+                    gameState.grid[idx] = itemA;
+                    gameState.grid[fromIdx] = null;
+                } else if (itemA === itemB) {
+                    let currentItem = itemCatalog[itemA];
+                    let nextId = itemA + 1;
+                    
+                    if (itemCatalog[nextId] && itemCatalog[nextId].type === currentItem.type) {
+                        gameState.grid[idx] = nextId;
+                        gameState.grid[fromIdx] = null;
+                        
+                        gameState.codex[nextId] = true;
+
+                        if (!gameState.quest.claimed) {
+                            gameState.quest.progress++;
+                            if (gameState.quest.progress >= gameState.quest.target) {
+                                showToast(gameState.lang === 'he' ? "המשימה הושלמה! אסוף את הפרס." : "Quest completed!");
+                            }
+                        }
+
+                        if (nextId === 4 && !gameState.sanctuaryMonsters.includes(4)) {
+                            gameState.sanctuaryMonsters.push(4);
+                        }
+
+                        playSound('success');
+                        showToast(gameState.lang === 'he' ? "מיזוג ואבולוציה מוצלחים! ✨" : "Merge & Evolution Success! ✨");
+                    } else {
+                        showToast(gameState.lang === 'he' ? "רמה מקסימלית!" : "Max level reached!");
+                    }
+                } else {
+                    gameState.grid[fromIdx] = itemB;
+                    gameState.grid[idx] = itemA;
+                }
+
+                renderGrid();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        function renderGeneratorUpgradeModal() {
+            const container = document.getElementById('gen-upgrade-content');
+            container.innerHTML = '';
+
+            for (let lvl = 1; lvl <= 5; lvl++) {
+                let cfg = generatorConfigs[lvl];
+                let isCurrent = gameState.genLevel === lvl;
+                let isUnlocked = lvl <= gameState.genLevel + 1;
+
+                let div = document.createElement('div');
+                div.className = `p-3.5 rounded-2xl border flex justify-between items-center ${isCurrent ? 'bg-teal-50 border-teal-400 shadow-sm' : 'bg-white border-slate-200'}`;
+                div.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xs text-slate-800">${gameState.lang === 'he' ? cfg.nameHe : cfg.nameEn}</span>
+                        <span class="text-[11px] text-slate-500 mt-0.5">${gameState.lang === 'he' ? cfg.descHe : cfg.descEn}</span>
+                        <span class="text-[10px] text-teal-600 font-bold mt-1">⚡ Cost: ${cfg.cost}</span>
+                    </div>
+                    ${isCurrent ? `<span class="text-xs font-bold text-teal-700 bg-teal-100 px-2.5 py-1 rounded-xl">פעיל / Active</span>` : 
+                      isUnlocked ? `<button onclick="upgradeGenerator(${lvl})" class="bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xs">שדרג (💎 50)</button>` :
+                      `<span class="text-xs text-slate-400">🔒 נעול</span>`}
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function upgradeGenerator(lvl) {
+            if (gameState.diamonds < 50) {
+                showToast(gameState.lang === 'he' ? "אין מספיק יהלומים!" : "Not enough diamonds!");
+                return;
+            }
+            gameState.diamonds -= 50;
+            gameState.genLevel = lvl;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? "המחולל שודרג בהצלחה! 🚀" : "Generator upgraded! 🚀");
+            renderGeneratorUpgradeModal();
+            updateUI();
+            saveGame();
+        }
+
+        function buyDiamondPack(amount) {
+            gameState.diamonds += amount;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? `[TEST GRANT] נוספו 💎 ${amount}` : `[TEST GRANT] Added 💎 ${amount}`);
+            updateUI();
+            saveGame();
+        }
+
+        function claimQuest() {
+            if (gameState.quest.claimed || gameState.quest.progress < gameState.quest.target) return;
+            gameState.quest.claimed = true;
+            gameState.coins += gameState.quest.reward.amount;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? "הפרס נאסף! 🪙 +150" : "Reward claimed! 🪙 +150");
+            document.getElementById('quest-claim-btn').disabled = true;
+            document.getElementById('quest-claim-btn').innerText = gameState.lang === 'he' ? "נאסף" : "Claimed";
+            updateUI();
+            saveGame();
+        }
+
+        function renderSanctuary() {
+            const list = document.getElementById('sanctuary-monsters-list');
+            list.innerHTML = '';
+            if (gameState.sanctuaryMonsters.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-500 col-span-2 text-center py-6">${gameState.lang === 'he' ? 'אין עדיין מפלצות במקלט. מזג מפלצת לדרגה 4 (עץ פלא)!' : 'No monsters in sanctuary yet.'}</p>`;
+                return;
+            }
+            gameState.sanctuaryMonsters.forEach(id => {
+                let m = itemCatalog[id];
+                let div = document.createElement('div');
+                div.className = "bg-white border border-teal-200 p-4 rounded-2xl flex flex-col items-center gap-2 shadow-xs";
+                div.innerHTML = `
+                    <span class="text-4xl floating">${m.icon}</span>
+                    <span class="text-xs font-bold text-teal-900">${gameState.lang === 'he' ? m.nameHe : m.nameEn}</span>
+                    <button onclick="collectSanctuaryReward()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-xs mt-1">איסוף מטבעות 🪙</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function collectSanctuaryReward() {
+            gameState.coins += 100;
+            playSound('success');
+            showToast(gameState.lang === 'he' ? "+100 מטבעות מהמקלט!" : "+100 coins collected!");
+            updateUI();
+            saveGame();
+        }
+
+        let mgTimerInterval = null;
+        let mgScore = 0;
+        let mgTimeLeft = 30;
+        let mgActive = false;
+
+        function startMinigame() {
+            if (mgActive) return;
+            mgActive = true;
+            mgScore = 0;
+            mgTimeLeft = 30;
+            document.getElementById('mg-start-btn').classList.add('hidden');
+            document.getElementById('mg-score').innerText = `ניקוד: ${mgScore}`;
+            
+            mgTimerInterval = setInterval(() => {
+                mgTimeLeft--;
+                document.getElementById('mg-timer').innerText = `זמן: ${mgTimeLeft}s`;
+                if (mgTimeLeft <= 0) {
+                    clearInterval(mgTimerInterval);
+                    mgActive = false;
+                    document.getElementById('mg-start-btn').classList.remove('hidden');
+                    document.getElementById('mg-start-btn').innerText = gameState.lang === 'he' ? "שחק שוב" : "Play Again";
+                    let rewardDiamonds = Math.floor(mgScore / 3);
+                    gameState.diamonds += rewardDiamonds;
+                    showToast(gameState.lang === 'he' ? `המשחק הסתיים! זכית ב-💎 ${rewardDiamonds}` : `Won 💎 ${rewardDiamonds}`);
+                    updateUI();
+                    saveGame();
+                }
+            }, 1000);
+
+            renderMinigameBoard();
+        }
+
+        function renderMinigameBoard() {
+            const board = document.getElementById('mg-board');
+            board.innerHTML = '';
+            if (!mgActive) return;
+
+            let icons = ['💎', '🔮', '🌿', '✨'];
+            for (let i = 0; i < 8; i++) {
+                let icon = icons[Math.floor(Math.random() * icons.length)];
+                let btn = document.createElement('button');
+                btn.className = "bg-white hover:bg-teal-50 border border-teal-200 text-3xl p-3.5 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-xs";
+                btn.innerText = icon;
+                btn.onclick = () => {
+                    if (!mgActive) return;
+                    mgScore += (icon === '💎' ? 5 : 2);
+                    document.getElementById('mg-score').innerText = `ניקוד: ${mgScore}`;
+                    playSound('produce');
+                    renderMinigameBoard();
+                };
+                board.appendChild(btn);
+            }
+        }
+
+        function renderCodex() {
+            const grid = document.getElementById('dex-grid');
+            grid.innerHTML = '';
+            Object.values(itemCatalog).forEach(item => {
+                let discovered = gameState.codex[item.id] || item.level === 1;
+                let div = document.createElement('div');
+                div.className = `bg-white border ${discovered ? 'border-teal-300 shadow-xs' : 'border-slate-200 opacity-60'} p-3 rounded-2xl flex flex-col items-center justify-center gap-1.5`;
+                div.innerHTML = `
+                    <span class="text-3xl ${discovered ? '' : 'grayscale opacity-30'}">${discovered ? item.icon : '❓'}</span>
+                    <span class="text-[10px] text-center font-bold ${discovered ? 'text-teal-900' : 'text-slate-400'}">${discovered ? (gameState.lang === 'he' ? item.nameHe : item.nameEn) : '???'}</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function toggleAudio(type) {
+            if (type === 'sfx') gameState.sfx = document.getElementById('sfx-toggle').checked;
+            else if (type === 'bgm') gameState.bgm = document.getElementById('bgm-toggle').checked;
+            saveGame();
+        }
+
+        function devAddDiamonds() {
+            buyDiamondPack(1000);
+        }
+    </script>
+</body>
+</html>
