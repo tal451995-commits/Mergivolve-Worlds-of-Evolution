@@ -89,6 +89,36 @@
 @media(max-width:370px){.world-card{min-height:145px}.world-copy{max-width:73%}.world-title{font-size:19px}.world-desc{max-width:210px}}
 @media(prefers-reduced-motion:reduce){.scene-cloud,.scene-tree,.scene-water,.scene-birds,.scene-firefly,.scene-foreground-leaf,.world-card.world-react:after{animation:none!important;transition:none!important}}
 
+ .board-item[data-type="egg"] svg {
+  transform-origin: 50% 70%;
+  animation: mergivolve-egg-float 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 219, 125, 0.45));
+}
+
+.board-item[data-type="incubator"] svg {
+  animation: mergivolve-incubator-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes mergivolve-egg-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-3px) rotate(1deg); }
+}
+
+@keyframes mergivolve-incubator-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(142, 225, 195, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 7px rgba(142, 225, 195, 0.8));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-item[data-type="egg"] svg,
+  .board-item[data-type="incubator"] svg {
+    animation: none;
+  }
+}
 </style>
 </head>
 <body>
