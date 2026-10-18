@@ -387,7 +387,7 @@ function finishBoardFlight(flight,index,isMerge,effect,rewardLabel=''){
    const dx=(destination.left+destination.width/2)-(piece.rect.left+piece.rect.width/2);
    const dy=(destination.top+destination.height/2)-(piece.rect.top+piece.rect.height/2);
    const side=(i%2===0?-1:1)*(isMerge?11:4);
-   const endScale=isMerge?.56:Math.min(1.08,destination.width/piece.rect.width);
+   const endScale=1;
    const endRotate=piece.rotation+(isMerge?(i===0?-12:12):0);
    const keyframes=[
     {transform:'translate3d(0,0,0) scale(1) rotate(0deg)',opacity:1,offset:0},
