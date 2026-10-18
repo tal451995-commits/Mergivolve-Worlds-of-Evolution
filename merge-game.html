@@ -305,11 +305,39 @@ function svgArt(type,level=1,companion=false){
  <path d="M39 21 Q50 12 61 21" fill="none" stroke="#f6d77a" stroke-width="4" stroke-linecap="round"/>
  <circle cx="38" cy="72" r="3" fill="#f7d66b"/><circle cx="50" cy="72" r="3" fill="#8ee1c3"/><circle cx="62" cy="72" r="3" fill="#f7d66b"/>`;
  } else if(type==='egg'){
- art=`<ellipse cx="50" cy="82" rx="19" ry="5" fill="#172a32" opacity=".16"/>
- <path d="M50 18 C39 18 29 39 31 55 C33 72 42 78 50 78 C58 78 67 72 69 55 C71 39 61 18 50 18Z" fill="url(#egg)" stroke="#b9824c" stroke-width="2.5"/>
- <path d="M40 37 Q45 29 49 35" fill="none" stroke="#fff5d6" stroke-width="3" stroke-linecap="round"/>
- <path d="M37 54 Q43 49 47 55 T61 54" fill="none" stroke="#fff0b7" stroke-width="2" opacity=".9"/>
- <circle cx="59" cy="35" r="3" fill="#fff5d6" opacity=".9"/>`;
+  const eggStage=Math.max(0,Math.min(4,(Number(level)||1)-1));
+  const eggColors=[
+    ['#fff9cf','#cde2a0','#b9824c'],
+    ['#e0f6ff','#82cde5','#478ca8'],
+    ['#f4dcff','#bc8be8','#8052b1'],
+    ['#ffe5b8','#ff9c65','#b95c3c'],
+    ['#fff5ad','#f3bd4f','#a76c27']
+  ][eggStage];
+  const eggGlow=eggStage>=3;
+  art=`
+  ${eggGlow?'<circle cx="50" cy="46" r="43" fill="url(#glow)"/>':''}
+  <ellipse cx="50" cy="82" rx="20" ry="5" fill="#172a32" opacity=".18"/>
+  <path d="M50 17 C38 17 28 39 30 56 C32 73 41 79 50 79 C59 79 68 73 70 56 C72 39 62 17 50 17Z"
+    fill="${eggColors[0]}" stroke="${eggColors[2]}" stroke-width="2.8"/>
+  <path d="M40 36 Q45 27 50 34" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity=".9"/>
+  <path d="M37 53 Q43 47 48 54 T62 52" fill="none" stroke="${eggColors[1]}" stroke-width="3" stroke-linecap="round"/>
+  ${eggStage>=1?`
+  <path d="M36 43 L42 47 L38 53" fill="none" stroke="${eggColors[2]}" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="61" cy="35" r="3" fill="#ffffff"/>
+  `:''}
+  ${eggStage>=2?`
+  <path d="M42 22 L38 13 L48 20 M57 20 L66 12 L62 25" fill="${eggColors[1]}" stroke="${eggColors[2]}" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M53 43 L48 50 L54 55 L49 62" fill="none" stroke="${eggColors[2]}" stroke-width="2.5" stroke-linejoin="round"/>
+  `:''}
+  ${eggStage>=3?`
+  <circle cx="28" cy="33" r="3" fill="#fff5ad"/>
+  <circle cx="73" cy="45" r="2.5" fill="#ffffff"/>
+  <path d="M34 65 L27 71 L36 73 M64 65 L72 71 L64 74" fill="none" stroke="${eggColors[2]}" stroke-width="2.5" stroke-linejoin="round"/>
+  `:''}
+  ${eggStage>=4?`
+  <path d="M39 25 L43 31 L39 37 M59 28 L55 34 L60 40" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M50 8 L53 15 L61 16 L55 21 L57 29 L50 24 L43 29 L45 21 L39 16 L47 15Z" fill="#fff5ad" stroke="#e4a83e" stroke-width="1.5"/>
+  `:''}`;
  } else if(type==='gen'){
   const lv=Math.max(1,Math.min(5,level)); const greens=['#7eac67','#619a59','#4b8d58','#477f66','#407260'];
   art=`<ellipse cx="50" cy="78" rx="32" ry="9" fill="#345738" opacity=".23"/><path d="M20 62 Q19 43 32 41 L31 31 Q39 39 43 28 Q50 37 56 27 Q62 38 70 31 L68 44 Q82 45 80 63 Q79 75 66 77 L34 77 Q20 75 20 62Z" fill="${greens[lv-1]}" stroke="#386748" stroke-width="3" stroke-linejoin="round"/><path d="M25 53 Q38 58 50 51 T76 53" fill="none" stroke="#b9d889" stroke-width="3" stroke-linecap="round"/><path d="M50 54 Q49 38 55 24" fill="none" stroke="#d3ef9a" stroke-width="4" stroke-linecap="round"/><path d="M52 36 Q35 34 34 21 Q49 20 54 33Z" fill="#a8d977" stroke="#477b4d" stroke-width="2"/><path d="M55 30 Q59 13 73 16 Q73 31 57 35Z" fill="#e2f28a" stroke="#477b4d" stroke-width="2"/>`;
