@@ -344,6 +344,33 @@ function useEnergy(n){if(state.energy<n){showToast(t('energyLow'));return false}
 function restoreEnergy(amount){state.energy=Math.min(ENERGY_MAX,state.energy+amount);if(state.energy===ENERGY_MAX)state.lastEnergyAt=Date.now();render();save()}
 function summonFrom(index,free=false){const gen=state.board[index];if(!gen||gen.type!=='gen'){const g=state.board.findIndex(x=>x&&x.type==='gen');if(g<0){showToast(t('summonNeed'));return}return summonFrom(g,free)}const target=firstEmpty();if(target<0){showToast(t('noSpace'));return}if(!free&&!useEnergy(ENERGY_COST))return;const lucky=state.boosters&&state.boosters.luckySummons>0;const output=Math.min(MAX_ITEM,1+Math.floor((gen.level-1)/2)+(lucky?1:0));if(lucky)state.boosters.luckySummons--;state.board[target]={type:'wild',level:output};state.summons++;addXp(1);state.coins+=2;save();render();playSfx('pop');playGeneratorAction(index);playBoardAction(target,false,'leaf');announce(t('summoned'));}
 function summonButton(){const gen=state.board.findIndex(x=>x&&x.type==='gen');if(gen<0){showToast(t('summonNeed'));return}summonFrom(gen)}
+ function incubateFrom(index){
+  const incubator=state.board[index];
+
+  if(!incubator||incubator.type!=='incubator')return;
+
+  const target=firstEmpty();
+
+  if(target<0){
+    showToast(t('noSpace'));
+    return;
+  }
+
+  if(!useEnergy(ENERGY_COST))return;
+
+  state.board[target]={
+    type:'egg',
+    level:0
+  };
+
+  addXp(1);
+  save();
+  render();
+  playSfx('pop');
+  playBoardAction(target,false,'leaf');
+  announce(lang==='he'?'נוצרה ביצת דרקון':'Dragon egg created');
+  showToast(lang==='he'?'נוצרה ביצת דרקון':'Dragon egg created');
+}
 function announce(msg){const frame=$('.board-frame');let a=$('.board-announce');if(!a){a=document.createElement('div');a.className='board-announce';frame.append(a)}a.textContent=msg;a.classList.remove('show');void a.offsetWidth;a.classList.add('show')}
 function registerMergeCombo(){const now=performance.now();mergeCombo=now-lastMergeAt<1550?Math.min(5,mergeCombo+1):1;lastMergeAt=now;return mergeCombo}
 function mergeAt(from,to){
