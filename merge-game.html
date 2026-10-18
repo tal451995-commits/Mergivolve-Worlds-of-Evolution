@@ -241,6 +241,19 @@ if (!state.starterEggsGranted) {
   }
 }
 
+ if (!state.eggIncubatorGranted) {
+  const emptySlot = state.board.findIndex(item => item === null);
+
+  if (emptySlot !== -1) {
+    state.board[emptySlot] = {
+      type: 'incubator',
+      level: 1
+    };
+
+    state.eggIncubatorGranted = true;
+    save();
+  }
+}
 function t(key){return (TEXT[lang]&&TEXT[lang][key])||TEXT.en[key]||key}
 function storeText(key){return (STORE_WORDS[lang]&&STORE_WORDS[lang][key])||STORE_WORDS.en[key]||key}
 function fmt(n){return new Intl.NumberFormat(lang==='he'?'he-IL':'en-US').format(n)}
