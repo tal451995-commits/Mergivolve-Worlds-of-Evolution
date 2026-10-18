@@ -19,6 +19,7 @@
 
   const style = document.createElement('style');
 
+  
   style.textContent = `
     .board-item img.creature-portrait {
       display: block;
@@ -29,19 +30,28 @@
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
-      filter: drop-shadow(0 2px 2px rgba(25,49,34,.15));
-      animation: none !important;
-      transform: none !important;
-      transition: none !important;
+      filter: drop-shadow(0 3px 3px rgba(25,49,34,.2));
+      transform-origin: center bottom;
+      animation: creaturePortraitIdle 3.2s ease-in-out infinite;
     }
 
-    /* Prevent temporary zooming when an item appears or merges. */
-    .board-item.merge-pop,
-    .board-item.spawn-pop {
-      animation: none !important;
-      transform: none !important;
+    @keyframes creaturePortraitIdle {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-2px) rotate(.5deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .board-item img.creature-portrait {
+        animation: none;
+      }
     }
   `;
+
+    
 
   document.head.appendChild(style);
 
