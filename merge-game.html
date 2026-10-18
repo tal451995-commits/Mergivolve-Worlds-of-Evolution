@@ -361,7 +361,47 @@ const flight=createBoardFlight(from,to,true);const next=mergedBoardItem(a);state
  save();render();triggerWorldReaction();const isEvolution=next.type==='wild'&&next.level>=7;const fx=isEvolution?'evolve':((state.equipped&&state.equipped.mergeFx)||'leaf');const topReward=next.level===MAX_ITEM&&next.type==='wild';const rewardLabel='+'+(earned+(topReward?50:0))+' 🪙'+(topReward?' +2 💎':'')+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,fx,rewardLabel);playSfx('merge');const msg=a.type==='gen'?t('genUpgrade'):t('merge');announce(msg);
  if(next.level===MAX_ITEM&&next.type==='wild'){state.gems+=2;state.coins+=50;save();showToast(t('newForm')+' 💎 +2')}else showToast(msg+' · +'+earned+' '+t('coinsWord')+(boosted?' ✨':''));updateMissions();return true
 }
-function tapCell(idx){const item=state.board[idx];if(!item){if(selected!==null){mergeAt(selected,idx)}return}if(item.type==='gen'){summonFrom(idx);return}if(selected===null){selected=idx;renderBoard();showToast(t('tapMatch'));return}if(selected===idx){selected=null;renderBoard();return}const other=state.board[selected];if(other&&other.type===item.type&&other.level===item.level){mergeAt(selected,idx)}else{selected=idx;renderBoard();showToast(t('tapMatch'))}}
+function tapCell(idx){
+  const item=state.board[idx];
+
+  if(!item){
+    if(selected!==null)mergeAt(selected,idx);
+    return;
+  }
+
+  if(item.type==='gen'){
+    summonFrom(idx);
+    return;
+  }
+
+  if(item.type==='incubator'){
+    incubateFrom(idx);
+    return;
+  }
+
+  if(selected===null){
+    selected=idx;
+    renderBoard();
+    showToast(t('tapMatch'));
+    return;
+  }
+
+  if(selected===idx){
+    selected=null;
+    renderBoard();
+    return;
+  }
+
+  const other=state.board[selected];
+
+  if(other&&other.type===item.type&&other.level===item.level){
+    mergeAt(selected,idx);
+  }else{
+    selected=idx;
+    renderBoard();
+    showToast(t('tapMatch'));
+  }
+}
 function pointerDown(e){const node=e.target.closest('.board-item');if(!node)return;const idx=Number(node.dataset.index);if(!Number.isInteger(idx)||!state.board[idx])return;e.preventDefault();drag={idx:idx,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,moved:false,node:node};dragTarget=null;}
 function updateDragVisual(x,y){if(!drag)return;if(!drag.moved&&Math.hypot(x-drag.startX,y-drag.startY)>8){drag.moved=true;drag.node.classList.add('dragging');ghost=document.createElement('div');ghost.className='flight-ghost';ghost.style.width='62px';ghost.style.height='62px';ghost.style.left='0';ghost.style.top='0';ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';ghost.innerHTML=svgArt(state.board[drag.idx].type,state.board[drag.idx].level);document.body.append(ghost);document.body.style.cursor='grabbing'}if(drag.moved&&ghost){ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';const found=document.elementFromPoint(x,y);const target=found&&found.closest?found.closest('.cell'):null;const valid=target&&Number(target.dataset.index)!==drag.idx?target:null;if(valid!==dragTarget){if(dragTarget)dragTarget.classList.remove('drop-target');dragTarget=valid;if(dragTarget)dragTarget.classList.add('drop-target')}}}
 function pointerMove(e){if(!drag)return;drag.x=e.clientX;drag.y=e.clientY;if(!dragRaf)dragRaf=requestAnimationFrame(()=>{dragRaf=0;if(drag)updateDragVisual(drag.x,drag.y)});}
