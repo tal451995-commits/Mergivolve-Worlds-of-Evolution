@@ -219,6 +219,28 @@ function mergedBoardItem(item) {
 
 function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?normalizeBoardItem(x):null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
 function save(){try{state.lastEnergyAt=state.lastEnergyAt||Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
+ 
+if (!state.starterEggsGranted) {
+  const emptySlots = state.board
+    .map((item, index) => item === null ? index : -1)
+    .filter(index => index !== -1);
+
+  if (emptySlots.length >= 2) {
+    state.board[emptySlots[0]] = {
+      type: 'wild',
+      level: 6
+    };
+
+    state.board[emptySlots[1]] = {
+      type: 'wild',
+      level: 6
+    };
+
+    state.starterEggsGranted = true;
+    save();
+  }
+}
+
 function t(key){return (TEXT[lang]&&TEXT[lang][key])||TEXT.en[key]||key}
 function storeText(key){return (STORE_WORDS[lang]&&STORE_WORDS[lang][key])||STORE_WORDS.en[key]||key}
 function fmt(n){return new Intl.NumberFormat(lang==='he'?'he-IL':'en-US').format(n)}
