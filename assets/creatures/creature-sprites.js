@@ -1,76 +1,52 @@
+
 /*
- * Mergivolve — JPG Creature Image Adapter
- * Uses the existing JPG files in the repository root.
- * Keeps the original merge logic unchanged.
+ * Mergivolve — PNG Creature Sprite Adapter
+ * Uses existing PNG files from the repository root.
+ * No JPG fallback and no character zoom animation.
  */
 (() => {
   'use strict';
 
-  // merge-game.html is in the repository root.
-  // Therefore these image URLs are relative to that page.
   const IMAGE_BASE = './';
 
-  
+  // These PNG files already exist in the repository root.
   const CREATURES_BY_LEVEL = {
-    1: {
-      file: 'forest_hatchling.jpg',
-      alt: 'Forest Hatchling'
-    },
-    2: {
-      file: 'red_hatchling.jpg',
-      alt: 'Red Hatchling'
-    },
-    3: {
-      file: 'volcanic_baby_dino.jpg',
-      alt: 'Volcanic Baby Dino'
-    },
-    4: {
-      file: 'verdant_drake.jpg',
-      alt: 'Verdant Drake'
-    },
-    5: {
-      file: 'ember_heart.jpg',
-      alt: 'Ember Heart'
-    },
-    6: {
-      file: 'coral_sentinel.jpg',
-      alt: 'Coral Sentinel'
-    },
-    7: {
-      file: 'geode_dragon.jpg',
-      alt: 'Geode Dragon'
-    },
-    8: {
-      file: 'celestial_wyrm.jpg',
-      alt: 'Celestial Wyrm'
-    }
+    1: { file: 'draglet.png', alt: 'Draglet' },
+    2: { file: 'dragonet.png', alt: 'Dragonet' },
+    3: { file: 'draco.png', alt: 'Draco' },
+    4: { file: 'flameheart.png', alt: 'Flameheart' },
+    5: { file: 'crystalwing.png', alt: 'Crystalwing' },
+    6: { file: 'frostfang.png', alt: 'Frostfang' },
+    7: { file: 'hydra.png', alt: 'Hydra' },
+    8: { file: 'tengu.png', alt: 'Tengu' }
   };
 
   const style = document.createElement('style');
+
   style.textContent = `
     .board-item img.creature-portrait {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
+      object-position: center bottom;
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
-      filter: drop-shadow(0 2px 3px rgba(25,49,34,.18));
-      animation: creatureEnter .22s ease-out both;
+      filter: drop-shadow(0 2px 2px rgba(25,49,34,.15));
+      animation: none !important;
+      transform: none !important;
+      transition: none !important;
     }
 
-    @keyframes creatureEnter {
-      from {
-        transform: translateY(3px) scale(.94);
-        opacity: .75;
-      }
-      to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
+    /* Prevent temporary zooming when an item appears or merges. */
+    .board-item.merge-pop,
+    .board-item.spawn-pop {
+      animation: none !important;
+      transform: none !important;
     }
   `;
+
   document.head.appendChild(style);
 
   function enhanceBoard() {
@@ -83,8 +59,17 @@
         if (!creature) return;
 
         if (
-          node.dataset.creatureSprite === creature.file ||
           node.dataset.creatureError === creature.file
+        ) {
+          return;
+        }
+
+        const existingImage =
+          node.querySelector('img.creature-portrait');
+
+        if (
+          node.dataset.creatureSprite === creature.file &&
+          existingImage
         ) {
           return;
         }
@@ -96,6 +81,7 @@
         const img = document.createElement('img');
 
         img.className = 'creature-portrait';
+        img.dataset.file = creature.file;
         img.src = IMAGE_BASE + creature.file;
         img.alt = creature.alt;
         img.draggable = false;
@@ -113,8 +99,9 @@
 
           delete node.dataset.creatureSprite;
           node.dataset.creatureError = creature.file;
+
           console.warn(
-            '[Mergivolve] Could not load creature image:',
+            '[Mergivolve] PNG could not load:',
             img.src
           );
         }, { once: true });
@@ -127,6 +114,7 @@
 
   function start() {
     const board = document.querySelector('#board');
+
     if (!board) {
       console.warn('[Mergivolve] Board not found.');
       return;
@@ -135,6 +123,7 @@
     enhanceBoard();
 
     const observer = new MutationObserver(enhanceBoard);
+
     observer.observe(board, {
       childList: true,
       subtree: true,
