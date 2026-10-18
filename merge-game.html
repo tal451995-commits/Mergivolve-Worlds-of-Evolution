@@ -463,7 +463,46 @@ function pointerDown(e){const node=e.target.closest('.board-item');if(!node)retu
 function updateDragVisual(x,y){if(!drag)return;if(!drag.moved&&Math.hypot(x-drag.startX,y-drag.startY)>8){drag.moved=true;drag.node.classList.add('dragging');ghost=document.createElement('div');ghost.className='flight-ghost';ghost.style.width='62px';ghost.style.height='62px';ghost.style.left='0';ghost.style.top='0';ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';ghost.innerHTML=svgArt(state.board[drag.idx].type,state.board[drag.idx].level);document.body.append(ghost);document.body.style.cursor='grabbing'}if(drag.moved&&ghost){ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';const found=document.elementFromPoint(x,y);const target=found&&found.closest?found.closest('.cell'):null;const valid=target&&Number(target.dataset.index)!==drag.idx?target:null;if(valid!==dragTarget){if(dragTarget)dragTarget.classList.remove('drop-target');dragTarget=valid;if(dragTarget)dragTarget.classList.add('drop-target')}}}
 function pointerMove(e){if(!drag)return;drag.x=e.clientX;drag.y=e.clientY;if(!dragRaf)dragRaf=requestAnimationFrame(()=>{dragRaf=0;if(drag)updateDragVisual(drag.x,drag.y)});}
 function cleanupDrag(){if(dragRaf){cancelAnimationFrame(dragRaf);dragRaf=0}if(drag&&drag.node)drag.node.classList.remove('dragging');if(ghost)ghost.remove();ghost=null;if(dragTarget)dragTarget.classList.remove('drop-target');dragTarget=null;document.body.style.cursor='';}
-function pointerUp(e){if(!drag)return;const d=drag;const didMove=d.moved||Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>8;const x=Number.isFinite(e.clientX)?e.clientX:d.x;const y=Number.isFinite(e.clientY)?e.clientY:d.y;if(dragRaf){cancelAnimationFrame(dragRaf);dragRaf=0}if(d.node)d.node.classList.remove('dragging');drag=null;cleanupDrag();if(didMove){const found=document.elementFromPoint(x,y);const target=found&&found.closest?found.closest('.cell'):null;if(target){const to=Number(target.dataset.index);if(Number.isInteger(to)){selected=null;mergeAt(d.idx,to)}}return}tapCell(d.idx)}
+function pointerUp(e){
+  if(!drag)return;
+
+  const d=drag;
+  const distance=Math.hypot(e.clientX-d.startX,e.clientY-d.startY);
+  const didMove=d.moved||distance>8;
+  const x=Number.isFinite(e.clientX)?e.clientX:d.x;
+  const y=Number.isFinite(e.clientY)?e.clientY:d.y;
+
+  if(dragRaf){
+    cancelAnimationFrame(dragRaf);
+    dragRaf=0;
+  }
+
+  if(d.node)d.node.classList.remove('dragging');
+
+  drag=null;
+  cleanupDrag();
+
+  if(didMove){
+    const found=document.elementFromPoint(x,y);
+    const target=found&&found.closest?found.closest('.cell'):null;
+
+    if(target){
+      const to=Number(target.dataset.index);
+
+      if(Number.isInteger(to)){
+        if(to===d.idx){
+          tapCell(d.idx);
+        }else{
+          selected=null;
+          mergeAt(d.idx,to);
+        }
+      }
+    }
+    return;
+  }
+
+  tapCell(d.idx);
+}
 function cancelDrag(){if(!drag)return;const d=drag;if(d.node)d.node.classList.remove('dragging');drag=null;cleanupDrag()}
 function openModal(title,html){$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;const modal=$('.modal');if(modal)modal.scrollTop=0;$('#modalBackdrop').classList.add('open')}
 function closeModal(){$('#modalBackdrop').classList.remove('open')}
