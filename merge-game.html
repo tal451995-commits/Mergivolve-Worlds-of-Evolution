@@ -334,7 +334,7 @@ function registerMergeCombo(){const now=performance.now();mergeCombo=now-lastMer
 function mergeAt(from,to){
  if(from===to)return false;const a=state.board[from],b=state.board[to];if(!a)return false;
  if(!b){const flight=createBoardFlight(from,to,false);state.board[to]=a;state.board[from]=null;selected=null;save();render();finishBoardFlight(flight,to,false,'move');showToast(t('moved'));return true}
-if(a.type!==b.type||a.level!==b.level||(a.type==='wild'&&((a.speciesId||null)!==(b.speciesId||null)||(a.familyId||null)!==(b.familyId||null)))){showToast(t('sameItem'));return false}
+if(a.type!==b.type||a.level!==b.level){showToast(t('sameItem'));return false}
  if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)&&a.type!=='wild'){showToast(t('maxLevel'));return false}
  const combo=registerMergeCombo();
  if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)){
