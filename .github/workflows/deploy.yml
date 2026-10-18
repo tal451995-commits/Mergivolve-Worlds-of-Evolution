@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-            - name: Prepare site files
+      - name: Prepare site files
         run: |
           mkdir -p dist
           cp ./*.html dist/
@@ -26,6 +26,7 @@ jobs:
           find . -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) -exec cp -t dist {} +
           cp manifest.json sw.js dist/
           cp icon-192-1.png icon-512-1.png dist/
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
