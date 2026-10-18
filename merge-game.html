@@ -261,7 +261,20 @@ function levelName(item){if(!item)return '';return item.type==='gen'?t('genNames
 function svgArt(type,level=1,companion=false){
  const defs=`<defs><linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ef80"/><stop offset="1" stop-color="#559451"/></linearGradient><linearGradient id="mush" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#ffafc0"/><stop offset="1" stop-color="#e45e79"/></linearGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5b5ff"/><stop offset="1" stop-color="#8b65ca"/></linearGradient><linearGradient id="crystal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c5fff0"/><stop offset=".5" stop-color="#6fcac2"/><stop offset="1" stop-color="#5b72bc"/></linearGradient><linearGradient id="egg" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff9cf"/><stop offset="1" stop-color="#cde2a0"/></linearGradient><linearGradient id="dragon" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#abdb76"/><stop offset=".6" stop-color="#62a65f"/><stop offset="1" stop-color="#34744d"/></linearGradient><linearGradient id="wing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f89f"/><stop offset="1" stop-color="#72bd7c"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff5b4" stop-opacity=".85"/><stop offset="1" stop-color="#fff5b4" stop-opacity="0"/></radialGradient></defs>`;
  let art='';
- if(type==='gen'){
+  if(type==='incubator'){
+ art=`<ellipse cx="50" cy="83" rx="25" ry="5" fill="#172a32" opacity=".18"/>
+ <rect x="25" y="24" width="50" height="53" rx="12" fill="#6b9b8c" stroke="#355c54" stroke-width="3"/>
+ <rect x="31" y="30" width="38" height="38" rx="9" fill="#dff8ef" stroke="#f7fff9" stroke-width="2"/>
+ <path d="M50 38 C40 38 37 49 43 57 C47 63 53 63 57 57 C63 49 60 38 50 38Z" fill="url(#egg)" stroke="#b9824c" stroke-width="1.5"/>
+ <path d="M39 21 Q50 12 61 21" fill="none" stroke="#f6d77a" stroke-width="4" stroke-linecap="round"/>
+ <circle cx="38" cy="72" r="3" fill="#f7d66b"/><circle cx="50" cy="72" r="3" fill="#8ee1c3"/><circle cx="62" cy="72" r="3" fill="#f7d66b"/>`;
+ } else if(type==='egg'){
+ art=`<ellipse cx="50" cy="82" rx="19" ry="5" fill="#172a32" opacity=".16"/>
+ <path d="M50 18 C39 18 29 39 31 55 C33 72 42 78 50 78 C58 78 67 72 69 55 C71 39 61 18 50 18Z" fill="url(#egg)" stroke="#b9824c" stroke-width="2.5"/>
+ <path d="M40 37 Q45 29 49 35" fill="none" stroke="#fff5d6" stroke-width="3" stroke-linecap="round"/>
+ <path d="M37 54 Q43 49 47 55 T61 54" fill="none" stroke="#fff0b7" stroke-width="2" opacity=".9"/>
+ <circle cx="59" cy="35" r="3" fill="#fff5d6" opacity=".9"/>`;
+ } else if(type==='gen'){
   const lv=Math.max(1,Math.min(5,level)); const greens=['#7eac67','#619a59','#4b8d58','#477f66','#407260'];
   art=`<ellipse cx="50" cy="78" rx="32" ry="9" fill="#345738" opacity=".23"/><path d="M20 62 Q19 43 32 41 L31 31 Q39 39 43 28 Q50 37 56 27 Q62 38 70 31 L68 44 Q82 45 80 63 Q79 75 66 77 L34 77 Q20 75 20 62Z" fill="${greens[lv-1]}" stroke="#386748" stroke-width="3" stroke-linejoin="round"/><path d="M25 53 Q38 58 50 51 T76 53" fill="none" stroke="#b9d889" stroke-width="3" stroke-linecap="round"/><path d="M50 54 Q49 38 55 24" fill="none" stroke="#d3ef9a" stroke-width="4" stroke-linecap="round"/><path d="M52 36 Q35 34 34 21 Q49 20 54 33Z" fill="#a8d977" stroke="#477b4d" stroke-width="2"/><path d="M55 30 Q59 13 73 16 Q73 31 57 35Z" fill="#e2f28a" stroke="#477b4d" stroke-width="2"/>`;
   if(lv>=2)art+=`<path d="M24 48 Q12 37 17 26 Q33 28 35 45Z" fill="#8fcf83" stroke="#3f7548" stroke-width="2"/><circle cx="65" cy="53" r="4" fill="#f8d76f"/>`;
