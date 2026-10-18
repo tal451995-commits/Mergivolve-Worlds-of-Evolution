@@ -257,7 +257,13 @@ if (!state.starterEggsGranted) {
 function t(key){return (TEXT[lang]&&TEXT[lang][key])||TEXT.en[key]||key}
 function storeText(key){return (STORE_WORDS[lang]&&STORE_WORDS[lang][key])||STORE_WORDS.en[key]||key}
 function fmt(n){return new Intl.NumberFormat(lang==='he'?'he-IL':'en-US').format(n)}
-function levelName(item){if(!item)return '';return item.type==='gen'?t('genNames')[item.level]||t('genNames')[5]:t('itemNames')[item.level]||t('itemNames')[8]}
+function levelName(item){
+  if(!item)return '';
+  if(item.type==='gen')return t('genNames')[item.level]||t('genNames')[5];
+  if(item.type==='incubator')return lang==='he'?'מדגרת ביצים':'Egg Incubator';
+  if(item.type==='egg')return lang==='he'?'ביצת דרקון':'Dragon Egg';
+  return t('itemNames')[item.level]||t('itemNames')[8];
+}
 function svgArt(type,level=1,companion=false){
  const defs=`<defs><linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ef80"/><stop offset="1" stop-color="#559451"/></linearGradient><linearGradient id="mush" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#ffafc0"/><stop offset="1" stop-color="#e45e79"/></linearGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5b5ff"/><stop offset="1" stop-color="#8b65ca"/></linearGradient><linearGradient id="crystal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c5fff0"/><stop offset=".5" stop-color="#6fcac2"/><stop offset="1" stop-color="#5b72bc"/></linearGradient><linearGradient id="egg" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff9cf"/><stop offset="1" stop-color="#cde2a0"/></linearGradient><linearGradient id="dragon" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#abdb76"/><stop offset=".6" stop-color="#62a65f"/><stop offset="1" stop-color="#34744d"/></linearGradient><linearGradient id="wing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f89f"/><stop offset="1" stop-color="#72bd7c"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff5b4" stop-opacity=".85"/><stop offset="1" stop-color="#fff5b4" stop-opacity="0"/></radialGradient></defs>`;
  let art='';
