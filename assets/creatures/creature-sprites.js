@@ -10,16 +10,12 @@
   const IMAGE_BASE = './';
 
   // These PNG files already exist in the repository root.
+  
   const CREATURES_BY_LEVEL = {
-    1: { file: 'draglet.png', alt: 'Draglet' },
-    2: { file: 'dragonet.png', alt: 'Dragonet' },
-    3: { file: 'draco.png', alt: 'Draco' },
-    4: { file: 'flameheart.png', alt: 'Flameheart' },
-    5: { file: 'crystalwing.png', alt: 'Crystalwing' },
-    6: { file: 'frostfang.png', alt: 'Frostfang' },
-    7: { file: 'hydra.png', alt: 'Hydra' },
-    8: { file: 'tengu.png', alt: 'Tengu' }
+    7: { file: 'draglet.png', alt: 'Dragon Hatchling' },
+    8: { file: 'dragonet.png', alt: 'Evolved Dragon' }
   };
+
 
   const style = document.createElement('style');
 
