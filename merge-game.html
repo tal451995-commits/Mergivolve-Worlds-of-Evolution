@@ -201,6 +201,19 @@ function normalizeBoardItem(item) {
 
 
 function mergedBoardItem(item) {
+  const next = {
+    ...item,
+    type: item.type,
+    level: Number(item.level) + 1
+  };
+
+  // Do not assign a random species when merging.
+  delete next.speciesId;
+  delete next.familyId;
+  delete next.evolutionStage;
+
+  return next;
+}
   const nextLevel = Number(item.level) + 1;
   const next = {
     ...item,
