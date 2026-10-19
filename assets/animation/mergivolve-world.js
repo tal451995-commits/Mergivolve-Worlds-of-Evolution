@@ -551,63 +551,89 @@ tree.traverse((object) => {
     clouds.push(cloud);
   }
 
-  // Small flock of flying birds.
+  
+  // Readable birds with bodies, heads, beaks and flapping wings.
   const birds = [];
-  const birdBodyGeometry = new THREE.SphereGeometry(0.16, 10, 8);
-  const birdWingGeometry = new THREE.BufferGeometry();
-
-  birdWingGeometry.setAttribute(
-    'position',
-    new THREE.Float32BufferAttribute([
-      0, 0, 0,
-      -0.48, 0.08, 0.12,
-      -0.18, 0.02, 0.04,
-      0, 0, 0,
-      0.18, 0.02, 0.04,
-      0.48, 0.08, 0.12
-    ], 3)
-  );
-
-  birdWingGeometry.setIndex([0, 1, 2, 3, 4, 5]);
-  birdWingGeometry.computeVertexNormals();
-
   const birdMaterial = new THREE.MeshStandardMaterial({
-    color: 0x34465a,
-    side: THREE.DoubleSide,
-    roughness: 0.9
+    color: 0x374b5d,
+    roughness: 0.85
+  });
+  const wingMaterial = new THREE.MeshStandardMaterial({
+    color: 0x718b9a,
+    roughness: 0.9,
+    side: THREE.DoubleSide
+  });
+  const beakMaterial = new THREE.MeshStandardMaterial({
+    color: 0xf0b34f
   });
 
-  for (let i = 0; i < 7; i++) {
+  const birdCount = isSmallScreen ? 12 : 20;
+
+  for (let i = 0; i < birdCount; i++) {
     const bird = new THREE.Group();
 
-    const birdBody = new THREE.Mesh(
-      birdBodyGeometry,
+    const body = new THREE.Mesh(
+      new THREE.SphereGeometry(0.22, 10, 8),
       birdMaterial
     );
-    bird.add(birdBody);
+    body.scale.set(1.35, 0.65, 0.7);
+    bird.add(body);
 
-    const wings = new THREE.Mesh(
-      birdWingGeometry,
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.14, 10, 8),
       birdMaterial
     );
-    bird.add(wings);
+    head.position.set(0.23, 0.09, 0);
+    bird.add(head);
+
+    const beak = new THREE.Mesh(
+      new THREE.ConeGeometry(0.065, 0.2, 5),
+      beakMaterial
+    );
+    beak.rotation.z = -Math.PI / 2;
+    beak.position.set(0.39, 0.08, 0);
+    bird.add(beak);
+
+    const leftWing = new THREE.Group();
+    leftWing.position.set(0, 0.1, -0.08);
+    const leftFeather = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 8, 6),
+      wingMaterial
+    );
+    leftFeather.scale.set(0.38, 0.055, 0.23);
+    leftFeather.position.set(-0.15, 0, -0.12);
+    leftWing.add(leftFeather);
+    bird.add(leftWing);
+
+    const rightWing = new THREE.Group();
+    rightWing.position.set(0, 0.1, 0.08);
+    const rightFeather = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 8, 6),
+      wingMaterial
+    );
+    rightFeather.scale.set(0.38, 0.055, 0.23);
+    rightFeather.position.set(-0.15, 0, 0.12);
+    rightWing.add(rightFeather);
+    bird.add(rightWing);
 
     bird.position.set(
-      -24 + i * 7,
-      12 + Math.random() * 8,
-      -20 - Math.random() * 18
+      -30 + Math.random() * 60,
+      13 + Math.random() * 7,
+      -18 - Math.random() * 22
     );
-
-    bird.scale.setScalar(0.7 + Math.random() * 0.6);
+    bird.scale.setScalar(1.2 + Math.random() * 0.8);
     scene.add(bird);
 
     birds.push({
       bird,
-      wings,
+      leftWing,
+      rightWing,
       phase: Math.random() * Math.PI * 2,
-      speed: 2 + Math.random() * 1.8
+      speed: 1.7 + Math.random() * 2,
+      baseY: bird.position.y
     });
   }
+
 
   const monsterRoot = new THREE.Group();
   const creature = new THREE.Group();
