@@ -47,6 +47,11 @@
       #joystick{width:82px;height:82px}#stick{width:36px;height:36px}
     }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+    
+html.embedded .back-link {
+  display: none !important;
+}
+
   </style>
   <script type="importmap">
     {
@@ -83,6 +88,13 @@
       </div>
     </div>
   </div>
+  
+<script>
+  if (new URLSearchParams(window.location.search).get('embedded') === '1') {
+    document.documentElement.classList.add('embedded');
+  }
+</script>
+
   <script type="module" src="./assets/animation/mergivolve-world.js"></script>
 </body>
 </html>
