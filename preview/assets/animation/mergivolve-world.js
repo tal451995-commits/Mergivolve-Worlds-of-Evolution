@@ -59,8 +59,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   controls.target.set(0, 1.1, 0);
   controls.update();
 
-  scene.add(new THREE.HemisphereLight(0xf4fcff, 0x60905a, 
-
+  scene.add(new THREE.HemisphereLight(0xf4fcff, 0x60905a, 1.7));
    const sun = new THREE.DirectionalLight(0xfff3d5, 2.1);
 sun.position.set(-22, 38, 18);
 sun.castShadow = true;
