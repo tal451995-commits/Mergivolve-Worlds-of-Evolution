@@ -524,6 +524,64 @@ tree.traverse((object) => {
     clouds.push(cloud);
   }
 
+  // Small flock of flying birds.
+  const birds = [];
+  const birdBodyGeometry = new THREE.SphereGeometry(0.16, 10, 8);
+  const birdWingGeometry = new THREE.BufferGeometry();
+
+  birdWingGeometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute([
+      0, 0, 0,
+      -0.48, 0.08, 0.12,
+      -0.18, 0.02, 0.04,
+      0, 0, 0,
+      0.18, 0.02, 0.04,
+      0.48, 0.08, 0.12
+    ], 3)
+  );
+
+  birdWingGeometry.setIndex([0, 1, 2, 3, 4, 5]);
+  birdWingGeometry.computeVertexNormals();
+
+  const birdMaterial = new THREE.MeshStandardMaterial({
+    color: 0x34465a,
+    side: THREE.DoubleSide,
+    roughness: 0.9
+  });
+
+  for (let i = 0; i < 7; i++) {
+    const bird = new THREE.Group();
+
+    const birdBody = new THREE.Mesh(
+      birdBodyGeometry,
+      birdMaterial
+    );
+    bird.add(birdBody);
+
+    const wings = new THREE.Mesh(
+      birdWingGeometry,
+      birdMaterial
+    );
+    bird.add(wings);
+
+    bird.position.set(
+      -24 + i * 7,
+      12 + Math.random() * 8,
+      -20 - Math.random() * 18
+    );
+
+    bird.scale.setScalar(0.7 + Math.random() * 0.6);
+    scene.add(bird);
+
+    birds.push({
+      bird,
+      wings,
+      phase: Math.random() * Math.PI * 2,
+      speed: 2 + Math.random() * 1.8
+    });
+  }
+
   const monsterRoot = new THREE.Group();
   const creature = new THREE.Group();
   monsterRoot.add(creature);
