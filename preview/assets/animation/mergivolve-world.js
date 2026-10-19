@@ -611,27 +611,32 @@ tree.traverse((object) => {
     beak.position.set(0.39, 0.08, 0);
     bird.add(beak);
 
+    const wingGeometry = new THREE.ConeGeometry(0.105, 0.34, 5);
+
     const leftWing = new THREE.Group();
-    leftWing.position.set(0, 0.1, -0.08);
+    leftWing.position.set(0, 0.1, -0.07);
+
     const leftFeather = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 8, 6),
+      wingGeometry,
       wingMaterial
     );
-    leftFeather.scale.set(0.38, 0.055, 0.23);
-    leftFeather.position.set(-0.15, 0, -0.12);
+    leftFeather.rotation.x = -Math.PI / 2;
+    leftFeather.rotation.z = -0.12;
     leftWing.add(leftFeather);
     bird.add(leftWing);
 
     const rightWing = new THREE.Group();
-    rightWing.position.set(0, 0.1, 0.08);
+    rightWing.position.set(0, 0.1, 0.07);
+
     const rightFeather = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 8, 6),
+      wingGeometry,
       wingMaterial
     );
-    rightFeather.scale.set(0.38, 0.055, 0.23);
-    rightFeather.position.set(-0.15, 0, 0.12);
+    rightFeather.rotation.x = Math.PI / 2;
+    rightFeather.rotation.z = -0.12;
     rightWing.add(rightFeather);
     bird.add(rightWing);
+
 
     bird.position.set(
       -30 + Math.random() * 60,
