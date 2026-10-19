@@ -1032,7 +1032,8 @@ tree.traverse((object) => {
     moonDisc.position.copy(sunDisc.position).negate();
     starMaterial.opacity = night * 0.95;
 
-    // Animate the flock across the sky.
+    
+    // Animate birds flying across the sky.
     for (const item of birds) {
       item.bird.position.x += dt * item.speed;
 
@@ -1040,8 +1041,13 @@ tree.traverse((object) => {
         item.bird.position.x = -45;
       }
 
-      item.wings.rotation.z =
-        Math.sin(elapsed * 9 + item.phase) * 0.55;
+      const flap = Math.sin(elapsed * 8 + item.phase);
+
+      item.leftWing.rotation.x = flap * 0.8;
+      item.rightWing.rotation.x = -flap * 0.8;
+
+      item.bird.position.y =
+        item.baseY + Math.sin(elapsed * 2 + item.phase) * 0.45;
     }
 
     for (let i = 0; i < clouds.length; i++) {
