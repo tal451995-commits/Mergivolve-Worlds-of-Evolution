@@ -267,7 +267,12 @@ scene.add(ground);
 
     tree.position.set(x, 0, z);
     tree.rotation.y = randomRange(0, Math.PI * 2);
-
+tree.traverse((object) => {
+  if (object.isMesh) {
+    object.castShadow = true;
+    object.receiveShadow = true;
+  }
+});
     scene.add(tree);
     trees.push(tree);
   }
