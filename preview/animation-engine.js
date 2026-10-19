@@ -1,13 +1,13 @@
 
 /*
  * Mergivolve Animation Engine
- * Version 0.2.0
+ * Version 0.3.0
  * Visual effects only — never changes game state or saved progress.
  */
 (function () {
   "use strict";
 
-  const VERSION = "0.2.0";
+  const VERSION = "0.3.0";
   const STYLE_ID = "mrg-animation-engine-styles";
   const PARTICLE_CLASS = "mrg-ambient-particle";
 
@@ -84,7 +84,21 @@
       .mrg-animation-scene .scene-foreground-leaf {
         translate: var(--mrg-leaf-x, 0px) var(--mrg-leaf-y, 0px);
       }
+      .mrg-animation-scene .scene-sun-glow {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: mrgSunBreath 7s ease-in-out infinite alternate;
+      }
 
+      .mrg-animation-scene .scene-water {
+        animation: mrgWaterShimmer 3.8s ease-in-out infinite alternate;
+      }
+
+      .mrg-animation-scene .scene-firefly {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: mrgFireflyGlow 3.2s ease-in-out infinite alternate;
+      }
       @keyframes mrgAmbientGlow {
         from { opacity: .25; }
         to { opacity: .75; }
