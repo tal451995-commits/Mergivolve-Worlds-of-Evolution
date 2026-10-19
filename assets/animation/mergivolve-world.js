@@ -613,7 +613,7 @@ tree.traverse((object) => {
     beak.position.set(0.39, 0.08, 0);
     bird.add(beak);
 
-    const wingGeometry = new THREE.ConeGeometry(0.105, 0.34, 5);
+    const wingGeometry = new THREE.ConeGeometry(0.07, 0.23, 5);
 
     const leftWing = new THREE.Group();
     leftWing.position.set(0, 0.1, -0.07);
