@@ -180,74 +180,93 @@ scene.add(ground);
     toon(0x72ca73)
   ];
 
-  function makeTree(size) {
+    function makeTree(size) {
     const tree = new THREE.Group();
 
-    // גזע תלת־ממדי
+    const height = size * (0.85 + Math.random() * 0.2);
+    const radius = size * 0.09;
+
     const trunk = new THREE.Mesh(
       new THREE.CylinderGeometry(
-        size * 0.075,
-        size * 0.12,
-        size * 0.66,
-        7
+        radius * 0.55,
+        radius * 1.25,
+        height,
+        10,
+        4
       ),
       trunkMaterial
     );
 
-    trunk.position.y = size * 0.33;
+    trunk.position.y = height / 2;
+    trunk.castShadow = true;
+    trunk.receiveShadow = true;
     tree.add(trunk);
 
-    // ענפים קצרים היוצאים מהגזע
-    for (let i = 0; i < 3; i++) {
+    const branchCount = 8;
+
+    for (let i = 0; i < branchCount; i++) {
+      const angle = (i / branchCount) * Math.PI * 2;
+      const length = size * (0.22 + Math.random() * 0.16);
+
       const branch = new THREE.Mesh(
         new THREE.CylinderGeometry(
-          size * 0.025,
-          size * 0.055,
-          size * 0.42,
-          6
+          size * 0.012,
+          size * 0.035,
+          length,
+          7
         ),
         trunkLightMaterial
       );
 
       branch.position.set(
-        (i - 1) * size * 0.16,
-        size * (0.43 + i * 0.09),
-        0
+        Math.cos(angle) * size * 0.12,
+        height * (0.4 + Math.random() * 0.4),
+        Math.sin(angle) * size * 0.12
       );
 
-      branch.rotation.z = (i - 1) * -0.65;
+      branch.rotation.z = -Math.cos(angle) * 0.8;
+      branch.rotation.x = Math.sin(angle) * 0.8;
+      branch.rotation.y = angle;
+      branch.castShadow = true;
       tree.add(branch);
     }
 
-    // שכבות עלווה בעלות נפח אמיתי
-    const crownLayers = [
-      { y: 0.58, scale: 0.35 },
-      { y: 0.78, scale: 0.31 },
-      { y: 0.96, scale: 0.25 }
-    ];
+    const clusterCount = 18;
 
-    crownLayers.forEach((layer, index) => {
-      const crown = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(size * layer.scale, 1),
+    for (let i = 0; i < clusterCount; i++) {
+      const angle = i * 2.399;
+      const distance = size * (0.08 + Math.random() * 0.3);
+      const leafSize = size * (0.17 + Math.random() * 0.1);
+
+      const leaves = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(leafSize, 2),
         foliageMaterials[
           Math.floor(Math.random() * foliageMaterials.length)
         ]
       );
 
-      crown.position.set(
-        randomRange(-size * 0.045, size * 0.045),
-        size * layer.y,
-        randomRange(-size * 0.045, size * 0.045)
+      leaves.position.set(
+        Math.cos(angle) * distance,
+        height * 0.78 + (Math.random() - 0.3) * size * 0.4,
+        Math.sin(angle) * distance
       );
 
-      crown.scale.set(
-        randomRange(0.9, 1.12),
-        randomRange(0.9, 1.15),
-        randomRange(0.9, 1.12)
+      leaves.scale.set(
+        0.9 + Math.random() * 0.5,
+        0.8 + Math.random() * 0.4,
+        0.9 + Math.random() * 0.5
       );
 
-      tree.add(crown);
-    });
+      leaves.rotation.set(
+        Math.random() * 0.4,
+        angle,
+        Math.random() * 0.4
+      );
+
+      leaves.castShadow = true;
+      leaves.receiveShadow = true;
+      tree.add(leaves);
+    }
 
     return tree;
   }
