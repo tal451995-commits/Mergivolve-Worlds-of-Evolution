@@ -164,21 +164,22 @@ scene.add(ground);
 
   
 
-  // Dense, natural grass carpet with varied blades.
+  
+  // Dense, small grass blades with overlapping coverage.
   const tuftPositions = [];
 
-  for (let i = 0; i < 9; i++) {
-    const angle = i * 2.399;
-    const radius = 0.04 + Math.random() * 0.17;
+  for (let i = 0; i < 8; i++) {
+    const angle = i * 2.399 + Math.random() * 0.35;
+    const radius = 0.06 + Math.random() * 0.36;
     const bx = Math.cos(angle) * radius;
     const bz = Math.sin(angle) * radius;
-    const width = 0.018 + Math.random() * 0.018;
-    const height = 0.28 + Math.random() * 0.42;
-    const lean = 0.04 + Math.random() * 0.12;
+    const width = 0.025 + Math.random() * 0.02;
+    const height = 0.16 + Math.random() * 0.18;
+    const lean = 0.035 + Math.random() * 0.09;
 
     tuftPositions.push(
-      bx - width, 0, bz,
-      bx + width, 0, bz,
+      bx - Math.sin(angle) * width, 0, bz + Math.cos(angle) * width,
+      bx + Math.sin(angle) * width, 0, bz - Math.cos(angle) * width,
       bx + Math.cos(angle) * lean, height,
       bz + Math.sin(angle) * lean
     );
@@ -191,7 +192,7 @@ scene.add(ground);
   );
   grassBladeGeometry.computeVertexNormals();
 
-  const grassCount = isSmallScreen ? 65000 : 110000;
+  const grassCount = isSmallScreen ? 80000 : 130000;
 
   const grassMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
@@ -210,9 +211,9 @@ scene.add(ground);
   const grassColor = new THREE.Color();
 
   const grassPalette = [
-    0x28652a, 0x347b2e, 0x408b32, 0x4c9638,
-    0x579e3c, 0x63a744, 0x39732c, 0x719b3d,
-    0x326d2b, 0x4a8534, 0x5b8c35, 0x397e36
+    0x245d27, 0x2d702b, 0x347b2e, 0x408532,
+    0x478d35, 0x51953a, 0x356b2a, 0x639b3d,
+    0x2b6529, 0x3a7830, 0x4b8734, 0x397a34
   ];
 
   const grassColumns = Math.ceil(Math.sqrt(grassCount));
@@ -224,19 +225,19 @@ scene.add(ground);
     const row = Math.floor(i / grassColumns);
 
     grassDummy.position.set(
-      -55 + (column + 0.15 + Math.random() * 0.7) * grassSpacing,
+      -55 + (column + 0.1 + Math.random() * 0.8) * grassSpacing,
       -0.075,
-      -55 + (row + 0.15 + Math.random() * 0.7) *
+      -55 + (row + 0.1 + Math.random() * 0.8) *
         (110 / grassRows)
     );
 
     grassDummy.rotation.set(
-      (Math.random() - 0.5) * 0.12,
+      (Math.random() - 0.5) * 0.1,
       Math.random() * Math.PI * 2,
-      (Math.random() - 0.5) * 0.12
+      (Math.random() - 0.5) * 0.1
     );
 
-    const scale = 0.85 + Math.random() * 0.7;
+    const scale = 0.9 + Math.random() * 0.45;
     grassDummy.scale.set(scale, scale, scale);
     grassDummy.updateMatrix();
 
@@ -255,6 +256,7 @@ scene.add(ground);
   grass.receiveShadow = true;
   grass.frustumCulled = false;
   worldDecor.add(grass);
+
 
 
 
