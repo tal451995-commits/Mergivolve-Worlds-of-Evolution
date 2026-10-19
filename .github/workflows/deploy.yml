@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [animation-engine-development, main]
+    branches: [main]
 
 permissions:
   contents: write
