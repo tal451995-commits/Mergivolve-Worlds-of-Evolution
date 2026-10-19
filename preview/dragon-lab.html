@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#07120e" />
+<title>Mergivolve — Dragon Lab</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#06110e; font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  #scene { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .hud { position:fixed; inset:0; pointer-events:none; color:#f0ffe9; }
+  .top { position:absolute; top:max(16px,env(safe-area-inset-top)); left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .brand { text-shadow:0 2px 18px #000; }
+  .brand .name { font-size:clamp(17px,4vw,25px); font-weight:850; letter-spacing:.04em; }
+  .brand .sub { margin-top:3px; color:#b8d8bd; font-size:11px; letter-spacing:.19em; text-transform:uppercase; }
+  .pill { border:1px solid #b3ebbe55; background:#091b16a8; backdrop-filter:blur(10px); border-radius:999px; padding:8px 11px; color:#c7f5cf; font-size:11px; white-space:nowrap; }
+  .bottom { position:absolute; left:16px; right:16px; bottom:max(18px,env(safe-area-inset-bottom)); display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; }
+  .dragon-name { font-size:clamp(21px,5vw,32px); font-weight:800; letter-spacing:.025em; text-shadow:0 3px 20px #000; }
+  .dragon-desc { color:#c0dac5; font-size:12px; text-shadow:0 2px 10px #000; }
+  .hint { margin-top:4px; border:1px solid #c7f5cf44; background:#07150fc7; color:#c9eccd; padding:9px 13px; border-radius:999px; font-size:11px; }
+  .loading { position:fixed; inset:0; display:grid; place-items:center; color:#d5f7d2; background:#06110e; z-index:5; font-size:14px; transition:opacity .45s ease; }
+  .loading.hide { opacity:0; pointer-events:none; }
+  #error { display:none; position:fixed; left:16px; right:16px; bottom:20px; z-index:8; background:#4b1717; color:#fff; padding:14px; border-radius:12px; font-size:13px; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="loading" id="loading">Awakening the forest…</div>
+<div class="hud">
+  <div class="top">
+    <div class="brand"><div class="name">MERGIVOLVE</div><div class="sub">Worlds of Evolution</div></div>
+    <div class="pill">DRAGON LAB · PROTOTYPE</div>
+  </div>
+  <div class="bottom">
+    <div class="dragon-name">Verdant — Forest Wyrm</div>
+    <div class="dragon-desc">A living 3D creature prototype · procedural model · original animation</div>
+    <div class="hint">Drag to look around · Pinch to zoom</div>
+  </div>
+</div>
+<div id="error"></div>
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.querySelector('#scene');
+const errorBox = document.querySelector('#error');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false, powerPreference:'high-performance' });
+} catch (e) {
+  errorBox.style.display='block'; errorBox.textContent='This browser could not start WebGL. Try opening the page in Chrome.';
+  document.querySelector('#loading').classList.add('hide'); throw e;
+}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#071711');
+scene.fog = new THREE.FogExp2('#0a2118', 0.035);
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(5.9, 3.8, 8.4);
+
+scene.add(new THREE.HemisphereLight('#c9f8df', '#14261b', 2.15));
+const moon = new THREE.DirectionalLight('#d8ffe4', 3.0); moon.position.set(-4,8,5); moon.castShadow=true; moon.shadow.mapSize.set(1024,1024); moon.shadow.camera.left=-8; moon.shadow.camera.right=8; moon.shadow.camera.top=8; moon.shadow.camera.bottom=-8; scene.add(moon);
+const tealLight = new THREE.PointLight('#36ffd0', 24, 11, 2); tealLight.position.set(2,2.2,-1.8); scene.add(tealLight);
+const amberLight = new THREE.PointLight('#ffa34e', 13, 8, 2); amberLight.position.set(-3,1.4,2); scene.add(amberLight);
+
+const mat = (color, roughness=.72, metalness=0, extra={}) => new THREE.MeshStandardMaterial({color, roughness, metalness, ...extra});
+const moss = mat('#253f2c'); const stone = mat('#485a48',.9); const stoneLight=mat('#667861',.85); const leafMats=[mat('#153d2a'),mat('#20583a'),mat('#2c7045'),mat('#3b8050')];
+const bodyMat=mat('#287b59',.43,0,{vertexColors:false});
+const bodyLight=mat('#4aa875',.45); const bellyMat=mat('#b1c87c',.65); const darkMat=mat('#153e35',.55); const wingMat=mat('#3b9b72',.48,0,{side:THREE.DoubleSide}); const wingDark=mat('#226448',.53,0,{side:THREE.DoubleSide});
+const hornMat=mat('#d6d49a',.44); const goldMat=mat('#f1c86e',.35,.25); const crystalMat=mat('#48f6dd',.22,.25,{emissive:'#13a98d',emissiveIntensity:1.2}); const eyeMat=new THREE.MeshStandardMaterial({color:'#ffdb59',roughness:.22,emissive:'#ff9b25',emissiveIntensity:1.4}); const pupilMat=mat('#16140b',.16); const blackMat=mat('#101a16',.45);
+
+function mesh(geo, material, parent, pos=[0,0,0], scale=null, rot=null, cast=true) {
+  const m=new THREE.Mesh(geo,material); if(pos)m.position.set(...pos); if(scale)m.scale.set(...scale); if(rot)m.rotation.set(...rot); m.castShadow=cast; m.receiveShadow=true; parent.add(m); return m;
+}
+function sphere(parent, material, pos, scale, segments=24) { return mesh(new THREE.SphereGeometry(1,segments,Math.max(12,Math.floor(segments*.66))),material,parent,pos,scale); }
+function cylinderBetween(parent, material, a, b, r1, r2, radial=9) {
+  const A=new THREE.Vector3(...a), B=new THREE.Vector3(...b), d=new THREE.Vector3().subVectors(B,A);
+  const m=mesh(new THREE.CylinderGeometry(r2,r1,d.length(),radial),material,parent,[...(A.clone().add(B).multiplyScalar(.5).toArray())]);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize()); return m;
+}
+function cone(parent, material, pos, r, h, rot=[0,0,0], segments=10) { return mesh(new THREE.ConeGeometry(r,h,segments),material,parent,pos,null,rot); }
+
+// Mossy stone island and rune ring.
+const island=mesh(new THREE.CylinderGeometry(3.15,3.35,.55,12),moss,scene,[0,-.38,0],[1,1,1],[0,.12,0]);
+const top=mesh(new THREE.CylinderGeometry(3.03,3.16,.22,12),stone,scene,[0,-.06,0],[1,1,1],[0,.12,0]);
+for(let i=0;i<14;i++){ const a=i/14*Math.PI*2; const r=3.05; const rock=mesh(new THREE.DodecahedronGeometry(.25+Math.random()*.16,0),i%3?stoneLight:stone,scene,[Math.cos(a)*r,-.21,Math.sin(a)*r],[1.1,.7,.8],[Math.random(),Math.random(),Math.random()]); }
+const ring=mesh(new THREE.TorusGeometry(2.08,.018,8,100),crystalMat,scene,[0,.075,0],[1,1,1],[Math.PI/2,0,0],false); ring.rotation.x=Math.PI/2;
+for(let i=0;i<8;i++){const a=i*Math.PI/4; const c=mesh(new THREE.OctahedronGeometry(.16,0),crystalMat,scene,[Math.cos(a)*2.13,.08,Math.sin(a)*2.13],[.7,1.3,.7],[0,a,0]); c.userData.float=Math.random()*6;}
+
+// Procedural dragon: separate parts are intentionally kept as groups for animation.
+const dragon=new THREE.Group(); scene.add(dragon); dragon.position.set(0,.26,0);
+const torso=new THREE.Group(); dragon.add(torso);
+sphere(torso,bodyMat,[0,.18,0],[.72,.64,1.15],32);
+sphere(torso,bellyMat,[0,-.12,.05],[.57,.37,.95],28);
+// chest, shoulder and haunch forms
+sphere(torso,bodyLight,[0,.38,-.58],[.53,.47,.47],24);
+sphere(torso,bodyMat,[-.48,.17,.45],[.38,.41,.47],22); sphere(torso,bodyMat,[.48,.17,.45],[.38,.41,.47],22);
+// neck, leading toward the head (front is negative Z)
+const neck=sphere(torso,bodyMat,[0,.52,-.94],[.39,.52,.59],28); neck.rotation.x=-.34;
+const throat=sphere(torso,bellyMat,[0,.38,-1.1],[.285,.32,.52],22); throat.rotation.x=-.35;
+const headPivot=new THREE.Group(); headPivot.position.set(0,.78,-1.28); torso.add(headPivot);
+sphere(headPivot,bodyMat,[0,.08,-.14],[.47,.42,.52],28);
+sphere(headPivot,bodyLight,[0,-.01,-.46],[.38,.27,.42],24);
+sphere(headPivot,bodyMat,[0,-.12,-.67],[.34,.18,.33],22);
+// muzzle tip, nostrils and cheek ridges
+sphere(headPivot,bellyMat,[0,-.20,-.70],[.24,.07,.23],18);
+for(const s of [-1,1]){
+  sphere(headPivot,blackMat,[s*.18,-.02,-.78],[.045,.028,.055],12);
+  sphere(headPivot,bodyLight,[s*.34,.02,-.32],[.16,.18,.26],18);
+  sphere(headPivot,eyeMat,[s*.365,.15,-.35],[.105,.12,.085],18);
+  sphere(headPivot,pupilMat,[s*.405,.15,-.402],[.035,.085,.035],12);
+  sphere(headPivot,mat('#fff3bc',.2),[s*.42,.19,-.43],[.022,.027,.018],10);
+  // crown horns sweeping backwards
+  const h=cone(headPivot,hornMat,[s*.24,.43,.02],.105,.56,[s*.38,0,s*-.24],12); h.rotation.z=s*-.28; h.rotation.x=-.7;
+  // small jaw spikes
+  cone(headPivot,bellyMat,[s*.31,-.22,-.22],.07,.21,[0,0,s*.6],8);
+}
+// tail joint chain with soft tapered shapes
+const tailJoints=[]; let tailParent=torso; let prev=[0,.17,.8];
+for(let i=0;i<6;i++){
+  const t=(i+1)/6; const z=.8+i*.35; const p=[Math.sin(i*.42)*.13,.12-i*.025,z];
+  const seg=sphere(tailParent,bodyMat,p,[.27*(1-t*.8),.27*(1-t*.8),.39],18);
+  if(i===0) seg.position.set(0,.15,1.0);
+  tailJoints.push(seg); tailParent=seg;
+}
+// Tail crystal blade
+const tailTip=cone(tailParent,crystalMat,[0,.02,.34],.16,.58,[Math.PI/2,0,0],5); tailTip.rotation.x=Math.PI/2;
+// Spines running from skull down the back and tail
+for(let i=0;i<13;i++){
+  const z=-.91+i*.28; const x=0; const y=.62-(Math.max(0,z-.1))*.045;
+  const spike=cone(torso,i<3?hornMat:bodyLight,[x,y,z],.105-i*.004,.28-i*.009,[-.1,0,0],7); spike.rotation.x=-.12;
+}
+// Four legs with elbows/knees and little claws.
+const legs=[];
+for(const s of [-1,1]) for(const front of [true,false]){
+  const leg=new THREE.Group(); const x=s*(front?.46:.49); const z=front?-.55:.52; leg.position.set(x,.12,z); torso.add(leg);
+  sphere(leg,bodyMat,[0,-.12,0],[.24,.36,.27],18);
+  const lower=cylinderBetween(leg,bodyMat,[0,-.25,0],[s*.045,-.49,-.045],.16,.105,10);
+  sphere(leg,bodyLight,[s*.045,-.5,-.07],[.19,.105,.22],16);
+  for(let k=-1;k<=1;k++) cone(leg,hornMat,[s*.045+k*.105,-.56,-.19],.043,.14,[.3,0,k*.18],7);
+  legs.push({group:leg,side:s,front});
+}
+// Wings have a membrane mesh and raised curved ribs, each attached to its own shoulder pivot.
+function createWing(side){
+  const pivot=new THREE.Group(); pivot.position.set(side*.42,.53,-.38); torso.add(pivot);
+  const wing=new THREE.Group(); pivot.add(wing); if(side<0) wing.scale.x=-1;
+  const shape=new THREE.Shape();
+  shape.moveTo(0,0); shape.quadraticCurveTo(.42,.42,.82,.6); shape.lineTo(1.48,.94); shape.quadraticCurveTo(1.38,.48,1.45,.12); shape.lineTo(1.0,.28); shape.quadraticCurveTo(.86,-.05,.78,-.46); shape.lineTo(.48,-.16); shape.quadraticCurveTo(.25,-.35,0,-.28); shape.lineTo(0,0);
+  const membrane=mesh(new THREE.ShapeGeometry(shape,10),wingMat,wing,[0,0,0],[1,1,1],[0,0,0],false); membrane.material.side=THREE.DoubleSide;
+  // translucent inner panel
+  const insetShape=new THREE.Shape(); insetShape.moveTo(.08,-.02); insetShape.lineTo(.72,.45); insetShape.lineTo(1.31,.76); insetShape.lineTo(1.28,.22); insetShape.lineTo(.93,.18); insetShape.lineTo(.69,-.32); insetShape.lineTo(.43,-.08); insetShape.closePath();
+  const inset=mesh(new THREE.ShapeGeometry(insetShape,8),wingDark,wing,[0,0,.008],[1,1,1],[0,0,0],false); inset.material.side=THREE.DoubleSide;
+  const paths=[[[0,0],[.82,.6],[1.48,.94]],[[0,0],[.83,.12],[1.45,.12]],[[0,0],[.61,-.01],[1.0,.28]],[[.17,-.03],[.48,-.16],[.78,-.46]]];
+  for(const pts of paths){ const curve=new THREE.QuadraticBezierCurve3(new THREE.Vector3(pts[0][0],pts[0][1],.02),new THREE.Vector3(pts[1][0],pts[1][1],.02),new THREE.Vector3(pts[2][0],pts[2][1],.02)); const rib=mesh(new THREE.TubeGeometry(curve,14,.024,5,false),bodyLight,wing,null,null,null,false); }
+  return pivot;
+}
+const leftWing=createWing(-1), rightWing=createWing(1);
+
+// Forest props: trees, luminous mushrooms and crystals.
+const forest=new THREE.Group(); scene.add(forest);
+for(let i=0;i<20;i++){
+  const a=i/20*Math.PI*2 + (Math.random()-.5)*.12; const r=4.0+Math.random()*2.0; const x=Math.cos(a)*r,z=Math.sin(a)*r;
+  const h=2.0+Math.random()*2.5; const trunkMat=mat('#3b4935',.95);
+  mesh(new THREE.CylinderGeometry(.12,.25,h*.57,7),trunkMat,forest,[x,h*.285-.25,z],[1,1,1],[0,0,Math.random()*.13]);
+  for(let j=0;j<4;j++){
+    const rad=.65+Math.random()*.48; const crown=mesh(new THREE.IcosahedronGeometry(rad,1),leafMats[Math.floor(Math.random()*leafMats.length)],forest,[x+(Math.random()-.5)*.5,h*.52+j*.35-.15,z+(Math.random()-.5)*.5],[1.0,.85,1.0],[Math.random(),Math.random(),Math.random()]);
+  }
+}
+for(let i=0;i<13;i++){
+ const a=Math.random()*Math.PI*2,r=2.45+Math.random()*.75,x=Math.cos(a)*r,z=Math.sin(a)*r;
+ const stem=mesh(new THREE.CylinderGeometry(.035,.06,.22,7),mat('#dfd6aa'),forest,[x,.12,z]);
+ const cap=mesh(new THREE.SphereGeometry(.16,12,8,0,Math.PI*2,0,Math.PI/2),mat(i%3===0?'#f7a65a':'#d46d85',.52,0,{emissive:i%3===0?'#752700':'#620d38',emissiveIntensity:.15}),forest,[x,.25,z],[1.25,.7,1.25],[0,0,0]);
+}
+for(let i=0;i<7;i++){
+ const a=i*2.399; const r=3.25+(i%3)*.18; const c=mesh(new THREE.OctahedronGeometry(.28+(i%2)*.09,0),crystalMat,forest,[Math.cos(a)*r,.24,Math.sin(a)*r],[.7,1.4,.7],[0,a,0]); c.userData.float=Math.random()*6;
+}
+// Floating fireflies
+const fireflyCount=75; const fireGeo=new THREE.BufferGeometry(); const firePositions=new Float32Array(fireflyCount*3); const fireData=[];
+for(let i=0;i<fireflyCount;i++){fireData.push({a:Math.random()*Math.PI*2,r:2.1+Math.random()*5.5,y:.2+Math.random()*3.4,speed:.18+Math.random()*.42,phase:Math.random()*6.28});firePositions[i*3]=Math.cos(fireData[i].a)*fireData[i].r;firePositions[i*3+1]=fireData[i].y;firePositions[i*3+2]=Math.sin(fireData[i].a)*fireData[i].r;}
+fireGeo.setAttribute('position',new THREE.BufferAttribute(firePositions,3)); const fireMat=new THREE.PointsMaterial({color:'#a4ffd0',size:.055,transparent:true,opacity:.88,blending:THREE.AdditiveBlending,depthWrite:false}); const fireflies=new THREE.Points(fireGeo,fireMat);scene.add(fireflies);
+
+// Low distant ridge silhouettes
+for(let i=0;i<15;i++){const a=i/15*Math.PI*2,r=8.0; const hill=mesh(new THREE.IcosahedronGeometry(1.6+Math.random(),1),mat('#0a281c',1),scene,[Math.cos(a)*r,-.1,Math.sin(a)*r],[1.45,.85,1.25],[0,Math.random(),0],false);}
+
+// Simple touch/mouse orbit controls, without extra dependencies.
+let pointerDown=false,lastX=0,lastY=0,yaw=.35,pitch=.22,zoom=1; const target=new THREE.Vector3(0,.55,0);
+function updateCamera(){const radius=10.0/zoom; const p=Math.max(-.12,Math.min(.68,pitch)); camera.position.set(Math.sin(yaw)*Math.cos(p)*radius, 2.1+Math.sin(p)*radius, Math.cos(yaw)*Math.cos(p)*radius); camera.lookAt(target);}
+updateCamera();
+canvas.addEventListener('pointerdown',e=>{pointerDown=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',e=>{if(!pointerDown)return; yaw-=(e.clientX-lastX)*.006; pitch+=(e.clientY-lastY)*.004; lastX=e.clientX;lastY=e.clientY;updateCamera();});
+canvas.addEventListener('pointerup',()=>pointerDown=false); canvas.addEventListener('pointercancel',()=>pointerDown=false);
+canvas.addEventListener('wheel',e=>{zoom=Math.max(.78,Math.min(1.5,zoom-e.deltaY*.001));updateCamera();},{passive:true});
+let pinchStart=0,pinchZoom=1;
+canvas.addEventListener('touchstart',e=>{if(e.touches.length===2){pinchStart=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);pinchZoom=zoom;}},{passive:true});
+canvas.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinchStart>0){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoom=Math.max(.78,Math.min(1.5,pinchZoom*d/pinchStart));updateCamera();}},{passive:true});
+
+const clock=new THREE.Clock();
+function animate(){
+ requestAnimationFrame(animate); const t=clock.getElapsedTime();
+ dragon.position.y=.26+Math.sin(t*1.7)*.055; dragon.rotation.y=Math.sin(t*.34)*.12;
+ leftWing.rotation.z=.18+Math.sin(t*3.0)*.32; rightWing.rotation.z=-.18-Math.sin(t*3.0)*.32;
+ leftWing.rotation.x=.16+Math.sin(t*3)*.12; rightWing.rotation.x=-.16-Math.sin(t*3)*.12;
+ headPivot.rotation.y=Math.sin(t*.7)*.11; headPivot.rotation.x=Math.sin(t*.9)*.025;
+ tailJoints.forEach((part,i)=>{part.rotation.y=Math.sin(t*1.5-i*.38)*(.08+i*.018);part.rotation.x=Math.sin(t*1.1-i*.25)*.025;});
+ legs.forEach((leg,i)=>{leg.group.rotation.x=Math.sin(t*2.3+(leg.front?0:Math.PI)+i)*.035;});
+ ring.rotation.z=t*.035; tealLight.intensity=21+Math.sin(t*2.1)*4; amberLight.intensity=11+Math.sin(t*1.2)*2;
+ forest.children.forEach(o=>{if(o.userData.float!==undefined)o.position.y=.24+Math.sin(t*1.7+o.userData.float)*.12;});
+ const arr=fireGeo.attributes.position.array; for(let i=0;i<fireflyCount;i++){const d=fireData[i],o=i*3;arr[o]=Math.cos(d.a+t*d.speed*.22)*d.r;arr[o+1]=d.y+Math.sin(t*d.speed*2+d.phase)*.22;arr[o+2]=Math.sin(d.a+t*d.speed*.22)*d.r;} fireGeo.attributes.position.needsUpdate=true; fireMat.opacity=.62+Math.sin(t*2.3)*.22;
+ renderer.render(scene,camera);
+}
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));});
+setTimeout(()=>document.querySelector('#loading').classList.add('hide'),650);
+animate();
+</script>
+</body>
+</html>

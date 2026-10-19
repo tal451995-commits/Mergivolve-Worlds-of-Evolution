@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#183d31">
+<meta name="description" content="Mergivolve — a cozy illustrated merge and evolution game.">
+<title>Mergivolve — Worlds of Evolution</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Rubik:wght@400;500;600;700;800;900&display=swap');
+:root{--forest:#173e31;--forest2:#285743;--leaf:#5e9b61;--lime:#d8f28b;--cream:#fff9e9;--paper:#f4edda;--ink:#233b2f;--muted:#748675;--gold:#f7c85c;--pink:#f2a0b6;--sky:#bfe7e2;--line:#d8dfc7;--shadow:0 8px 20px #234d3220;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html{min-height:100%;background:#122b23}body{margin:0;min-height:100dvh;font-family:Rubik,'Nunito',system-ui,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 15% 5%,#71956a 0,#416e50 18%,transparent 42%),radial-gradient(ellipse at 95% 30%,#2e6147 0,transparent 38%),linear-gradient(145deg,#244b38,#11291f);padding:0 0 var(--safe-bottom)}button{font:inherit;border:0;cursor:pointer;color:inherit}button:focus-visible{outline:3px solid #eabf52;outline-offset:2px}.game-shell{width:min(100%,560px);margin:0 auto;min-height:100dvh;padding:calc(9px + var(--safe-top)) 12px calc(14px + var(--safe-bottom));background:linear-gradient(180deg,#f8f0d9 0%,#f2e8ce 100%);box-shadow:0 0 50px #07180f70;position:relative;overflow:hidden}.game-shell:before,.game-shell:after{content:"";position:absolute;width:130px;height:180px;pointer-events:none;opacity:.12;z-index:0;background:radial-gradient(ellipse at 25% 35%,#3b7747 0 12%,transparent 13%),radial-gradient(ellipse at 70% 55%,#679858 0 15%,transparent 16%),radial-gradient(ellipse at 25% 78%,#3b7747 0 13%,transparent 14%);transform:rotate(-25deg)}.game-shell:before{left:-65px;top:170px}.game-shell:after{right:-68px;top:390px;transform:rotate(28deg)}.game-shell>*{position:relative;z-index:1}.topbar{display:flex;align-items:center;gap:9px;min-height:48px}.brand-mark{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#d9f58a,#8dbd65);border:2px solid #fff1c9;box-shadow:0 4px 0 #629052;flex:0 0 auto}.brand-mark svg{width:34px;height:34px}.brand-copy{min-width:0}.brand-title{font-weight:900;letter-spacing:.4px;font-size:17px;line-height:1;color:#204732}.brand-sub{font-size:9px;font-weight:800;letter-spacing:1.1px;color:#76906e;margin-top:5px}.top-actions{margin-inline-start:auto;display:flex;gap:5px;align-items:center}.icon-btn{width:34px;height:34px;border:1px solid #d1d8bd;border-radius:11px;background:#fff9e7;display:grid;place-items:center;font-size:16px;box-shadow:0 2px 0 #dfd9c2}.language-btn{height:34px;border:1px solid #cad5b8;background:#fff9e7;border-radius:11px;padding:0 9px;font-size:10px;font-weight:900;box-shadow:0 2px 0 #dfd9c2}.resource-row{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:7px;margin-top:12px}.resource{border-radius:13px;padding:8px 9px 7px;background:#fffaf0;border:1px solid #e4dec9;box-shadow:0 3px 0 #ded5bb;min-width:0}.resource-top{display:flex;justify-content:space-between;align-items:center;gap:5px;font-size:10px;font-weight:800}.resource-icon{font-size:14px}.resource-value{font-size:17px;font-weight:900;line-height:1.15;margin-top:3px;color:#264733;font-variant-numeric:tabular-nums}.energy-bar{height:5px;background:#e5e4c8;border-radius:99px;overflow:hidden;margin-top:6px}.energy-fill{height:100%;width:100%;border-radius:inherit;background:linear-gradient(90deg,#8dce66,#dbed83);transition:width .2s}.resource-note{font-size:8px;color:#82907b;margin-top:4px;font-weight:700}.world-card{margin-top:13px;border-radius:19px;min-height:104px;padding:12px 13px;overflow:hidden;position:relative;color:#fff8df;background:linear-gradient(115deg,#245c41 0%,#39764b 49%,#73a66a 100%);box-shadow:0 5px 0 #214e37;display:flex;align-items:center;gap:8px}.world-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 25%,#f8e69b99 0 3%,transparent 4%),radial-gradient(circle at 71% 38%,#ffedb944 0 10%,transparent 11%),linear-gradient(180deg,transparent 50%,#163b2c4a 100%);pointer-events:none}.world-copy{min-width:0;flex:1;z-index:1}.world-eyebrow{font-size:9px;letter-spacing:1.15px;font-weight:900;color:#d8f3b4}.world-title{font-weight:900;font-size:20px;line-height:1.07;margin:5px 0 4px;letter-spacing:-.3px}.world-desc{font-size:10px;color:#e6f0cd;line-height:1.3;max-width:245px}.world-progress{margin-top:8px;height:5px;background:#163d2a86;border-radius:99px;max-width:230px;overflow:hidden}.world-progress span{display:block;height:100%;width:12%;background:linear-gradient(90deg,#e6f8a2,#f6d77f);border-radius:99px;transition:width .25s}.world-art{z-index:1;width:112px;flex:0 0 112px;align-self:stretch;display:grid;place-items:center;margin-inline-end:-5px}.world-art svg{width:112px;height:94px;filter:drop-shadow(0 6px 3px #10342245)}.goal-strip{display:flex;align-items:center;gap:8px;margin:13px 1px 9px;font-size:11px;font-weight:800}.goal-badge{width:29px;height:29px;display:grid;place-items:center;background:#fffaf0;border:1px solid #e1d9bf;border-radius:10px;font-size:16px;flex:0 0 auto}.goal-copy{flex:1;min-width:0}.goal-title{font-size:11px;font-weight:900}.goal-sub{margin-top:2px;font-size:9px;font-weight:600;color:#83917a}.goal-count{font-variant-numeric:tabular-nums;color:#54824e;font-size:10px;font-weight:900}.board-frame{padding:8px;border-radius:19px;background:linear-gradient(145deg,#8e633b,#68482c);box-shadow:inset 0 2px 1px #ffe6a05e,0 5px 0 #4f3927,0 9px 16px #3c49282c;position:relative}.board-frame:before{content:"";position:absolute;inset:4px;border:1px solid #eac78b52;border-radius:15px;pointer-events:none}.board{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;touch-action:pan-y;user-select:none}.cell{aspect-ratio:1;min-width:0;position:relative;border-radius:10px;background:linear-gradient(145deg,#b9c48b,#9cae73);border:1px solid #8d9f68;box-shadow:inset 0 2px 3px #e6eac69c,inset 0 -3px 0 #6d895b77;display:grid;place-items:center;overflow:hidden}.cell:before{content:"";position:absolute;width:70%;height:26%;left:15%;bottom:6%;border-radius:50%;background:#264b3040;filter:blur(4px)}.cell.empty{background:linear-gradient(145deg,#b8c28d,#a4b47b);border-color:#91a16b}.cell.empty:after{content:"";position:absolute;inset:0;opacity:.16;background:radial-gradient(circle at 15% 18%,#fff 0 1px,transparent 2px),radial-gradient(circle at 80% 68%,#fff 0 1px,transparent 2px)}.cell.selected{outline:3px solid #fff3a0;outline-offset:-3px;box-shadow:inset 0 0 0 2px #e6c956,0 0 12px #fff4a6cc;z-index:2}.cell.drop-target{outline:3px dashed #fff8c4;outline-offset:-4px}.board-item{position:absolute;inset:2px;z-index:1;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;transition:transform .14s,filter .14s}.board-item:active{cursor:grabbing}.board-item svg{width:96%;height:96%;overflow:visible;filter:drop-shadow(0 2px 1px #253f2840)}.board-item.generator svg{width:92%;height:92%}.board-item.dragging{opacity:.27;transform:scale(.92)}.level-badge{position:absolute;bottom:1px;inset-inline-end:1px;background:#fff8dc;color:#38563a;border:1px solid #b2c18e;min-width:16px;height:16px;padding:0 4px;border-radius:7px;font-size:9px;font-weight:900;display:grid;place-items:center;box-shadow:0 1px 2px #203c2440;z-index:2}.gen-tag{position:absolute;top:2px;inset-inline-start:2px;font-size:7px;font-weight:900;background:#315f45;color:#eff6c5;border:1px solid #b9d18b;border-radius:5px;padding:2px 3px;z-index:2}.board-item.pulse{animation:pulse .45s ease}@keyframes pulse{0%,100%{transform:scale(1)}45%{transform:scale(1.14) rotate(-3deg)}}.board-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 1px;color:#f7e7b9;font-size:9px;font-weight:800}.board-footer span{display:flex;gap:4px;align-items:center}.hint-dot{width:7px;height:7px;border-radius:50%;background:#d9f28b;box-shadow:0 0 6px #d9f28b}.bottom-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:13px}.tool-btn{min-height:59px;padding:7px 4px 6px;border-radius:15px;background:#fff9e8;border:1px solid #e1d9bf;box-shadow:0 3px 0 #d9cfb2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;transition:transform .1s}.tool-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #d9cfb2}.tool-icon{font-size:22px;line-height:1}.tool-label{font-size:10px;font-weight:900}.tool-sub{font-size:8px;font-weight:700;color:#8a967c}.tool-btn.primary{background:linear-gradient(145deg,#dff49a,#bce17e);border-color:#abc96f;box-shadow:0 3px 0 #87ad58}.tool-btn.primary .tool-sub{color:#4d7543}.companion-strip{margin-top:12px;padding:8px 10px;border-radius:15px;background:#e4eacb;border:1px solid #d2dbb3;display:flex;align-items:center;gap:9px}.companion-avatar{width:46px;height:46px;border-radius:13px;background:linear-gradient(145deg,#e5f7bd,#c7e6a0);display:grid;place-items:center;flex:0 0 auto;border:1px solid #c5d8a1;overflow:hidden}.companion-avatar svg{width:46px;height:46px}.companion-copy{flex:1;min-width:0}.companion-name{font-size:11px;font-weight:900}.companion-desc{font-size:9px;color:#73856b;margin-top:3px;line-height:1.25}.companion-stage{font-size:9px;font-weight:900;color:#4c8050;text-align:end;white-space:nowrap}.xp-bar{height:5px;margin-top:5px;border-radius:99px;background:#cbd8b1;overflow:hidden}.xp-bar span{height:100%;display:block;width:0;background:linear-gradient(90deg,#71af61,#c0e27a);border-radius:99px;transition:width .25s}.tiny-footer{text-align:center;font-size:8px;color:#9b9b7e;font-weight:700;margin-top:10px;letter-spacing:.15px}.toast{position:fixed;left:50%;bottom:calc(95px + var(--safe-bottom));z-index:50;transform:translate(-50%,12px);max-width:calc(100% - 28px);padding:11px 15px;background:#1b4a36;color:#f7f4d9;border:1px solid #9cbe7b;border-radius:13px;font-size:11px;font-weight:800;text-align:center;box-shadow:0 8px 24px #08221660;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:fixed;inset:0;z-index:40;background:#0c2119a8;display:none;align-items:flex-end;justify-content:center;padding:12px 12px calc(12px + var(--safe-bottom));backdrop-filter:blur(4px)}.modal-backdrop.open{display:flex}.modal{width:min(100%,520px);max-height:82dvh;overflow:auto;border-radius:23px;padding:16px;background:#fff8e7;border:2px solid #e2d4b3;box-shadow:0 20px 60px #0a1f16a6;animation:modalIn .18s ease}@keyframes modalIn{from{transform:translateY(15px);opacity:.7}to{transform:translateY(0);opacity:1}}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.modal-title{font-size:19px;font-weight:900;color:#254632}.close-btn{width:34px;height:34px;border-radius:11px;background:#ecedd8;font-size:19px}.modal-desc{font-size:11px;line-height:1.5;color:#768574;margin-bottom:12px}.shop-row,.mission-row,.collection-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #ebe1ca}.shop-row:last-child,.mission-row:last-child,.collection-row:last-child{border-bottom:0}.shop-art{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:#e6edcf;flex:0 0 auto}.shop-art svg{width:44px;height:44px}.shop-info{flex:1;min-width:0}.shop-title{font-size:12px;font-weight:900}.shop-desc{font-size:10px;line-height:1.35;color:#7b8977;margin-top:3px}.buy-btn{background:#2d6847;color:#f8f3d9;padding:9px 11px;border-radius:11px;font-size:10px;font-weight:900;white-space:nowrap}.buy-btn:disabled{opacity:.4}.mission-progress{height:5px;background:#e1e4c8;border-radius:99px;overflow:hidden;margin-top:6px}.mission-progress span{height:100%;display:block;background:#84b766;border-radius:99px}.mission-reward{font-size:9px;color:#54824e;font-weight:900;margin-top:4px}.test-actions{display:flex;gap:8px;flex-wrap:wrap}.test-actions button{padding:11px 12px;border-radius:12px;background:#e4ebce;border:1px solid #c8d5b0;font-size:11px;font-weight:900}.sound-row{display:flex;gap:8px;margin:10px 0}.sound-row button{flex:1;padding:11px;border-radius:12px;background:#e3ebce;font-size:11px;font-weight:900}.sound-row button.active{background:#cfeaa1;box-shadow:inset 0 0 0 1px #97bd69}.modal-note{font-size:10px;color:#84907b;line-height:1.45;margin-top:10px}.locked{opacity:.5;filter:grayscale(.3)}.board-announce{position:absolute;top:7px;left:50%;transform:translateX(-50%);z-index:5;background:#fff6d9;color:#3e6138;border:1px solid #b7ca87;border-radius:99px;padding:6px 10px;font-size:9px;font-weight:900;white-space:nowrap;pointer-events:none;display:none}.board-announce.show{display:block;animation:fadeOut 1.25s forwards}@keyframes fadeOut{0%,70%{opacity:1}100%{opacity:0}}@media(min-width:560px){body{padding:18px 0}.game-shell{border-radius:24px;min-height:calc(100dvh - 36px);padding-inline:16px}.board{gap:7px}.board-frame{padding:10px}.world-title{font-size:22px}}@media(max-width:370px){.game-shell{padding-inline:8px}.world-card{padding-inline:10px}.world-art{width:88px;flex-basis:88px}.world-art svg{width:92px}.brand-title{font-size:15px}.tool-label{font-size:9px}.board{gap:4px}.board-frame{padding:7px}.cell{border-radius:8px}.bottom-tools{gap:5px}}
+
+/* --- Mergivolve polish pass: responsive store, theme cosmetics and game-feel motion --- */
+.modal-head{position:sticky;top:-16px;z-index:10;background:#fff8e7;padding-top:4px}.boost-status{display:flex;flex-wrap:wrap;gap:6px;margin:0 1px 7px}.boost-status:empty{display:none}.boost-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#e2ecc6;border:1px solid #c4d9a0;color:#42663d;font-size:9px;font-weight:900;box-shadow:0 1px 0 #c9d6ac}.shop-intro{font-size:10px;color:#72816e;line-height:1.45;margin:0 0 10px}.shop-wallet{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#e7edcf;border:1px solid #d4dfb6;border-radius:13px;padding:8px 10px;margin:8px 0 11px;font-size:10px;font-weight:900}.shop-wallet span{white-space:nowrap}.shop-tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 1px 8px;margin:0 0 7px;scrollbar-width:thin}.shop-tab{flex:0 0 auto;background:#f2ebd5;border:1px solid #ded7be;border-radius:999px;padding:8px 11px;font-size:10px;font-weight:900;white-space:nowrap}.shop-tab.active{background:#2f6747;color:#fff8df;border-color:#2f6747;box-shadow:0 2px 0 #1f4c35}.shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shop-product{min-width:0;display:flex;flex-direction:column;gap:5px;padding:9px 8px 8px;background:linear-gradient(160deg,#fffdf1,#f2ebd5);border:1px solid #e0d7bb;border-radius:15px;box-shadow:0 3px 0 #dcd2b5;position:relative;overflow:hidden}.shop-product:before{content:"";position:absolute;right:-19px;top:-22px;width:64px;height:64px;border-radius:50%;background:#deebc0;opacity:.52;pointer-events:none}.shop-product-top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:5px;min-height:43px}.shop-product-icon{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#e5f2c5,#c6dda5);border:1px solid #c9d9ac;display:grid;place-items:center;font-size:24px;flex:0 0 auto;box-shadow:inset 0 1px 0 #ffffffa3}.shop-price{font-size:9px;font-weight:900;border-radius:999px;background:#f6e9b8;color:#79591d;padding:5px 6px;white-space:nowrap;position:relative}.shop-price.gem{background:#d5eceb;color:#356c7a}.shop-product-name{font-size:11px;font-weight:900;line-height:1.2;min-height:26px;position:relative}.shop-product-desc{font-size:9px;color:#7b8875;line-height:1.35;min-height:36px;position:relative}.shop-product-action{width:100%;min-height:31px;padding:7px 5px;border-radius:10px;background:#2f6847;color:#fff8df;font-size:9px;font-weight:900;box-shadow:0 2px 0 #1d4b34;margin-top:auto;position:relative}.shop-product-action:disabled{background:#d8dec6;color:#89927e;box-shadow:none;cursor:default}.shop-product-action.owned{background:#dce9c5;color:#42653f;box-shadow:none;border:1px solid #c8d9ad}.shop-empty{padding:17px;text-align:center;font-size:11px;color:#7b8875}.shop-currency{font-variant-numeric:tabular-nums}.board-item:not(.dragging) svg{animation:itemFloat 3.6s ease-in-out infinite;transform-origin:50% 55%}.flight-ghost{position:fixed;display:flex;align-items:center;justify-content:center;z-index:120;pointer-events:none;touch-action:none;transform:translate3d(0,0,0);will-change:transform,opacity;filter:drop-shadow(0 5px 4px #172f2340)}.flight-ghost svg{width:96%;height:96%;overflow:visible}.flight-ghost .level-badge{z-index:2}.board-item.arrival-hidden{opacity:0!important}.board-item.merge-pop{animation:mergePop .27s cubic-bezier(.18,.88,.28,1.28) both;z-index:4}.board-item.spawn-pop{animation:spawnPop .3s cubic-bezier(.18,.88,.28,1.28) both;z-index:4}.board-item.dragging{will-change:transform,opacity}.cell.merge-impact{animation:cellImpact .34s ease-out}.cell.spawn-impact{animation:cellImpact .28s ease-out}.merge-burst{position:absolute;z-index:15;pointer-events:none;width:1px;height:1px;overflow:visible}.merge-ring{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border:2px solid #fff3a2;border-radius:50%;animation:ringBloom .42s cubic-bezier(.12,.7,.25,1) forwards;box-shadow:0 0 8px #fff3a2}.merge-spark{position:absolute;left:0;top:0;font-size:12px;line-height:1;opacity:0;animation:burstSpark .52s cubic-bezier(.12,.72,.22,1) forwards;animation-delay:var(--delay,0ms);text-shadow:0 1px 3px #33432b4d}.merge-spark:nth-child(3n){font-size:9px}.merge-spark:nth-child(4n){font-size:15px}.merge-burst[data-effect="gold"] .merge-spark{color:#ffd76a;text-shadow:0 0 7px #ffda77}.merge-burst[data-effect="petal"] .merge-spark{color:#f28fb4;text-shadow:0 0 6px #fff0f4}.merge-burst[data-effect="crystal"] .merge-spark{color:#8fe9e7;text-shadow:0 0 8px #b4ffff}.merge-burst[data-effect="rainbow"] .merge-spark{color:#dba5ff;text-shadow:0 0 7px #ffc6ee}.merge-burst[data-effect="meteor"] .merge-spark{color:#fff1ad;text-shadow:0 0 7px #f3b35e}.merge-burst[data-effect="leaf"] .merge-spark{color:#a5d970;text-shadow:0 0 7px #e4ffaf}.merge-burst .merge-label{position:absolute;left:0;top:-12px;white-space:nowrap;color:#fff8d7;font-size:10px;font-weight:900;text-shadow:0 2px 3px #21442e;animation:rewardFloat .58s ease-out forwards}.companion-avatar{position:relative;overflow:visible;isolation:isolate}.companion-avatar svg{position:relative;z-index:1}.companion-avatar[data-aura="gold"]{box-shadow:0 0 0 2px #f7d675,0 0 15px #f3c85b9c}.companion-avatar[data-aura="moon"]{box-shadow:0 0 0 2px #9bd9eb,0 0 15px #7bbde9a6}.companion-avatar[data-aura="rainbow"]{box-shadow:0 0 0 2px #e1b2f2,0 0 16px #da93f4a8;animation:auraPulse 2.8s ease-in-out infinite}.cosmetic-charm{position:absolute;z-index:3;top:-7px;inset-inline-end:-6px;width:23px;height:23px;display:grid;place-items:center;background:#fff7df;border:1px solid #d9c986;border-radius:50%;font-size:14px;box-shadow:0 2px 4px #243d2940;animation:charmBob 2.4s ease-in-out infinite}.game-shell[data-board-skin="moonlit"] .board-frame{background:linear-gradient(145deg,#4a477b,#242f58);box-shadow:inset 0 2px 1px #c6d8ff55,0 5px 0 #20284c,0 9px 16px #24264c35}.game-shell[data-board-skin="moonlit"] .board-frame:before{border-color:#c6c8ff66}.game-shell[data-board-skin="moonlit"] .cell,.game-shell[data-board-skin="moonlit"] .cell.empty{background:linear-gradient(145deg,#8d9fcb,#7083b1);border-color:#697ca9;box-shadow:inset 0 2px 3px #d8e5ff85,inset 0 -3px 0 #485d9077}.game-shell[data-board-skin="ocean"] .board-frame{background:linear-gradient(145deg,#327d87,#185b6b);box-shadow:inset 0 2px 1px #c7ffff65,0 5px 0 #124b57,0 9px 16px #153f4a30}.game-shell[data-board-skin="ocean"] .cell,.game-shell[data-board-skin="ocean"] .cell.empty{background:linear-gradient(145deg,#9ddfd7,#65bcb9);border-color:#58a5a3;box-shadow:inset 0 2px 3px #e2ffff9c,inset 0 -3px 0 #368c8977}.game-shell[data-board-skin="sunset"] .board-frame{background:linear-gradient(145deg,#ad704b,#814d39);box-shadow:inset 0 2px 1px #ffe5a45e,0 5px 0 #6e4030,0 9px 16px #3c49282c}.game-shell[data-board-skin="sunset"] .cell,.game-shell[data-board-skin="sunset"] .cell.empty{background:linear-gradient(145deg,#f0c48a,#daa46e);border-color:#c18c5c;box-shadow:inset 0 2px 3px #fff0c59c,inset 0 -3px 0 #9e6b4877}.game-shell[data-board-skin="cosmic"] .board-frame{background:linear-gradient(145deg,#62467c,#342d63);box-shadow:inset 0 2px 1px #ead3ff55,0 5px 0 #2c2455,0 9px 16px #28204435}.game-shell[data-board-skin="cosmic"] .cell,.game-shell[data-board-skin="cosmic"] .cell.empty{background:linear-gradient(145deg,#b09cda,#8279c1);border-color:#7569ad;box-shadow:inset 0 2px 3px #eee2ff9c,inset 0 -3px 0 #5a528a77}.game-shell[data-generator-look="gilded"] .board-item.generator svg{filter:sepia(.36) saturate(1.35) drop-shadow(0 2px 2px #e8bc4f80)}.game-shell[data-generator-look="moon"] .board-item.generator svg{filter:hue-rotate(36deg) saturate(1.12) drop-shadow(0 0 5px #b4dbffb0)}.game-shell[data-generator-look="rainbow"] .board-item.generator svg{filter:hue-rotate(285deg) saturate(1.4) drop-shadow(0 0 4px #e7a7ff9c)}@keyframes itemFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-1.5px) rotate(.5deg)}}@keyframes mergePop{0%{transform:scale(.3) rotate(-12deg);filter:brightness(1.8)}68%{transform:scale(1.17) rotate(3deg);filter:brightness(1.16)}100%{transform:scale(1) rotate(0);filter:brightness(1)}}@keyframes spawnPop{0%{transform:scale(.4) rotate(-10deg);opacity:.25}72%{transform:scale(1.12) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes cellImpact{0%{box-shadow:inset 0 0 0 0 #fff8b5}45%{box-shadow:inset 0 0 0 3px #fff3a9,0 0 12px #fff3a966}100%{box-shadow:inset 0 0 0 0 transparent}}@keyframes ringBloom{0%{transform:scale(.35);opacity:1}100%{transform:scale(4.3);opacity:0}}@keyframes burstSpark{0%{transform:translate3d(0,0,0) scale(.25) rotate(0);opacity:0}14%{opacity:1}100%{transform:translate3d(var(--dx),var(--dy),0) scale(1) rotate(var(--rot,45deg));opacity:0}}@keyframes rewardFloat{0%{transform:translateY(4px) scale(.8);opacity:0}20%{opacity:1}100%{transform:translateY(-28px) scale(1.05);opacity:0}}@keyframes auraPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.14)}}@keyframes charmBob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-2px) rotate(5deg)}}@media(max-width:370px){.shop-grid{gap:6px}.shop-product{padding:7px 6px}.shop-product-icon{width:36px;height:36px;font-size:21px}.shop-product-desc{font-size:8px}}@media(prefers-reduced-motion:reduce){.board-item svg,.cosmetic-charm,.companion-avatar[data-aura="rainbow"]{animation:none!important}.flight-ghost,.merge-burst,.merge-spark,.merge-ring{animation:none!important;transition:none!important}}
+
+
+
+/* --- Animation direction v2: anticipation, curved travel, impact and distinct idle motion --- */
+.board-item[data-type="gen"]:not(.dragging) svg{animation:generatorBreath 3.1s ease-in-out infinite;transform-origin:50% 70%}
+.board-item[data-type="wild"][data-level="1"]:not(.dragging) svg{animation:seedWiggle 3.9s ease-in-out infinite;transform-origin:50% 72%}
+.board-item[data-type="wild"][data-level="2"]:not(.dragging) svg{animation:sproutSway 3.4s ease-in-out infinite;transform-origin:50% 76%}
+.board-item[data-type="wild"][data-level="3"]:not(.dragging) svg,
+.board-item[data-type="wild"][data-level="4"]:not(.dragging) svg{animation:capBounce 3.6s ease-in-out infinite;transform-origin:50% 75%}
+.board-item[data-type="wild"][data-level="5"]:not(.dragging) svg{animation:crystalShimmer 3.7s ease-in-out infinite;transform-origin:50% 65%}
+.board-item[data-type="wild"][data-level="6"]:not(.dragging) svg{animation:eggRock 3.8s ease-in-out infinite;transform-origin:50% 77%}
+.board-item[data-type="wild"][data-level="7"]:not(.dragging) svg,
+.board-item[data-type="wild"][data-level="8"]:not(.dragging) svg{animation:dragonHover 3s ease-in-out infinite;transform-origin:50% 62%}
+.cell.selected .board-item:not(.dragging){filter:drop-shadow(0 0 5px #fff3a8b8)}
+.cell.merge-prep{animation:mergeAnticipation .19s cubic-bezier(.2,.8,.25,1) both;z-index:3}
+.cell.generator-flash{animation:generatorFlash .38s ease-out both}
+.cell.impact-flash{animation:impactFlash .18s ease-out both}
+.merge-burst{z-index:16}
+.merge-burst::before{content:"";position:absolute;left:-39px;top:-39px;width:78px;height:78px;border-radius:50%;background:radial-gradient(circle,#fff8c9b8 0%,#ffe68a60 24%,#fff2a000 72%);filter:blur(2px);animation:mergeBloom .34s ease-out forwards;pointer-events:none}
+.merge-burst[data-effect="evolve"]::before{width:106px;height:106px;left:-53px;top:-53px;background:radial-gradient(circle,#fffdf0 0%,#ffeb9fc9 18%,#d3ffb45c 44%,#fff2a000 73%);animation-duration:.52s}
+.merge-burst[data-effect="evolve"] .merge-ring{border-color:#fffdf1;box-shadow:0 0 12px #fff3ba,0 0 22px #9be7a2}
+.merge-burst[data-effect="evolve"] .merge-spark{color:#fff4be;text-shadow:0 0 9px #fff7d6,0 0 17px #c7f5a2}
+.merge-burst .merge-label{left:0;top:-14px;transform:translateX(-50%);font-size:10px;letter-spacing:.1px;animation:rewardFloat .74s cubic-bezier(.15,.72,.25,1) forwards;z-index:3}
+.flight-ghost{will-change:transform,opacity;backface-visibility:hidden}
+@keyframes generatorBreath{0%,100%{transform:translateY(0) scale(1,1)}46%{transform:translateY(-1.6px) scale(1.025,.985)}60%{transform:translateY(0) scale(.99,1.015)}}
+@keyframes seedWiggle{0%,100%{transform:translateY(0) rotate(0)}36%{transform:translateY(-1.4px) rotate(-1.2deg)}48%{transform:translateY(0) rotate(1deg)}60%{transform:rotate(0)}}
+@keyframes sproutSway{0%,100%{transform:rotate(0) translateY(0)}50%{transform:rotate(1.4deg) translateY(-1px)}}
+@keyframes capBounce{0%,100%{transform:translateY(0) rotate(0)}43%{transform:translateY(-1.8px) rotate(-.7deg)}58%{transform:translateY(0) rotate(.5deg)}}
+@keyframes crystalShimmer{0%,100%{transform:translateY(0) scale(1);filter:brightness(1)}48%{transform:translateY(-1.2px) scale(1.015);filter:brightness(1.08)}}
+@keyframes eggRock{0%,100%{transform:rotate(0) translateY(0)}34%{transform:rotate(-1.5deg)}56%{transform:rotate(1.7deg) translateY(-1px)}72%{transform:rotate(0)}}
+@keyframes dragonHover{0%,100%{transform:translateY(0) rotate(0) scale(1)}42%{transform:translateY(-2px) rotate(-.8deg) scale(1.015)}60%{transform:translateY(-.5px) rotate(.5deg) scale(1.005)}}
+@keyframes mergeAnticipation{0%{transform:scale(1)}38%{transform:scale(.955)}72%{transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes generatorFlash{0%{box-shadow:inset 0 0 0 0 #d9f69c}32%{box-shadow:inset 0 0 0 3px #e9f8ad,0 0 13px #c8ef9a99}100%{box-shadow:inset 0 0 0 0 #d9f69c00}}
+@keyframes impactFlash{0%{filter:brightness(1)}35%{filter:brightness(1.22)}100%{filter:brightness(1)}}
+@keyframes mergeBloom{0%{transform:scale(.45);opacity:0}18%{opacity:1}100%{transform:scale(1.35);opacity:0}}
+@keyframes rewardFloat{0%{transform:translate(-50%,5px) scale(.78);opacity:0}16%{opacity:1}100%{transform:translate(-50%,-31px) scale(1.06);opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ .board-item svg,.cosmetic-charm,.companion-avatar[data-aura="rainbow"]{animation:none!important}
+ .flight-ghost,.merge-burst,.merge-spark,.merge-ring,.merge-burst::before,.merge-burst .merge-label{animation:none!important;transition:none!important}
+ .board-item.merge-pop,.board-item.spawn-pop,.cell.merge-impact,.cell.spawn-impact,.cell.merge-prep,.cell.generator-flash,.cell.impact-flash{animation:none!important}
+}
+
+
+/* --- World Art Pass 01: illustrated valley, animated scenery and merge-reactive lighting --- */
+.world-card{min-height:154px;padding:12px 13px;isolation:isolate;background:#2d6647;box-shadow:0 5px 0 #214e37}
+.world-card:before{inset:0;z-index:1;background:linear-gradient(270deg,#163e2fef 0%,#1e523bbf 37%,#22583b49 67%,#1e523b00 100%);pointer-events:none}
+.world-card:after{content:"";position:absolute;inset:-8%;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 48% 52%,#fff8cda8 0%,#e5ffb64a 24%,transparent 63%)}
+.world-card.world-react:after{animation:worldMergeGlow .78s ease-out both}
+.world-copy{position:relative;z-index:3;max-width:70%;text-shadow:0 1px 4px #173d2e66}
+.world-eyebrow{color:#e0f7b9;text-shadow:0 1px 4px #21492e}
+.world-title{font-size:21px;text-shadow:0 2px 8px #1a402c96}
+.world-desc{color:#f0f5d8;text-shadow:0 1px 4px #1a402c}
+.world-progress{background:#153e2b9c;box-shadow:0 1px 3px #102b1c5e}
+.world-art{position:absolute;inset:0;z-index:0;width:auto;height:100%;margin:0;display:block;opacity:1;pointer-events:none;overflow:hidden}
+.world-art svg{display:block;width:100%;height:100%;filter:none}
+.world-scene-svg{overflow:hidden}
+.scene-cloud{transform-box:fill-box;transform-origin:center;animation:sceneCloudDrift 28s ease-in-out infinite alternate}
+.scene-cloud.cloud-two{animation-duration:37s;animation-delay:-13s}
+.scene-tree{transform-box:fill-box;transform-origin:50% 100%;animation:sceneTreeSway 4.8s ease-in-out infinite}
+.scene-tree.tree-right{animation-duration:5.9s;animation-delay:-2.3s}
+.scene-water{stroke-dasharray:9 11;animation:sceneWaterFlow 5.5s linear infinite}
+.scene-birds{transform-box:view-box;transform-origin:center;animation:sceneBirdGlide 15s ease-in-out infinite}
+.scene-firefly{transform-box:fill-box;transform-origin:center;animation:sceneFireflyPulse 2.8s ease-in-out infinite;filter:drop-shadow(0 0 4px #fff7b8)}
+.scene-firefly:nth-child(2){animation-delay:-1.4s}.scene-firefly:nth-child(3){animation-delay:-.8s}.scene-firefly:nth-child(4){animation-delay:-2.1s}.scene-firefly:nth-child(5){animation-delay:-1.8s}
+.scene-foreground-leaf{transform-box:fill-box;transform-origin:50% 100%;animation:sceneGrassSway 3.3s ease-in-out infinite alternate}
+.game-shell:dir(ltr) .world-card:before{background:linear-gradient(90deg,#163e2fef 0%,#1e523bbf 37%,#22583b49 67%,#1e523b00 100%)}
+@keyframes sceneCloudDrift{0%{transform:translateX(-7px)}100%{transform:translateX(12px)}}
+@keyframes sceneTreeSway{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.3deg)}}
+@keyframes sceneGrassSway{0%{transform:rotate(-2deg)}100%{transform:rotate(2deg)}}
+@keyframes sceneWaterFlow{to{stroke-dashoffset:-80}}
+@keyframes sceneBirdGlide{0%,100%{transform:translateX(-4px) translateY(0)}50%{transform:translateX(14px) translateY(-5px)}}
+@keyframes sceneFireflyPulse{0%,100%{opacity:.24;transform:scale(.72)}48%{opacity:1;transform:scale(1.35)}}
+@keyframes worldMergeGlow{0%{opacity:0;transform:scale(.82)}24%{opacity:1}100%{opacity:0;transform:scale(1.08)}}
+@media(max-width:370px){.world-card{min-height:145px}.world-copy{max-width:73%}.world-title{font-size:19px}.world-desc{max-width:210px}}
+@media(prefers-reduced-motion:reduce){.scene-cloud,.scene-tree,.scene-water,.scene-birds,.scene-firefly,.scene-foreground-leaf,.world-card.world-react:after{animation:none!important;transition:none!important}}
+
+ .board-item[data-type="egg"] svg {
+  transform-origin: 50% 70%;
+  animation: mergivolve-egg-float 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 219, 125, 0.45));
+}
+
+.board-item[data-type="incubator"] svg {
+  animation: mergivolve-incubator-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes mergivolve-egg-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-3px) rotate(1deg); }
+}
+
+@keyframes mergivolve-incubator-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(142, 225, 195, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 7px rgba(142, 225, 195, 0.8));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-item[data-type="egg"] svg,
+  .board-item[data-type="incubator"] svg {
+    animation: none;
+  }
+}
+</style>
+</head>
+<body>
+<main class="game-shell" id="gameRoot">
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 33 C7 31 6 19 9 9 C19 10 24 17 23 24 C26 14 31 10 35 11 C35 24 29 32 20 33Z" fill="#397448" stroke="#285b3a" stroke-width="1.5"/><path d="M10 12 Q19 19 20 32 M33 14 Q26 22 20 32" fill="none" stroke="#d7f18b" stroke-width="1.7" stroke-linecap="round"/><circle cx="20" cy="30" r="3" fill="#f2c65d"/></svg></div>
+    <div class="brand-copy"><div class="brand-title">MERGIVOLVE</div><div class="brand-sub" data-i18n="subtitle">WORLDS OF EVOLUTION</div></div>
+    <div class="top-actions"><button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙</button><button class="icon-btn" id="soundBtn" aria-label="Sound">♫</button><button class="language-btn" id="languageBtn">EN</button></div>
+  </header>
+  <section class="resource-row" aria-label="Resources">
+    <div class="resource"><div class="resource-top"><span data-i18n="energy">Energy</span><span class="resource-icon">⚡</span></div><div class="resource-value"><span id="energyVal">100</span><span style="font-size:10px;color:#8c9a7e"> / 100</span></div><div class="energy-bar"><div class="energy-fill" id="energyFill"></div></div><div class="resource-note" id="energyNote">Ready to explore</div></div>
+    <div class="resource"><div class="resource-top"><span data-i18n="coins">Coins</span><span class="resource-icon">🪙</span></div><div class="resource-value" id="coinsVal">800</div><div class="resource-note" data-i18n="coinsNote">Earn with every merge</div></div>
+    <div class="resource"><div class="resource-top"><span data-i18n="crystals">Crystals</span><span class="resource-icon">💎</span></div><div class="resource-value" id="gemsVal">12</div><div class="resource-note" data-i18n="gemsNote">Rare discoveries</div></div>
+  </section>
+  <section class="world-card">
+    <div class="world-copy"><div class="world-eyebrow" data-i18n="chapter">WORLD 01 · FIRST AWAKENING</div><div class="world-title" data-i18n="worldName">Verdant Wilds</div><div class="world-desc" data-i18n="worldDesc">A little magic is growing under every leaf.</div><div class="world-progress"><span id="worldProgress"></span></div></div>
+    <div class="world-art" id="worldArt" aria-hidden="true"></div>
+  </section>
+  <section class="goal-strip"><div class="goal-badge">✨</div><div class="goal-copy"><div class="goal-title" data-i18n="goalTitle">Wake up the forest</div><div class="goal-sub" data-i18n="goalSub">Merge objects to discover new forms</div></div><div class="goal-count"><span id="mergeCount">0</span><span data-i18n="merges"> MERGES</span></div></section>
+  <section class="boost-status" id="boostStatus" aria-live="polite"></section>
+  <section class="board-frame" aria-label="Merge board"><div class="board" id="board" role="grid" aria-label="5 by 5 merge board"></div><div class="board-footer"><span><i class="hint-dot"></i><span data-i18n="boardTip">Drag or tap matching items</span></span><span><span id="emptyCount">18</span><span data-i18n="freeSpaces">spaces free</span></span></div></section>
+  <section class="bottom-tools" aria-label="Game actions">
+    <button class="tool-btn primary" id="summonBtn"><span class="tool-icon">🌱</span><span class="tool-label" data-i18n="summon">Summon</span><span class="tool-sub" data-i18n="summonSub">Use 5 energy</span></button>
+    <button class="tool-btn" id="shopBtn"><span class="tool-icon">🧺</span><span class="tool-label" data-i18n="shop">Forest shop</span><span class="tool-sub" data-i18n="shopSub">Upgrade tools</span></button>
+    <button class="tool-btn" id="missionsBtn"><span class="tool-icon">📜</span><span class="tool-label" data-i18n="missions">Missions</span><span class="tool-sub" data-i18n="missionsSub">Free rewards</span></button>
+    <button class="tool-btn" id="collectionBtn"><span class="tool-icon">🐉</span><span class="tool-label" data-i18n="sanctuary">Sanctuary</span><span class="tool-sub" data-i18n="sanctuarySub">Your companion</span></button>
+  </section>
+  <section class="companion-strip"><div class="companion-avatar" id="companionAvatar"></div><div class="companion-copy"><div class="companion-name" id="companionName">Sprig — Forest Wyrmling</div><div class="companion-desc" id="companionDesc">Every merge helps your companion grow.</div><div class="xp-bar"><span id="xpFill"></span></div></div><div class="companion-stage"><div data-i18n="growth">GROWTH</div><div id="stageText">1 / 4</div></div></section>
+  <div class="tiny-footer" data-i18n="footer">A little merge. A whole new world. · Progress saves on this device</div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="modalBackdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div class="modal-title" id="modalTitle">Settings</div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div><div id="modalBody"></div></section></div>
+ <script src="./assets/creatures/species-catalog.js"></script>
+ <script src="./assets/creatures/species-catalog-expansion.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = (s,root=document) => root.querySelector(s);
+const SIZE=25, MAX_ITEM=8, MAX_GEN=5, ENERGY_MAX=100, ENERGY_COST=5, ENERGY_REGEN_MS=180000;
+const SAVE_KEY='mergivolve-merge-prototype-v1';
+const STORE_WORDS = {
+ he:{shopTitle:'חנות האבולוציה',shopIntro:'קנו כוחות, מראה ואפקטים בעזרת המטבעות והגבישים שהרווחתם במשחק.',all:'הכול',boost:'כוחות',boards:'לוחות',looks:'מראה',effects:'אפקטים',companion:'המלווה',wallet:'היתרה שלך',buyItem:'קנייה',equipItem:'לבישה',equippedItem:'בשימוש',itemOwned:'במלאי',notEnoughFunds:'אין מספיק מטבעות או גבישים.',needPair:'כדי להשתמש בכוח הזה צריך זוג פריטים תואמים בלוח.',needSelection:'קודם בחרו פריט בלוח, ואז פתחו את החנות.',needSpace:'צריך לפחות תא פנוי אחד בלוח.',energyFull:'האנרגיה כבר מלאה.',itemBought:'נרכש בהצלחה!',itemEquipped:'המראה עודכן!',energyUsed:'האנרגיה מולאה.',luckyUsed:'אבקת מזל הופעלה לשלוש היצירות הבאות.',coinRushUsed:'בונוס המטבעות פעיל לחמשת המיזוגים הבאים.',wildSeedUsed:'זרע נדיר נוצר בלוח.',makerBought:'יוצר חדש נוסף ללוח.',hammerUsed:'הפטיש שדרג את הפריט!',magnetUsed:'המגנט מצא זוג ומיזג אותו!',shopUnavailable:'כרגע לא ניתן להשתמש',luckyRemaining:'יצירות משודרגות',coinRushRemaining:'מיזוגים עם בונוס',tabHint:'כל הרכישות הן במטבעות משחק. אין תשלום אמיתי.',buyWithCoins:'מטבעות',buyWithGems:'גבישים'},
+ en:{shopTitle:'Evolution Store',shopIntro:'Spend the coins and crystals you earn in-game on boosts, looks and effects.',all:'All',boost:'Boosts',boards:'Boards',looks:'Looks',effects:'Effects',companion:'Companion',wallet:'Your balance',buyItem:'Buy',equipItem:'Equip',equippedItem:'Equipped',itemOwned:'Owned',notEnoughFunds:'Not enough coins or crystals.',needPair:'This boost needs a matching pair on the board.',needSelection:'Select an item on the board before opening the store.',needSpace:'You need at least one free board space.',energyFull:'Your energy is already full.',itemBought:'Purchased!',itemEquipped:'Look updated!',energyUsed:'Energy refilled.',luckyUsed:'Lucky pollen is active for your next three summons.',coinRushUsed:'Double coins is active for your next five merges.',wildSeedUsed:'A rare seed appeared on the board.',makerBought:'A new maker was added to your board.',hammerUsed:'The hammer upgraded your item!',magnetUsed:'The magnet found a pair and merged it!',shopUnavailable:'Unavailable right now',luckyRemaining:'boosted summons',coinRushRemaining:'double-coin merges',tabHint:'All purchases use in-game currency. No real-money payments.',buyWithCoins:'Coins',buyWithGems:'Crystals'}
+};
+const SHOP_ITEMS = [
+ {id:'boost-energy',category:'boost',kind:'boost',effect:'energy',price:120,currency:'coins',icon:'🧪',name:{he:'טל אנרגיה',en:'Energy Dew'},desc:{he:'מוסיף 40 נקודות אנרגיה מיד.',en:'Instantly restores 40 energy.'}},
+ {id:'boost-lucky',category:'boost',kind:'boost',effect:'lucky',price:165,currency:'coins',icon:'🍀',name:{he:'אבקת מזל',en:'Lucky Pollen'},desc:{he:'שלוש היצירות הבאות יפיקו פריט בדרגה גבוהה יותר.',en:'Your next three summons create one level higher.'}},
+ {id:'boost-coins',category:'boost',kind:'boost',effect:'coinRush',price:180,currency:'coins',icon:'🪙',name:{he:'פריחת הזהב',en:'Golden Bloom'},desc:{he:'מכפיל את תגמול המטבעות בחמשת המיזוגים הבאים.',en:'Doubles coin rewards for your next five merges.'}},
+ {id:'boost-magnet',category:'boost',kind:'boost',effect:'magnet',price:260,currency:'coins',icon:'🧲',name:{he:'מגנט מיזוג',en:'Merge Magnet'},desc:{he:'מאתר זוג תואם פנוי וממזג אותו בשבילך.',en:'Finds and merges a matching pair for you.'}},
+ {id:'boost-seed',category:'boost',kind:'boost',effect:'wildSeed',price:145,currency:'coins',icon:'🌱',name:{he:'זרע נדיר',en:'Rare Seed'},desc:{he:'יוצר על הלוח פריט טבע בדרגה 2, בלי אנרגיה.',en:'Creates a level-2 nature item without using energy.'}},
+ {id:'boost-hammer',category:'boost',kind:'boost',effect:'hammer',price:300,currency:'coins',icon:'🔨',name:{he:'פטיש האבולוציה',en:'Evolution Hammer'},desc:{he:'משדרג בדרגה אחת את הפריט שבחרתם בלוח.',en:'Raises your selected board item by one level.'}},
+ {id:'boost-maker',category:'boost',kind:'boost',effect:'maker',price:270,currency:'coins',icon:'🌳',name:{he:'שורשים מכושפים',en:'Enchanted Roots'},desc:{he:'מוסיף יוצר פריטים חדש שאפשר למזג ולפתח.',en:'Adds a new maker you can merge and evolve.'}},
+ {id:'board-moon',category:'boards',kind:'cosmetic',slot:'boardSkin',value:'moonlit',price:430,currency:'coins',icon:'🌙',name:{he:'חורשת אור הירח',en:'Moonlit Grove'},desc:{he:'לוח לילי בגווני כחול וסגול עמוקים.',en:'A night board in deep blue and violet.'}},
+ {id:'board-ocean',category:'boards',kind:'cosmetic',slot:'boardSkin',value:'ocean',price:9,currency:'gems',icon:'🌊',name:{he:'לגונת הקריסטל',en:'Crystal Lagoon'},desc:{he:'מסגרת אוקיינוס ותאים בצבעי טורקיז.',en:'Ocean frame and turquoise board cells.'}},
+ {id:'board-sunset',category:'boards',kind:'cosmetic',slot:'boardSkin',value:'sunset',price:620,currency:'coins',icon:'🌅',name:{he:'שקיעה ענברית',en:'Amber Sunset'},desc:{he:'לוח חמים בגוני אפרסק, זהב וענבר.',en:'A warm peach, gold and amber board.'}},
+ {id:'board-cosmic',category:'boards',kind:'cosmetic',slot:'boardSkin',value:'cosmic',price:18,currency:'gems',icon:'🪐',name:{he:'ערפילית קוסמית',en:'Cosmic Nebula'},desc:{he:'לוח חללי סגול עם מסגרת מסתורית.',en:'A cosmic violet board with a mysterious frame.'}},
+ {id:'look-gold',category:'looks',kind:'cosmetic',slot:'generatorLook',value:'gilded',price:520,currency:'coins',icon:'✨',name:{he:'יוצר מוזהב',en:'Gilded Maker'},desc:{he:'מעניק ליוצרים שלך מראה זהוב ונוצץ.',en:'Gives your makers a polished golden look.'}},
+ {id:'look-moon',category:'looks',kind:'cosmetic',slot:'generatorLook',value:'moon',price:10,currency:'gems',icon:'🌌',name:{he:'יוצר ירח',en:'Moon Maker'},desc:{he:'הילה קרירה ומסתורית ליוצרים.',en:'A cool, mysterious glow for makers.'}},
+ {id:'look-rainbow',category:'looks',kind:'cosmetic',slot:'generatorLook',value:'rainbow',price:680,currency:'coins',icon:'🌈',name:{he:'יוצר קשת',en:'Rainbow Maker'},desc:{he:'צבעוניות קסומה ליוצרים על הלוח.',en:'A playful rainbow finish for makers.'}},
+ {id:'fx-gold',category:'effects',kind:'cosmetic',slot:'mergeFx',value:'gold',price:330,currency:'coins',icon:'💫',name:{he:'ניצוצות זהב',en:'Golden Sparks'},desc:{he:'במיזוג מתפזרים ניצוצות זהובים.',en:'Merges burst with golden sparks.'}},
+ {id:'fx-petal',category:'effects',kind:'cosmetic',slot:'mergeFx',value:'petal',price:390,currency:'coins',icon:'🌸',name:{he:'סערת עלי כותרת',en:'Petal Burst'},desc:{he:'עלי כותרת רכים מתפזרים סביב הפריט החדש.',en:'Soft petals scatter around the new item.'}},
+ {id:'fx-crystal',category:'effects',kind:'cosmetic',slot:'mergeFx',value:'crystal',price:10,currency:'gems',icon:'💎',name:{he:'התפוצצות קריסטל',en:'Crystal Shatter'},desc:{he:'רסיסי אור גאומטריים ברגע המיזוג.',en:'Geometric shards of light on every merge.'}},
+ {id:'fx-rainbow',category:'effects',kind:'cosmetic',slot:'mergeFx',value:'rainbow',price:14,currency:'gems',icon:'🌈',name:{he:'אבק כוכבים צבעוני',en:'Rainbow Stardust'},desc:{he:'הבזק קשת צבעוני שמלווה כל מיזוג.',en:'A colorful rainbow flash with every merge.'}},
+ {id:'fx-meteor',category:'effects',kind:'cosmetic',slot:'mergeFx',value:'meteor',price:600,currency:'coins',icon:'☄️',name:{he:'שובל מטאור',en:'Meteor Trail'},desc:{he:'המיזוג מסתיים בשובל כוכבים מהיר.',en:'Each merge ends in a swift meteor trail.'}},
+ {id:'aura-gold',category:'companion',kind:'cosmetic',slot:'companionAura',value:'gold',price:270,currency:'coins',icon:'☀️',name:{he:'הילה מוזהבת',en:'Golden Aura'},desc:{he:'הילה זוהרת סביב המלווה שלך.',en:'A warm, glowing aura around your companion.'}},
+ {id:'aura-moon',category:'companion',kind:'cosmetic',slot:'companionAura',value:'moon',price:8,currency:'gems',icon:'🌙',name:{he:'הילה ירחית',en:'Moon Aura'},desc:{he:'הילת ירח כחולה ועדינה סביב המלווה.',en:'A soft blue moon aura around your companion.'}},
+ {id:'aura-rainbow',category:'companion',kind:'cosmetic',slot:'companionAura',value:'rainbow',price:12,currency:'gems',icon:'🦄',name:{he:'הילה קשתית',en:'Rainbow Aura'},desc:{he:'הילה צבעונית עם זוהר משתנה.',en:'A colorful aura with a magical glow.'}},
+ {id:'charm-crown',category:'companion',kind:'cosmetic',slot:'companionCharm',value:'👑',price:330,currency:'coins',icon:'👑',name:{he:'כתר קטן',en:'Tiny Crown'},desc:{he:'כתר דקורטיבי למלווה שלך.',en:'A tiny decorative crown for your companion.'}},
+ {id:'charm-flower',category:'companion',kind:'cosmetic',slot:'companionCharm',value:'🌼',price:290,currency:'coins',icon:'🌼',name:{he:'פרח קסום',en:'Magic Flower'},desc:{he:'פרח קטן שמקשט את דיוקן המלווה.',en:'A little flower charm for the companion portrait.'}},
+ {id:'charm-halo',category:'companion',kind:'cosmetic',slot:'companionCharm',value:'💠',price:7,currency:'gems',icon:'💠',name:{he:'סמל גביש',en:'Crystal Emblem'},desc:{he:'סמל גבישי נדיר ליד המלווה.',en:'A rare crystal emblem beside your companion.'}}
+];
+let activeShopTab = 'all';
+
+const TEXT={
+ he:{subtitle:'עולמות של התפתחות',energy:'אנרגיה',coins:'מטבעות',crystals:'גבישים',coinsNote:'מרוויחים בכל מיזוג',gemsNote:'תגליות נדירות',ready:'מוכנים לצאת לדרך',energyWait:'הבא בעוד',chapter:'עולם 01 · ההתעוררות הראשונה',worldName:'היער הקסום',worldDesc:'מתחת לכל עלה צומח מעט קסם.',goalTitle:'מעירים את היער',goalSub:'ממזגים פריטים ומגלים צורות חדשות',merges:' מיזוגים',boardTip:'גוררים או מקישים על פריטים תואמים',freeSpaces:'מקומות פנויים',summon:'יצירה',summonSub:'5 אנרגיה',shop:'חנות היער',shopSub:'שדרוג הכלים',missions:'משימות',missionsSub:'פרסים בחינם',sanctuary:'שמורה',sanctuarySub:'היצור שלך',growth:'התפתחות',footer:'מיזוג קטן. עולם חדש. · ההתקדמות נשמרת במכשיר הזה',genLabel:'יוצר',genDesc:'הקישו על היוצר כדי לקבל פריט. מיזוג של שני יוצרים זהים מעלה דרגה ומשפר תפוקה.',merge:'מיזוג!',genUpgrade:'היוצר התפתח!',newForm:'צורה חדשה התגלתה!',energyLow:'חסרה אנרגיה. אפשר לחכות או לקבל אנרגיה בבדיקה.',noSpace:'אין מקום פנוי בלוח. מזגו כמה פריטים קודם.',sameItem:'אפשר למזג רק פריטים מאותה דרגה.',tapMatch:'נבחר פריט. הקישו על פריט זהה כדי למזג.',moved:'הפריט הוזז.',earned:'קיבלתם',coinsWord:'מטבעות',xpWord:'ניסיון',summoned:'פריט חדש נוצר!',summonNeed:'מקישים על יוצר בלוח או על יצירה כדי לייצר פריט.',maxLevel:'הפריט כבר בדרגה הגבוהה ביותר!',buyGen:'קניית יוצר',buyGenDesc:'יוצר בסיסי שמפיק זרעים. שני יוצרים זהים מתמזגים ליוצר חזק יותר.',energyPack:'מילוי אנרגיה',energyPackDesc:'מוסיף 30 אנרגיה. אין תשלום אמיתי או רכישה בכסף.',upgrade:'שדרוג',buy:'קנייה',notEnough:'אין מספיק מטבעות.',settings:'הגדרות',language:'שפה',music:'מוזיקת רקע',effects:'אפקטים קוליים',on:'פעיל',off:'כבוי',testTools:'כלי בדיקה חינמיים',testEnergy:'+50 אנרגיה',testCoins:'+500 מטבעות',testGems:'+25 גבישים',reset:'איפוס התקדמות',resetConfirm:'לאפס את כל ההתקדמות המקומית במשחק הזה?',settingsNote:'המשחק שומר את ההתקדמות בדפדפן במכשיר הזה. כלי הבדיקה אינם רכישה ואינם מחוברים לתשלום.',missionsTitle:'משימות היער',missionMerge:'בצעו 3 מיזוגים',missionSummon:'צרו 5 פריטים',missionGen:'שדרגו יוצר פעם אחת',claim:'קבלת פרס',claimed:'התקבל',progress:'התקדמות',rewards:'פרס',collectionTitle:'שמורת היצורים',collectionDesc:'המלווה מתפתח בזכות הניסיון שמרוויחים ממיזוגים. כל צורה חדשה משנה את הצללית, הכנפיים וההילה.',stageNames:['ניצן קטן','דרקון צעיר','שומר היער','דרקון היער'],stageDescs:['רק התעורר מתוך ביצה קסומה.','הכנפיים מתחילות להתחזק.','הקסם של היער זורם בו.','שומר אגדי של היער הקסום.'],stageLabel:'שלב',worldUnlock:'עולמות נוספים ייפתחו בהמשך ההתקדמות.',itemNames:['','זרע יער','נבט צעיר','פטריית יער','פטריית ירח','גביש קסום','ביצת דרקון','דרקון צעיר','דרקון היער'],genNames:['','שורשים קסומים','גדם מעורר','חורשת פטריות','עץ גבישים','עץ הרוחות'],genDesc:'הקישו על היוצר כדי לקבל פריט. מיזוג של שני יוצרים מעלה את הדרגה ומשפר את התפוקה.',noMissions:'כל המשימות הושלמו. כל הכבוד!',missionDone:'המשימה הושלמה! הפרס מחכה.',shopTitle:'חנות היער'},
+ en:{subtitle:'WORLDS OF EVOLUTION',energy:'Energy',coins:'Coins',crystals:'Crystals',coinsNote:'Earn with every merge',gemsNote:'Rare discoveries',ready:'Ready to explore',energyWait:'Next in',chapter:'WORLD 01 · FIRST AWAKENING',worldName:'Verdant Wilds',worldDesc:'A little magic is growing under every leaf.',goalTitle:'Wake up the forest',goalSub:'Merge objects to discover new forms',merges:' MERGES',boardTip:'Drag or tap matching items',freeSpaces:'spaces free',summon:'Summon',summonSub:'5 energy',shop:'Forest shop',shopSub:'Upgrade tools',missions:'Missions',missionsSub:'Free rewards',sanctuary:'Sanctuary',sanctuarySub:'Your companion',growth:'GROWTH',footer:'A little merge. A whole new world. · Progress saves on this device',genLabel:'Maker',genDesc:'Tap a maker to create an item. Merge two matching makers to raise its level and improve output.',merge:'Merged!',genUpgrade:'Maker evolved!',newForm:'A new form discovered!',energyLow:'Not enough energy. Wait a little or use free test energy.',noSpace:'No free space on the board. Merge some items first.',sameItem:'Only items of the same level can merge.',tapMatch:'Item selected. Tap a matching item to merge.',moved:'Item moved.',earned:'You earned',coinsWord:'coins',xpWord:'XP',summoned:'A new item appeared!',summonNeed:'Tap a maker on the board or use Summon to create an item.',maxLevel:'This item is already at max level!',buyGen:'Buy a maker',buyGenDesc:'A starter maker that produces seeds. Merge two matching makers to upgrade it.',energyPack:'Energy refill',energyPackDesc:'Adds 30 energy. No real payment or purchase is involved.',upgrade:'Upgrade',buy:'Buy',notEnough:'Not enough coins.',settings:'Settings',language:'Language',music:'Background music',effects:'Sound effects',on:'On',off:'Off',testTools:'Free test tools',testEnergy:'+50 energy',testCoins:'+500 coins',testGems:'+25 crystals',reset:'Reset progress',resetConfirm:'Reset all local progress for this game?',settingsNote:'Progress is saved in this browser on this device. Test tools are not purchases and are not connected to payments.',missionsTitle:'Forest missions',missionMerge:'Make 3 merges',missionSummon:'Summon 5 items',missionGen:'Upgrade a maker once',claim:'Claim reward',claimed:'Claimed',progress:'Progress',rewards:'Reward',collectionTitle:'Creature sanctuary',collectionDesc:'Your companion evolves from merge XP. Each new form changes its silhouette, wings and aura.',stageNames:['Little Sprout','Young Dragon','Forest Warden','Forest Dragon'],stageDescs:['Just hatched from a magical egg.','Its wings are growing stronger.','Forest magic flows through it.','A legendary guardian of the forest.'],stageLabel:'Stage',worldUnlock:'More worlds will unlock as you progress.',itemNames:['','Forest seed','Young sprout','Forest mushroom','Mooncap','Magic crystal','Dragon egg','Young dragon','Forest dragon'],genNames:['','Enchanted roots','Awakened stump','Mushroom grove','Crystal tree','Spirit tree'],genDesc:'Tap the maker to create an item. Merge two matching makers to raise its level and improve its output.',noMissions:'All missions completed. Well done!',missionDone:'Mission complete! Your reward is ready.',shopTitle:'Forest shop'}
+};
+let lang='he', toastTimer=0, drag=null, selected=null, ghost=null, dragRaf=0, dragTarget=null, audioCtx=null, musicNodes=[], musicTimer=null, lastMergeAt=0, mergeCombo=0;
+let state=loadState();
+function defaultState(){const b=Array(SIZE).fill(null);b[12]={type:'gen',level:1};b[6]={type:'wild',level:1};b[8]={type:'wild',level:1};b[10]={type:'wild',level:2};b[14]={type:'wild',level:2};b[16]={type:'wild',level:3};b[18]={type:'wild',level:3};b[21]={type:'wild',level:4};return {board:b,energy:100,coins:800,gems:12,xp:0,merges:0,summons:0,genUpgrades:0,claimed:{},ownedItems:[],equipped:{boardSkin:'forest',mergeFx:'leaf',companionAura:'none',generatorLook:'classic',companionCharm:'none'},boosters:{luckySummons:0,coinRush:0},lastEnergyAt:Date.now(),music:false,effects:true,lang:'he',created:Date.now()}}
+ 
+
+function normalizeBoardItem(item) {
+  if (!item || typeof item !== 'object' || item.type !== 'wild') {
+    return item;
+  }
+
+  const normalized = { ...item };
+
+  if (
+    typeof normalized.speciesId === 'string' &&
+    normalized.speciesId
+  ) {
+    normalized.familyId =
+      normalized.familyId || normalized.speciesId;
+
+    normalized.evolutionStage = Math.max(
+      1,
+      Number(normalized.level) - 5
+    );
+  } else {
+    delete normalized.speciesId;
+    delete normalized.familyId;
+    delete normalized.evolutionStage;
+  }
+
+  return normalized;
+}
+
+
+
+function mergedBoardItem(item) {
+  const next = {
+    ...item,
+    type: item.type,
+    level: Number(item.level) + 1
+  };
+
+  // Do not assign a random species when merging.
+  delete next.speciesId;
+  delete next.familyId;
+  delete next.evolutionStage;
+
+  return next;
+}
+  
+  
+
+function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?normalizeBoardItem(x):null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
+function save(){try{state.lastEnergyAt=state.lastEnergyAt||Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
+ 
+if (!state.starterEggsGranted) {
+  const emptySlots = state.board
+    .map((item, index) => item === null ? index : -1)
+    .filter(index => index !== -1);
+
+  if (emptySlots.length >= 2) {
+    state.board[emptySlots[0]] = {
+      type: 'wild',
+      level: 6
+    };
+
+    state.board[emptySlots[1]] = {
+      type: 'wild',
+      level: 6
+    };
+
+    state.starterEggsGranted = true;
+    save();
+  }
+}
+
+ if (!state.eggIncubatorGranted) {
+  const emptySlot = state.board.findIndex(item => item === null);
+
+  if (emptySlot !== -1) {
+    state.board[emptySlot] = {
+      type: 'incubator',
+      level: 1
+    };
+
+    state.eggIncubatorGranted = true;
+    save();
+  }
+}
+function t(key){return (TEXT[lang]&&TEXT[lang][key])||TEXT.en[key]||key}
+function storeText(key){return (STORE_WORDS[lang]&&STORE_WORDS[lang][key])||STORE_WORDS.en[key]||key}
+function fmt(n){return new Intl.NumberFormat(lang==='he'?'he-IL':'en-US').format(n)}
+function levelName(item){
+  if(!item)return '';
+  if(item.type==='gen')return t('genNames')[item.level]||t('genNames')[5];
+  if(item.type==='incubator')return lang==='he'?'מדגרת ביצים':'Egg Incubator';
+  if(item.type==='egg')return lang==='he'?'ביצת דרקון':'Dragon Egg';
+  return t('itemNames')[item.level]||t('itemNames')[8];
+}
+function svgArt(type,level=1,companion=false){
+ const defs=`<defs><linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ef80"/><stop offset="1" stop-color="#559451"/></linearGradient><linearGradient id="mush" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#ffafc0"/><stop offset="1" stop-color="#e45e79"/></linearGradient><linearGradient id="cap" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5b5ff"/><stop offset="1" stop-color="#8b65ca"/></linearGradient><linearGradient id="crystal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c5fff0"/><stop offset=".5" stop-color="#6fcac2"/><stop offset="1" stop-color="#5b72bc"/></linearGradient><linearGradient id="egg" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff9cf"/><stop offset="1" stop-color="#cde2a0"/></linearGradient><linearGradient id="dragon" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#abdb76"/><stop offset=".6" stop-color="#62a65f"/><stop offset="1" stop-color="#34744d"/></linearGradient><linearGradient id="wing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f89f"/><stop offset="1" stop-color="#72bd7c"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff5b4" stop-opacity=".85"/><stop offset="1" stop-color="#fff5b4" stop-opacity="0"/></radialGradient></defs>`;
+ let art='';
+  if(type==='incubator'){
+ art=`<ellipse cx="50" cy="83" rx="25" ry="5" fill="#172a32" opacity=".18"/>
+ <rect x="25" y="24" width="50" height="53" rx="12" fill="#6b9b8c" stroke="#355c54" stroke-width="3"/>
+ <rect x="31" y="30" width="38" height="38" rx="9" fill="#dff8ef" stroke="#f7fff9" stroke-width="2"/>
+ <path d="M50 38 C40 38 37 49 43 57 C47 63 53 63 57 57 C63 49 60 38 50 38Z" fill="url(#egg)" stroke="#b9824c" stroke-width="1.5"/>
+ <path d="M39 21 Q50 12 61 21" fill="none" stroke="#f6d77a" stroke-width="4" stroke-linecap="round"/>
+ <circle cx="38" cy="72" r="3" fill="#f7d66b"/><circle cx="50" cy="72" r="3" fill="#8ee1c3"/><circle cx="62" cy="72" r="3" fill="#f7d66b"/>`;
+ } else if(type==='egg'){
+  const eggStage=Math.max(0,Math.min(4,(Number(level)||1)-1));
+  const eggColors=[
+    ['#fff9cf','#cde2a0','#b9824c'],
+    ['#e0f6ff','#82cde5','#478ca8'],
+    ['#f4dcff','#bc8be8','#8052b1'],
+    ['#ffe5b8','#ff9c65','#b95c3c'],
+    ['#fff5ad','#f3bd4f','#a76c27']
+  ][eggStage];
+  const eggGlow=eggStage>=3;
+  art=`
+  ${eggGlow?'<circle cx="50" cy="46" r="43" fill="url(#glow)"/>':''}
+  <ellipse cx="50" cy="82" rx="20" ry="5" fill="#172a32" opacity=".18"/>
+  <path d="M50 17 C38 17 28 39 30 56 C32 73 41 79 50 79 C59 79 68 73 70 56 C72 39 62 17 50 17Z"
+    fill="${eggColors[0]}" stroke="${eggColors[2]}" stroke-width="2.8"/>
+  <path d="M40 36 Q45 27 50 34" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity=".9"/>
+  <path d="M37 53 Q43 47 48 54 T62 52" fill="none" stroke="${eggColors[1]}" stroke-width="3" stroke-linecap="round"/>
+  ${eggStage>=1?`
+  <path d="M36 43 L42 47 L38 53" fill="none" stroke="${eggColors[2]}" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="61" cy="35" r="3" fill="#ffffff"/>
+  `:''}
+  ${eggStage>=2?`
+  <path d="M42 22 L38 13 L48 20 M57 20 L66 12 L62 25" fill="${eggColors[1]}" stroke="${eggColors[2]}" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M53 43 L48 50 L54 55 L49 62" fill="none" stroke="${eggColors[2]}" stroke-width="2.5" stroke-linejoin="round"/>
+  `:''}
+  ${eggStage>=3?`
+  <circle cx="28" cy="33" r="3" fill="#fff5ad"/>
+  <circle cx="73" cy="45" r="2.5" fill="#ffffff"/>
+  <path d="M34 65 L27 71 L36 73 M64 65 L72 71 L64 74" fill="none" stroke="${eggColors[2]}" stroke-width="2.5" stroke-linejoin="round"/>
+  `:''}
+  ${eggStage>=4?`
+  <path d="M39 25 L43 31 L39 37 M59 28 L55 34 L60 40" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M50 8 L53 15 L61 16 L55 21 L57 29 L50 24 L43 29 L45 21 L39 16 L47 15Z" fill="#fff5ad" stroke="#e4a83e" stroke-width="1.5"/>
+  `:''}`;
+ } else if(type==='gen'){
+  const lv=Math.max(1,Math.min(5,level)); const greens=['#7eac67','#619a59','#4b8d58','#477f66','#407260'];
+  art=`<ellipse cx="50" cy="78" rx="32" ry="9" fill="#345738" opacity=".23"/><path d="M20 62 Q19 43 32 41 L31 31 Q39 39 43 28 Q50 37 56 27 Q62 38 70 31 L68 44 Q82 45 80 63 Q79 75 66 77 L34 77 Q20 75 20 62Z" fill="${greens[lv-1]}" stroke="#386748" stroke-width="3" stroke-linejoin="round"/><path d="M25 53 Q38 58 50 51 T76 53" fill="none" stroke="#b9d889" stroke-width="3" stroke-linecap="round"/><path d="M50 54 Q49 38 55 24" fill="none" stroke="#d3ef9a" stroke-width="4" stroke-linecap="round"/><path d="M52 36 Q35 34 34 21 Q49 20 54 33Z" fill="#a8d977" stroke="#477b4d" stroke-width="2"/><path d="M55 30 Q59 13 73 16 Q73 31 57 35Z" fill="#e2f28a" stroke="#477b4d" stroke-width="2"/>`;
+  if(lv>=2)art+=`<path d="M24 48 Q12 37 17 26 Q33 28 35 45Z" fill="#8fcf83" stroke="#3f7548" stroke-width="2"/><circle cx="65" cy="53" r="4" fill="#f8d76f"/>`;
+  if(lv>=3)art+=`<path d="M31 41 Q25 28 40 20 Q53 20 58 37Z" fill="#f59fb2" stroke="#8b5860" stroke-width="2.5"/><circle cx="40" cy="28" r="2.5" fill="#fff1d7"/><circle cx="49" cy="25" r="2.5" fill="#fff1d7"/>`;
+  if(lv>=4)art+=`<path d="M65 36 L73 17 L78 35 L89 41 L74 43 L68 53Z" fill="url(#crystal)" stroke="#4e7b81" stroke-width="2"/><path d="M16 69 Q6 55 13 45" fill="none" stroke="#e4f29d" stroke-width="3" stroke-linecap="round"/>`;
+  if(lv>=5)art+=`<circle cx="24" cy="23" r="16" fill="url(#glow)"/><path d="M21 36 L27 13 L36 30 L45 11 L48 35Z" fill="url(#crystal)" stroke="#4d827d" stroke-width="2"/>`;
+ } else if(level===1){art=`<ellipse cx="50" cy="69" rx="25" ry="8" fill="#5a6e3e" opacity=".18"/><path d="M34 59 Q35 38 51 35 Q68 39 68 59 Q58 71 45 69Z" fill="#b98b55" stroke="#845d37" stroke-width="3"/><path d="M49 46 Q37 32 30 21 Q47 18 54 39Z" fill="#83b965" stroke="#477b4c" stroke-width="2.5"/><path d="M52 42 Q54 19 72 17 Q72 34 55 45Z" fill="#c4e878" stroke="#477b4c" stroke-width="2.5"/><path d="M31 63 Q48 70 65 62" fill="none" stroke="#f4dca0" stroke-width="3" stroke-linecap="round"/>`}
+ else if(level===2){art=`<ellipse cx="49" cy="79" rx="24" ry="6" fill="#50683d" opacity=".18"/><path d="M45 68 Q48 52 48 35" fill="none" stroke="#47804d" stroke-width="6" stroke-linecap="round"/><path d="M47 49 Q25 48 24 28 Q44 28 50 46Z" fill="#98ce6e" stroke="#477b4c" stroke-width="2.5"/><path d="M49 39 Q53 15 75 17 Q75 39 51 44Z" fill="#c9e98b" stroke="#477b4c" stroke-width="2.5"/><ellipse cx="49" cy="68" rx="13" ry="9" fill="#bb8b57" stroke="#805f3c" stroke-width="2.5"/><circle cx="52" cy="66" r="2" fill="#f6dd94"/>`}
+ else if(level===3 || level===4){const glow=level===4;art=`${glow?'<circle cx="50" cy="46" r="42" fill="url(#glow)"/>':''}<ellipse cx="50" cy="77" rx="29" ry="7" fill="#4a573c" opacity=".18"/><path d="M37 74 Q36 57 40 45 L61 45 Q65 57 63 74 Q51 82 37 74Z" fill="#f4dfbe" stroke="#a78c6d" stroke-width="2.5"/><path d="M19 47 Q22 24 49 20 Q75 21 82 44 Q69 57 50 55 Q31 56 19 47Z" fill="${glow?'url(#cap)':'url(#mush)'}" stroke="${glow?'#7652a9':'#a84960'}" stroke-width="3" stroke-linejoin="round"/><path d="M24 43 Q38 29 54 28" fill="none" stroke="#fff0df" stroke-width="3" stroke-linecap="round" opacity=".7"/><circle cx="36" cy="39" r="4" fill="#fff6e0"/><circle cx="54" cy="32" r="3.5" fill="#fff6e0"/><circle cx="67" cy="43" r="4" fill="#fff6e0"/>`;
+ if(glow)art+=`<path d="M20 25 l3 -7 3 7 7 3 -7 3 -3 7 -3 -7 -7 -3Z" fill="#fff5ac"/><path d="M77 14 l2 -5 2 5 5 2 -5 2 -2 5 -2 -5 -5 -2Z" fill="#fff5ac"/>`;
+ } else if(level===5){art=`<ellipse cx="50" cy="79" rx="28" ry="7" fill="#4a573c" opacity=".18"/><path d="M22 68 L33 39 L43 60 L54 22 L65 60 L78 36 L83 70Z" fill="url(#crystal)" stroke="#527f88" stroke-width="2.5" stroke-linejoin="round"/><path d="M54 23 L54 67 M34 40 L42 64 M78 37 L65 64" fill="none" stroke="#effff0" stroke-width="2.5" stroke-linecap="round" opacity=".85"/><path d="M39 69 L49 52 L58 69Z" fill="#cbf7d8" opacity=".85"/><circle cx="26" cy="25" r="3" fill="#f6dc89"/><circle cx="79" cy="21" r="3" fill="#f6dc89"/>`}
+ else if(level===6){art=`<ellipse cx="50" cy="79" rx="23" ry="6" fill="#4a573c" opacity=".18"/><path d="M50 16 C68 16 76 40 69 60 C63 78 37 78 30 60 C22 39 32 16 50 16Z" fill="url(#egg)" stroke="#708c5f" stroke-width="3"/><path d="M37 31 Q50 20 62 32" fill="none" stroke="#fffef0" stroke-width="4" stroke-linecap="round"/><path d="M35 52 Q41 44 47 52 T60 51" fill="none" stroke="#d4a76b" stroke-width="3" stroke-linecap="round"/><path d="M20 66 Q14 50 22 40 Q33 52 27 68Z" fill="#8dbb68" stroke="#4e8054" stroke-width="2"/><path d="M78 67 Q87 51 80 40 Q68 51 73 68Z" fill="#b8d976" stroke="#4e8054" stroke-width="2"/>`}
+ else if(level>=7){const grown=level>=8||companion&&level>=3;const majestic=companion&&level>=4;art=`<ellipse cx="49" cy="82" rx="31" ry="7" fill="#344e35" opacity=".18"/><path d="M29 61 Q14 57 16 43 Q22 31 35 40 Q49 50 42 64Z" fill="url(#wing)" stroke="#477c4b" stroke-width="2.5"/><path d="M65 58 Q75 38 87 37 Q91 53 72 67Z" fill="url(#wing)" stroke="#477c4b" stroke-width="2.5"/><path d="M34 66 Q18 75 13 64 Q23 62 30 54" fill="none" stroke="#4f8b51" stroke-width="7" stroke-linecap="round"/><path d="M30 62 Q28 42 44 42 Q57 43 61 62 Q58 76 44 77 Q30 75 30 62Z" fill="url(#dragon)" stroke="#356d49" stroke-width="3"/><path d="M46 46 Q45 29 61 25 Q78 26 78 45 Q74 60 60 61 Q47 59 46 46Z" fill="url(#dragon)" stroke="#356d49" stroke-width="3"/><path d="M51 31 L47 17 L58 27Z" fill="#f2d47a" stroke="#826c45" stroke-width="2"/><path d="M68 29 L76 16 L77 34Z" fill="#f2d47a" stroke="#826c45" stroke-width="2"/><ellipse cx="66" cy="48" rx="8" ry="7" fill="#fff7d9"/><ellipse cx="67" cy="48" rx="4" ry="5" fill="#384f3e"/><circle cx="68" cy="46" r="1.7" fill="#fff"/><ellipse cx="77" cy="56" rx="5" ry="3" fill="#f6a2a0"/><path d="M57 58 Q67 64 77 57 Q74 71 62 69Z" fill="#f5e6b7" stroke="#9ab978" stroke-width="2"/><path d="M35 72 Q49 78 58 70" fill="none" stroke="#d7ec9c" stroke-width="3" stroke-linecap="round"/>`;
+ if(grown)art+=`<path d="M33 50 L21 31 L37 38 M72 44 L88 25 L82 48" fill="#67ab69" stroke="#3a764e" stroke-width="3" stroke-linejoin="round"/><path d="M37 39 L25 27 M80 35 L88 20" stroke="#f6d878" stroke-width="3" stroke-linecap="round"/>`;
+ if(majestic)art+=`<path d="M48 30 L50 11 L61 24 L70 8 L74 28Z" fill="#f2d47a" stroke="#94713e" stroke-width="2.5"/><circle cx="61" cy="22" r="3" fill="#fff6bf"/><path d="M20 37 Q8 14 25 10 Q35 22 32 39 M79 37 Q92 14 81 9 Q68 21 70 39" fill="#c8f0a1" fill-opacity=".75" stroke="#5b9c6a" stroke-width="2.5"/>`;
+ }
+ return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${defs}<g stroke-linecap="round" stroke-linejoin="round">${art}</g></svg>`;
+}
+function worldIllustration(){return `<svg class="world-scene-svg" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+ <linearGradient id="sceneSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8bc9d8"/><stop offset=".53" stop-color="#c5e8c7"/><stop offset="1" stop-color="#f4e8ad"/></linearGradient>
+ <linearGradient id="sceneMountain" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#91b9b5"/><stop offset="1" stop-color="#557f82"/></linearGradient>
+ <linearGradient id="sceneHillBack" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#83b878"/><stop offset="1" stop-color="#3f8057"/></linearGradient>
+ <linearGradient id="sceneHillFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#75a95f"/><stop offset="1" stop-color="#245b40"/></linearGradient>
+ <linearGradient id="sceneRiver" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#92d8d3"/><stop offset=".5" stop-color="#d3f2d0"/><stop offset="1" stop-color="#68b9b8"/></linearGradient>
+ <radialGradient id="sceneSunGlow"><stop stop-color="#fff5ba" stop-opacity=".9"/><stop offset="1" stop-color="#fff5ba" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="560" height="220" fill="url(#sceneSky)"/>
+<circle class="scene-sun-glow" cx="440" cy="48" r="56" fill="url(#sceneSunGlow)"/>
+<circle cx="440" cy="48" r="22" fill="#fff0a9" opacity=".95"/><circle cx="440" cy="48" r="15" fill="#fff7c7"/>
+<g class="scene-cloud cloud-one" fill="#fffdf0" opacity=".88"><path d="M48 55c-13 0-19-8-14-17 3-6 9-8 16-7 3-12 21-15 29-4 13-5 24 5 22 16 10 4 8 12-2 12z"/><path d="M297 34c-9 0-14-5-11-12 2-4 7-6 12-5 2-8 14-10 20-3 9-3 17 4 15 11 7 3 6 9-1 9z" transform="translate(80 13) scale(.8)"/></g>
+<g class="scene-cloud cloud-two" fill="#fffdf0" opacity=".63"><path d="M190 65c-10 0-15-7-11-14 3-5 8-7 14-6 3-10 17-12 24-3 10-4 19 4 17 13 8 3 6 10-2 10z"/><path d="M485 89c-11 0-16-7-12-15 3-5 9-7 15-6 3-10 18-12 25-3 11-4 20 4 18 13 8 3 7 11-2 11z"/></g>
+<path d="M-18 145 55 82 91 111 162 42 226 112 273 73 337 126 407 62 473 119 523 86 582 145V225H-18Z" fill="url(#sceneMountain)"/>
+<path d="M117 84 162 42 203 90 183 82 168 65 156 88 142 76Z" fill="#e1ead8" opacity=".83"/><path d="M366 98 407 62 449 99 429 91 413 77 403 101 389 88Z" fill="#e1ead8" opacity=".76"/>
+<path d="M-20 166Q50 115 112 150T244 143T365 148T580 128V230H-20Z" fill="#83b8a0"/><path d="M-15 176Q47 132 112 163T246 159T371 165T575 151V230H-15Z" fill="url(#sceneHillBack)"/><path d="M-20 201Q58 155 139 187T283 181T415 188T582 165V230H-20Z" fill="url(#sceneHillFront)"/>
+<path d="M-10 208Q72 184 134 199T250 195T365 203T570 183" fill="none" stroke="#a5ce83" stroke-width="3" opacity=".65"/>
+<path d="M319 139Q350 150 341 169T314 194Q305 207 336 220H440Q405 208 424 194T458 172Q475 156 451 147Z" fill="url(#sceneRiver)" opacity=".95"/><path class="scene-water" d="M337 169Q345 160 358 166M325 195Q350 181 375 190M353 211Q381 198 408 208" fill="none" stroke="#f1ffdc" stroke-width="2.5" stroke-linecap="round" opacity=".85"/>
+<g transform="translate(27 88)"><g class="scene-tree tree-sway"><path d="M18 92V42" stroke="#6a5039" stroke-width="10" stroke-linecap="round"/><path d="M19 80 5 57M19 66 34 49" stroke="#6a5039" stroke-width="5" stroke-linecap="round"/><path d="M-2 48Q-15 28 2 14Q-3-5 19 0Q37-9 43 11Q60 28 42 48Q22 61-2 48Z" fill="#36784e" stroke="#2d6545" stroke-width="3"/><path d="M0 28Q11 8 26 15Q37 20 41 32" fill="none" stroke="#91c978" stroke-width="5" stroke-linecap="round"/><circle cx="9" cy="19" r="4" fill="#c1e68a"/></g></g>
+<g transform="translate(482 103) scale(.82)"><g class="scene-tree tree-sway tree-right"><path d="M18 83V42" stroke="#6a5039" stroke-width="9" stroke-linecap="round"/><path d="M19 65 3 48M19 59 32 42" stroke="#6a5039" stroke-width="5" stroke-linecap="round"/><path d="M-3 49Q-14 30 2 17Q-2 0 18 2Q35-5 42 13Q56 28 42 47Q22 60-3 49Z" fill="#2d7048" stroke="#285f40" stroke-width="3"/><path d="M1 30Q15 12 31 20Q39 24 41 34" fill="none" stroke="#a7d57a" stroke-width="4" stroke-linecap="round"/><circle cx="29" cy="14" r="3" fill="#f5d877"/></g></g>
+<g transform="translate(115 133) scale(.48)"><g class="scene-tree tree-sway"><path d="M18 92V42" stroke="#72563b" stroke-width="12" stroke-linecap="round"/><path d="M-2 48Q-15 28 2 14Q-3-5 19 0Q37-9 43 11Q60 28 42 48Q22 61-2 48Z" fill="#55965b" stroke="#3c7a4d" stroke-width="3"/><path d="M4 25Q20 6 39 25" fill="none" stroke="#b7df84" stroke-width="5" stroke-linecap="round"/></g></g>
+<g transform="translate(432 139) scale(.55)"><g class="scene-tree tree-sway"><path d="M18 92V42" stroke="#72563b" stroke-width="12" stroke-linecap="round"/><path d="M-2 48Q-15 28 2 14Q-3-5 19 0Q37-9 43 11Q60 28 42 48Q22 61-2 48Z" fill="#5f9b5d" stroke="#3c7a4d" stroke-width="3"/><path d="M3 24Q18 7 38 24" fill="none" stroke="#c4e18b" stroke-width="5" stroke-linecap="round"/></g></g>
+<g class="scene-birds" fill="none" stroke="#477d79" stroke-width="2.2" stroke-linecap="round"><path d="M244 64q6-7 12 0q6-7 12 0"/><path d="M272 52q4-5 8 0q4-5 8 0"/></g>
+<g fill="#fff2aa"><circle class="scene-firefly" cx="244" cy="165" r="2.8"/><circle class="scene-firefly" cx="274" cy="142" r="2.2"/><circle class="scene-firefly" cx="299" cy="184" r="2.4"/><circle class="scene-firefly" cx="466" cy="143" r="2.4"/><circle class="scene-firefly" cx="88" cy="154" r="2.1"/></g>
+<g class="scene-foreground-leaf" fill="#b9df82"><path d="M62 220Q57 199 42 194Q44 215 62 220Z"/><path d="M63 220Q67 197 84 192Q82 213 63 220Z"/><path d="M500 220Q493 198 478 196Q482 216 500 220Z"/><path d="M501 220Q507 199 523 194Q521 214 501 220Z"/></g>
+<path d="M0 218Q70 208 119 218T235 215T349 218T470 213T560 217" fill="none" stroke="#b7d78a" stroke-width="4" opacity=".82"/>
+</svg>`;}
+function triggerWorldReaction(){
+ const hero=$('.world-card');if(!hero||reducedMotion())return;
+ hero.classList.remove('world-react');void hero.offsetWidth;hero.classList.add('world-react');
+ window.setTimeout(()=>hero.classList.remove('world-react'),820);
+}
+function renderBoard(){const board=$('#board');board.innerHTML='';state.board.forEach((item,i)=>{const cell=document.createElement('div');cell.className='cell'+(!item?' empty':'')+(selected===i?' selected':'');cell.dataset.index=i;cell.setAttribute('role','gridcell');cell.setAttribute('aria-label',item?`${levelName(item)} ${item.level}`:'Empty');if(item){const node=document.createElement('div');node.className='board-item'+(item.type==='gen'?' generator':'');node.dataset.index=i;node.dataset.type=item.type;node.dataset.level=String(item.level);node.innerHTML=svgArt(item.type,item.level)+(item.type==='gen'?`<span class="gen-tag">${t('genLabel')}</span>`:'')+`<span class="level-badge">${item.level}</span>`;node.title=levelName(item);cell.append(node)}board.append(cell)});$('#emptyCount').textContent=state.board.filter(x=>!x).length;}
+function companionStage(){return state.xp>=36?3:state.xp>=20?2:state.xp>=8?1:0}
+function renderCompanion(){const stage=companionStage();$('#companionAvatar').innerHTML=svgArt('wild',7+stage,true);$('#companionName').textContent=(lang==='he'?['נבטי · דרקון היער','נבטי · דרקון צעיר','נבטי · שומר היער','נבטי · דרקון היער'][stage]:['Sprig · Forest Wyrmling','Sprig · Young Dragon','Sprig · Forest Warden','Sprig · Forest Dragon'][stage]);$('#companionDesc').textContent=t('stageDescs')[stage];const mins=[0,8,20,36,52];const next=mins[stage+1]||52;const base=mins[stage];$('#xpFill').style.width=Math.min(100,((state.xp-base)/(next-base))*100)+'%';$('#stageText').textContent=`${stage+1} / 4`;}
+function render(){if(!['he','en'].includes(lang))lang=state.lang||'he';document.documentElement.lang=lang;document.documentElement.dir=lang==='he'?'rtl':'ltr';document.body.dir=lang==='he'?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(TEXT[lang][k]!=null)el.textContent=TEXT[lang][k]});$('#languageBtn').textContent=lang==='he'?'EN':'עב';$('#energyVal').textContent=fmt(Math.floor(state.energy));$('#coinsVal').textContent=fmt(state.coins);$('#gemsVal').textContent=fmt(state.gems);$('#energyFill').style.width=(state.energy/ENERGY_MAX*100)+'%';$('#energyNote').textContent=state.energy>=ENERGY_MAX?t('ready'):t('energyWait')+' '+Math.max(1,Math.ceil((ENERGY_REGEN_MS-(Date.now()-state.lastEnergyAt))/1000))+'s';$('#mergeCount').textContent=fmt(state.merges);$('#worldProgress').style.width=Math.min(100,5+state.merges*2)+'%';if(!$('#worldArt').firstElementChild)$('#worldArt').innerHTML=worldIllustration();renderBoard();renderCompanion();applyCosmetics();renderBoostStatus();$('#soundBtn').textContent=state.music?'♫':'♪';$('#soundBtn').style.background=state.music?'#e5f3c4':'';}
+function showToast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1900)}
+function firstEmpty(){return state.board.findIndex(x=>!x)}
+function addXp(n){const before=companionStage();state.xp+=n;if(companionStage()>before)showToast(t('newForm'));}
+function updateMissions(){save()}
+function useEnergy(n){if(state.energy<n){showToast(t('energyLow'));return false}const wasFull=state.energy>=ENERGY_MAX;state.energy-=n;if(wasFull)state.lastEnergyAt=Date.now();return true}
+function restoreEnergy(amount){state.energy=Math.min(ENERGY_MAX,state.energy+amount);if(state.energy===ENERGY_MAX)state.lastEnergyAt=Date.now();render();save()}
+function summonFrom(index,free=false){const gen=state.board[index];if(!gen||gen.type!=='gen'){const g=state.board.findIndex(x=>x&&x.type==='gen');if(g<0){showToast(t('summonNeed'));return}return summonFrom(g,free)}const target=firstEmpty();if(target<0){showToast(t('noSpace'));return}if(!free&&!useEnergy(ENERGY_COST))return;const lucky=state.boosters&&state.boosters.luckySummons>0;const output=Math.min(MAX_ITEM,1+Math.floor((gen.level-1)/2)+(lucky?1:0));if(lucky)state.boosters.luckySummons--;state.board[target]={type:'wild',level:output};state.summons++;addXp(1);state.coins+=2;save();render();playSfx('pop');playGeneratorAction(index);playBoardAction(target,false,'leaf');announce(t('summoned'));}
+function summonButton(){const gen=state.board.findIndex(x=>x&&x.type==='gen');if(gen<0){showToast(t('summonNeed'));return}summonFrom(gen)}
+ function incubateFrom(index){
+  const incubator=state.board[index];
+
+  if(!incubator||incubator.type!=='incubator')return;
+
+  const target=firstEmpty();
+
+  if(target<0){
+    showToast(t('noSpace'));
+    return;
+  }
+
+  if(!useEnergy(ENERGY_COST))return;
+
+  state.board[target]={
+    type:'egg',
+    level:0
+  };
+
+  addXp(1);
+  save();
+  render();
+  playSfx('pop');
+  playBoardAction(target,false,'leaf');
+  announce(lang==='he'?'נוצרה ביצת דרקון':'Dragon egg created');
+  showToast(lang==='he'?'נוצרה ביצת דרקון':'Dragon egg created');
+}
+function announce(msg){const frame=$('.board-frame');let a=$('.board-announce');if(!a){a=document.createElement('div');a.className='board-announce';frame.append(a)}a.textContent=msg;a.classList.remove('show');void a.offsetWidth;a.classList.add('show')}
+function registerMergeCombo(){const now=performance.now();mergeCombo=now-lastMergeAt<1550?Math.min(5,mergeCombo+1):1;lastMergeAt=now;return mergeCombo}
+function mergeAt(from,to){
+ if(from===to)return false;const a=state.board[from],b=state.board[to];if(!a)return false;
+ if(!b){const flight=createBoardFlight(from,to,false);state.board[to]=a;state.board[from]=null;selected=null;save();render();finishBoardFlight(flight,to,false,'move');showToast(t('moved'));return true}
+if(a.type!==b.type||a.level!==b.level){showToast(t('sameItem'));return false}
+ if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)&&a.type!=='wild'){showToast(t('maxLevel'));return false}
+ const combo=registerMergeCombo();
+ if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)){
+  if(a.type==='wild'){const flight=createBoardFlight(from,to,true);state.board[to]=a;state.board[from]=null;selected=null;const base=35;const boosted=state.boosters.coinRush>0;if(boosted)state.boosters.coinRush--;const earned=base*(boosted?2:1);state.coins+=earned;state.gems+=1;state.merges++;addXp(5);save();render();triggerWorldReaction();const rewardLabel='+'+earned+' 🪙 +1 💎'+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,'gold',rewardLabel);playSfx('merge');announce(t('earned')+' +'+earned+' '+t('coinsWord')+' 💎');return true}
+  showToast(t('maxLevel'));return false
+ }
+const flight=createBoardFlight(from,to,true);const next=mergedBoardItem(a);state.board[to]=next;;state.board[from]=null;selected=null;state.merges++;
+ const baseCoins=a.type==='gen'?18:10+a.level*2;const boosted=state.boosters.coinRush>0;if(boosted)state.boosters.coinRush--;const earned=baseCoins*(boosted?2:1);state.coins+=earned;addXp(a.type==='gen'?3:2+a.level);if(a.type==='gen')state.genUpgrades++;
+ save();render();triggerWorldReaction();const isEvolution=next.type==='wild'&&next.level>=7;const fx=isEvolution?'evolve':((state.equipped&&state.equipped.mergeFx)||'leaf');const topReward=next.level===MAX_ITEM&&next.type==='wild';const rewardLabel='+'+(earned+(topReward?50:0))+' 🪙'+(topReward?' +2 💎':'')+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,fx,rewardLabel);playSfx('merge');const msg=a.type==='gen'?t('genUpgrade'):t('merge');announce(msg);
+ if(next.level===MAX_ITEM&&next.type==='wild'){state.gems+=2;state.coins+=50;save();showToast(t('newForm')+' 💎 +2')}else showToast(msg+' · +'+earned+' '+t('coinsWord')+(boosted?' ✨':''));updateMissions();return true
+}
+function tapCell(idx){
+  const item=state.board[idx];
+
+  if(!item){
+    if(selected!==null)mergeAt(selected,idx);
+    return;
+  }
+
+  if(item.type==='gen'){
+    summonFrom(idx);
+    return;
+  }
+
+  if(item.type==='incubator'){
+    incubateFrom(idx);
+    return;
+  }
+
+  if(selected===null){
+    selected=idx;
+    renderBoard();
+    showToast(t('tapMatch'));
+    return;
+  }
+
+  if(selected===idx){
+    selected=null;
+    renderBoard();
+    return;
+  }
+
+  const other=state.board[selected];
+
+  if(other&&other.type===item.type&&other.level===item.level){
+    mergeAt(selected,idx);
+  }else{
+    selected=idx;
+    renderBoard();
+    showToast(t('tapMatch'));
+  }
+}
+function pointerDown(e){const node=e.target.closest('.board-item');if(!node)return;const idx=Number(node.dataset.index);if(!Number.isInteger(idx)||!state.board[idx])return;e.preventDefault();drag={idx:idx,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,moved:false,node:node};dragTarget=null;}
+function updateDragVisual(x,y){if(!drag)return;if(!drag.moved&&Math.hypot(x-drag.startX,y-drag.startY)>8){drag.moved=true;drag.node.classList.add('dragging');ghost=document.createElement('div');ghost.className='flight-ghost';ghost.style.width='62px';ghost.style.height='62px';ghost.style.left='0';ghost.style.top='0';ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';ghost.innerHTML=svgArt(state.board[drag.idx].type,state.board[drag.idx].level);document.body.append(ghost);document.body.style.cursor='grabbing'}if(drag.moved&&ghost){ghost.style.transform='translate3d('+(x-31)+'px,'+(y-31)+'px,0)';const found=document.elementFromPoint(x,y);const target=found&&found.closest?found.closest('.cell'):null;const valid=target&&Number(target.dataset.index)!==drag.idx?target:null;if(valid!==dragTarget){if(dragTarget)dragTarget.classList.remove('drop-target');dragTarget=valid;if(dragTarget)dragTarget.classList.add('drop-target')}}}
+function pointerMove(e){if(!drag)return;drag.x=e.clientX;drag.y=e.clientY;if(!dragRaf)dragRaf=requestAnimationFrame(()=>{dragRaf=0;if(drag)updateDragVisual(drag.x,drag.y)});}
+function cleanupDrag(){if(dragRaf){cancelAnimationFrame(dragRaf);dragRaf=0}if(drag&&drag.node)drag.node.classList.remove('dragging');if(ghost)ghost.remove();ghost=null;if(dragTarget)dragTarget.classList.remove('drop-target');dragTarget=null;document.body.style.cursor='';}
+function pointerUp(e){
+  if(!drag)return;
+
+  const d=drag;
+  const distance=Math.hypot(e.clientX-d.startX,e.clientY-d.startY);
+  const didMove=d.moved||distance>8;
+  const x=Number.isFinite(e.clientX)?e.clientX:d.x;
+  const y=Number.isFinite(e.clientY)?e.clientY:d.y;
+
+  if(dragRaf){
+    cancelAnimationFrame(dragRaf);
+    dragRaf=0;
+  }
+
+  if(d.node)d.node.classList.remove('dragging');
+
+  drag=null;
+  cleanupDrag();
+
+  if(didMove){
+    const found=document.elementFromPoint(x,y);
+    const target=found&&found.closest?found.closest('.cell'):null;
+
+    if(target){
+      const to=Number(target.dataset.index);
+
+      if(Number.isInteger(to)){
+        if(to===d.idx){
+          tapCell(d.idx);
+        }else{
+          selected=null;
+          mergeAt(d.idx,to);
+        }
+      }
+    }
+    return;
+  }
+
+  tapCell(d.idx);
+}
+function cancelDrag(){if(!drag)return;const d=drag;if(d.node)d.node.classList.remove('dragging');drag=null;cleanupDrag()}
+function openModal(title,html){$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;const modal=$('.modal');if(modal)modal.scrollTop=0;$('#modalBackdrop').classList.add('open')}
+function closeModal(){$('#modalBackdrop').classList.remove('open')}
+function renderBoostStatus(){const host=$('#boostStatus');if(!host)return;const badges=[];if(state.boosters&&state.boosters.luckySummons>0)badges.push('<span class="boost-pill">🍀 '+storeText('luckyRemaining')+' × '+state.boosters.luckySummons+'</span>');if(state.boosters&&state.boosters.coinRush>0)badges.push('<span class="boost-pill">🪙 '+storeText('coinRushRemaining')+' × '+state.boosters.coinRush+'</span>');host.innerHTML=badges.join('')}
+function applyCosmetics(){
+ const root=$('.game-shell');if(root){root.dataset.boardSkin=(state.equipped&&state.equipped.boardSkin)||'forest';root.dataset.generatorLook=(state.equipped&&state.equipped.generatorLook)||'classic'}
+ const avatar=$('#companionAvatar');if(avatar){avatar.dataset.aura=(state.equipped&&state.equipped.companionAura)||'none';const previous=avatar.querySelector('.cosmetic-charm');if(previous)previous.remove();const charm=state.equipped&&state.equipped.companionCharm;if(charm&&charm!=='none'){const badge=document.createElement('span');badge.className='cosmetic-charm';badge.textContent=charm;avatar.append(badge)}}
+}
+function reducedMotion(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function createBoardFlight(from,to,isMerge){
+ if(reducedMotion())return null;
+ const fromNode=document.querySelector('.cell[data-index="'+from+'"] .board-item');
+ const targetCell=document.querySelector('.cell[data-index="'+to+'"]');
+ if(!fromNode||!targetCell)return null;
+ const pieces=[];
+ function addPiece(node,rotation){const rect=node.getBoundingClientRect();const ghostNode=document.createElement('div');ghostNode.className='flight-ghost';ghostNode.style.left=rect.left+'px';ghostNode.style.top=rect.top+'px';ghostNode.style.width=rect.width+'px';ghostNode.style.height=rect.height+'px';ghostNode.innerHTML=node.innerHTML;document.body.append(ghostNode);pieces.push({node:ghostNode,rect:rect,rotation:rotation})}
+ addPiece(fromNode,isMerge?-8:-2);
+ if(isMerge){const toNode=targetCell.querySelector('.board-item');if(toNode)addPiece(toNode,8)}
+ return {pieces:pieces,to:to,isMerge:isMerge};
+}
+function playBoardBurst(index,effect,spawn,label=''){
+ if(reducedMotion())return;
+ const board=$('#board');const cell=board&&board.querySelector('.cell[data-index="'+index+'"]');if(!board||!cell)return;
+ const burst=document.createElement('div');burst.className='merge-burst';burst.dataset.effect=effect||'leaf';burst.style.left=(cell.offsetLeft+cell.offsetWidth/2)+'px';burst.style.top=(cell.offsetTop+cell.offsetHeight/2)+'px';
+ const ring=document.createElement('i');ring.className='merge-ring';burst.append(ring);if(label){const reward=document.createElement('span');reward.className='merge-label';reward.textContent=label;burst.append(reward)}
+ const glyphs={leaf:['✦','✧','❋','•','🍃'],gold:['✦','✧','✶','•','✺'],petal:['❀','✿','✧','❁','•'],crystal:['◇','✧','◆','✦','⋆'],rainbow:['✦','✧','✺','•','✶'],meteor:['★','✶','✧','⋆','•'],evolve:['✦','✧','✶','◇','✺']};const list=glyphs[effect]||glyphs.leaf;const count=effect==='evolve'?17:(spawn?7:11);
+ for(let i=0;i<count;i++){const angle=(Math.PI*2*i/count)+(Math.random()-.5)*.24;const distance=(spawn?17:24)+Math.random()*(spawn?13:20);const spark=document.createElement('span');spark.className='merge-spark';spark.textContent=list[i%list.length];spark.style.setProperty('--dx',(Math.cos(angle)*distance)+'px');spark.style.setProperty('--dy',(Math.sin(angle)*distance)+'px');spark.style.setProperty('--rot',((Math.random()*150)-75)+'deg');spark.style.setProperty('--delay',(i*10)+'ms');burst.append(spark)}
+ board.append(burst);window.setTimeout(()=>burst.remove(),760);
+}
+function playBoardAction(index,isMerge,effect,withBurst=true,label=''){
+ const cell=document.querySelector('.cell[data-index="'+index+'"]');if(!cell)return;
+ const node=cell.querySelector('.board-item');if(node){const cls=isMerge?'merge-pop':'spawn-pop';node.classList.remove('merge-pop','spawn-pop');void node.offsetWidth;node.classList.add(cls);window.setTimeout(()=>{if(node.isConnected)node.classList.remove(cls)},520)}
+ cell.classList.remove('merge-impact','spawn-impact','impact-flash');void cell.offsetWidth;cell.classList.add(isMerge?'merge-impact':'spawn-impact');if(isMerge)cell.classList.add('impact-flash');window.setTimeout(()=>{if(cell.isConnected)cell.classList.remove('merge-impact','spawn-impact','impact-flash')},430);
+ if(withBurst)playBoardBurst(index,effect||((state.equipped&&state.equipped.mergeFx)||'leaf'),!isMerge,label);
+}
+function playGeneratorAction(index){if(reducedMotion())return;const cell=document.querySelector('.cell[data-index="'+index+'"]');const node=cell&&cell.querySelector('.board-item.generator');if(!cell||!node)return;if(typeof node.animate!=='function'){playBoardBurst(index,'leaf',true);return}cell.classList.remove('generator-flash');void cell.offsetWidth;cell.classList.add('generator-flash');const a=node.animate([{transform:'translate3d(0,0,0) scale(1) rotate(0deg)'},{transform:'translate3d(0,2px,0) scale(.92,1.06) rotate(-3deg)',offset:.28},{transform:'translate3d(0,-3px,0) scale(1.08,.96) rotate(2deg)',offset:.62},{transform:'translate3d(0,0,0) scale(1) rotate(0deg)'}],{duration:365,easing:'cubic-bezier(.2,.8,.25,1)'});a.finished.catch(()=>{});playBoardBurst(index,'leaf',true);window.setTimeout(()=>{if(cell.isConnected)cell.classList.remove('generator-flash')},420)}
+function finishBoardFlight(flight,index,isMerge,effect,rewardLabel=''){
+ if(!flight||!flight.pieces.length){playBoardAction(index,isMerge,effect,effect!=='move',rewardLabel);return}
+ const cell=document.querySelector('.cell[data-index="'+index+'"]');if(!cell){flight.pieces.forEach(p=>p.node.remove());return}
+ const targetItem=cell.querySelector('.board-item');if(targetItem)targetItem.classList.add('arrival-hidden');
+ if(!flight.pieces.every(p=>typeof p.node.animate==='function')){flight.pieces.forEach(p=>p.node.remove());if(targetItem)targetItem.classList.remove('arrival-hidden');playBoardAction(index,isMerge,effect,effect!=='move',rewardLabel);return}
+ const destination=cell.getBoundingClientRect();
+ if(isMerge){cell.classList.remove('merge-prep');void cell.offsetWidth;cell.classList.add('merge-prep')}
+ const launchFlights=()=>{
+  const jobs=flight.pieces.map((piece,i)=>{
+   const dx=(destination.left+destination.width/2)-(piece.rect.left+piece.rect.width/2);
+   const dy=(destination.top+destination.height/2)-(piece.rect.top+piece.rect.height/2);
+   const side=(i%2===0?-1:1)*(isMerge?11:4);
+   const endScale=1;
+   const endRotate=piece.rotation+(isMerge?(i===0?-12:12):0);
+   const keyframes=[
+    {transform:'translate3d(0,0,0) scale(1) rotate(0deg)',opacity:1,offset:0},
+    {transform:'translate3d('+(dx*.26+side)+'px,'+(dy*.26-8)+'px,0) scale(1) rotate('+(piece.rotation*.35)+'deg)',opacity:1,offset:.27},
+    {transform:'translate3d('+(dx*.76-side*.35)+'px,'+(dy*.76+3)+'px,0) scale(1) rotate('+(piece.rotation*.8)+'deg)',opacity:isMerge?.72:1,offset:.76},
+    {transform:'translate3d('+dx+'px,'+dy+'px,0) scale('+endScale+') rotate('+endRotate+'deg)',opacity:isMerge?0:1,offset:1}
+   ];
+   const anim=piece.node.animate(keyframes,{duration:isMerge?238:255,easing:'cubic-bezier(.18,.82,.24,1)',fill:'forwards'});
+   return anim.finished.catch(()=>{});
+  });
+  Promise.all(jobs).then(async()=>{
+   flight.pieces.forEach(p=>p.node.remove());
+   if(!targetItem||!targetItem.isConnected)return;
+   if(isMerge)await new Promise(resolve=>window.setTimeout(resolve,38));
+   cell.classList.remove('merge-prep');
+   targetItem.classList.remove('arrival-hidden');
+   playBoardAction(index,isMerge,effect,effect!=='move',rewardLabel);
+  });
+ };
+ if(isMerge)window.setTimeout(launchFlights,48);else launchFlights();
+}
+function findMergePair(){for(let i=0;i<state.board.length;i++){const a=state.board[i];if(!a)continue;const max=a.type==='gen'?MAX_GEN:MAX_ITEM;if(a.level>=max&&a.type!=='wild')continue;for(let j=i+1;j<state.board.length;j++){const b=state.board[j];if(b&&b.type===a.type&&b.level===a.level)return [i,j]}}return null}
+function canAffordShopItem(item){return item.currency==='gems'?state.gems>=item.price:state.coins>=item.price}
+function canUseShopItem(item){if(item.kind==='cosmetic')return true;switch(item.effect){case'energy':return state.energy<ENERGY_MAX;case'magnet':return !!findMergePair();case'hammer':{const chosen=selected===null?null:state.board[selected];return !!(chosen&&chosen.level<(chosen.type==='gen'?MAX_GEN:MAX_ITEM))}case'wildSeed':case'maker':return firstEmpty()>=0;default:return true}}
+function shopPrice(item){return (item.currency==='gems'?'💎 ':'🪙 ')+fmt(item.price)}
+function shopModal(filter){if(filter)activeShopTab=filter;const cats=[{id:'all',label:storeText('all')},{id:'boost',label:storeText('boost')},{id:'boards',label:storeText('boards')},{id:'looks',label:storeText('looks')},{id:'effects',label:storeText('effects')},{id:'companion',label:storeText('companion')}];if(!cats.some(c=>c.id===activeShopTab))activeShopTab='all';const tabs=cats.map(c=>'<button class="shop-tab '+(activeShopTab===c.id?'active':'')+'" data-shop-tab="'+c.id+'">'+c.label+'</button>').join('');const products=SHOP_ITEMS.filter(it=>activeShopTab==='all'||it.category===activeShopTab).map(it=>{const owns=state.ownedItems.includes(it.id);const equipped=it.kind==='cosmetic'&&owns&&state.equipped[it.slot]===it.value;const usable=canUseShopItem(it);const canPay=canAffordShopItem(it);let label,disabled=false,ownedClass='';if(it.kind==='cosmetic'){if(equipped){label='✓ '+storeText('equippedItem');disabled=true;ownedClass=' owned'}else if(owns){label=storeText('equipItem');ownedClass=' owned'}else{label=storeText('buyItem')+' · '+shopPrice(it);disabled=!canPay}}else{label=usable?storeText('buyItem')+' · '+shopPrice(it):storeText('shopUnavailable');disabled=!usable||!canPay}return '<article class="shop-product"><div class="shop-product-top"><span class="shop-product-icon">'+it.icon+'</span><span class="shop-price '+(it.currency==='gems'?'gem':'')+'">'+shopPrice(it)+'</span></div><div class="shop-product-name">'+it.name[lang]+'</div><div class="shop-product-desc">'+it.desc[lang]+'</div><button class="shop-product-action'+ownedClass+'" data-shop-item="'+it.id+'" '+(disabled?'disabled':'')+'>'+label+'</button></article>'}).join('');const currency='<div class="shop-wallet"><span>'+storeText('wallet')+'</span><span class="shop-currency">🪙 '+fmt(state.coins)+'</span><span class="shop-currency">💎 '+fmt(state.gems)+'</span></div>';openModal(storeText('shopTitle'),'<p class="shop-intro">'+storeText('shopIntro')+'</p>'+currency+'<div class="shop-tabs">'+tabs+'</div><div class="shop-grid">'+(products||'<div class="shop-empty">—</div>')+'</div><div class="modal-note">'+storeText('tabHint')+'</div>')}
+function shopItemAction(id){const item=SHOP_ITEMS.find(it=>it.id===id);if(!item)return;const owns=state.ownedItems.includes(item.id);if(item.kind==='cosmetic'){if(!owns&&!canAffordShopItem(item)){showToast(storeText('notEnoughFunds'));return}if(owns){state.equipped[item.slot]=item.value;save();render();playSfx('pop');showToast(storeText('itemEquipped'));shopModal(activeShopTab);return}if(item.currency==='gems')state.gems-=item.price;else state.coins-=item.price;state.ownedItems.push(item.id);state.equipped[item.slot]=item.value;save();render();playSfx('pop');showToast(storeText('itemBought'));shopModal(activeShopTab);return}
+ if(!canUseShopItem(item)){if(item.effect==='energy')showToast(storeText('energyFull'));else if(item.effect==='magnet')showToast(storeText('needPair'));else if(item.effect==='hammer')showToast(storeText('needSelection'));else showToast(storeText('needSpace'));return}if(!canAffordShopItem(item)){showToast(storeText('notEnoughFunds'));return}
+ if(item.currency==='gems')state.gems-=item.price;else state.coins-=item.price;
+ const effect=item.effect;if(effect==='magnet'){const pair=findMergePair();if(!pair){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(storeText('needPair'));shopModal(activeShopTab);return}selected=null;save();closeModal();mergeAt(pair[0],pair[1]);playSfx('merge');showToast(storeText('magnetUsed'));return}
+ if(effect==='energy'){state.energy=Math.min(ENERGY_MAX,state.energy+40);if(state.energy===ENERGY_MAX)state.lastEnergyAt=Date.now();save();render();playSfx('pop');showToast(storeText('energyUsed'))}
+ else if(effect==='lucky'){state.boosters.luckySummons+=3;save();render();playSfx('pop');showToast(storeText('luckyUsed'))}
+ else if(effect==='coinRush'){state.boosters.coinRush+=5;save();render();playSfx('pop');showToast(storeText('coinRushUsed'))}
+ else if(effect==='wildSeed'){const slot=firstEmpty();state.board[slot]={type:'wild',level:2};state.summons++;addXp(1);save();render();playSfx('pop');playBoardAction(slot,false,'leaf');showToast(storeText('wildSeedUsed'))}
+ else if(effect==='maker'){const slot=firstEmpty();state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');playBoardAction(slot,false,'leaf');showToast(storeText('makerBought'))}
+ else if(effect==='hammer'){const slot=selected;const chosen=state.board[slot];if(!chosen){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(storeText('needSelection'));shopModal(activeShopTab);return}if(chosen.level>=(chosen.type==='gen'?MAX_GEN:MAX_ITEM)){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(t('maxLevel'));shopModal(activeShopTab);return}state.board[slot]=mergedBoardItem(chosen);if(chosen.type==='gen')state.genUpgrades++;state.xp+=2;selected=null;save();render();playSfx('merge');playBoardAction(slot,true,(state.equipped&&state.equipped.mergeFx)||'leaf');showToast(storeText('hammerUsed'))}
+ shopModal(activeShopTab)}
+
+function missionsModal(){const defs=[{id:'merge',goal:3,val:state.merges,reward:60,title:t('missionMerge')},{id:'summon',goal:5,val:state.summons,reward:45,title:t('missionSummon')},{id:'gen',goal:1,val:state.genUpgrades,reward:100,title:t('missionGen')}];const html=defs.map(m=>{const done=m.val>=m.goal,claimed=!!state.claimed[m.id];return `<div class="mission-row"><div class="shop-art">${m.id==='merge'?'🔗':m.id==='summon'?'🌱':'🌳'}</div><div class="shop-info"><div class="shop-title">${m.title}</div><div class="shop-desc">${t('progress')}: ${Math.min(m.val,m.goal)} / ${m.goal}</div><div class="mission-progress"><span style="width:${Math.min(100,m.val/m.goal*100)}%"></span></div><div class="mission-reward">${t('rewards')}: 🪙 ${m.reward}</div></div><button class="buy-btn" data-claim="${m.id}" ${(!done||claimed)?'disabled':''}>${claimed?t('claimed'):t('claim')}</button></div>`}).join('');openModal(t('missionsTitle'),html+(defs.every(m=>m.val>=m.goal&&state.claimed[m.id])?`<div class="modal-note">${t('noMissions')}</div>`:''))}
+function collectionModal(){const stage=companionStage();const names=t('stageNames');openModal(t('collectionTitle'),`<div style="display:flex;align-items:center;gap:12px;margin:5px 0 13px"><div class="shop-art" style="width:86px;height:86px">${svgArt('wild',7+stage,true)}</div><div><div class="shop-title" style="font-size:16px">${names[stage]}</div><div class="shop-desc">${t('stageLabel')} ${stage+1} / 4 · ${fmt(state.xp)} ${t('xpWord')}</div><div class="mission-progress" style="width:190px"><span style="width:${Math.min(100,state.xp/52*100)}%"></span></div></div></div><div class="modal-desc">${t('collectionDesc')}</div>${t('worldUnlock')}<div class="modal-note">${t('stageDescs')[stage]}</div>`)}
+function settingsModal(){openModal(t('settings'),'<div class="shop-title">'+t('language')+'</div><div class="sound-row"><button data-setlang="he" class="'+(lang==='he'?'active':'')+'">עברית · RTL</button><button data-setlang="en" class="'+(lang==='en'?'active':'')+'">English · LTR</button></div><div class="shop-title" style="margin-top:13px">'+t('music')+' / '+t('effects')+'</div><div class="sound-row"><button data-sound="music" class="'+(state.music?'active':'')+'">♫ '+t('music')+': '+(state.music?t('on'):t('off'))+'</button><button data-sound="effects" class="'+(state.effects?'active':'')+'">✦ '+t('effects')+': '+(state.effects?t('on'):t('off'))+'</button></div><div class="shop-title" style="margin:15px 0 9px">'+t('testTools')+'</div><div class="test-actions"><button data-test="energy">⚡ '+t('testEnergy')+'</button><button data-test="coins">🪙 '+t('testCoins')+'</button><button data-test="gems">💎 '+t('testGems')+'</button></div><div style="margin-top:11px"><button class="buy-btn" style="background:#985b4d" data-reset="yes">'+t('reset')+'</button></div><div class="modal-note">'+t('settingsNote')+'</div>')}
+function buy(type){if(type==='gen'){if(state.coins<250){showToast(t('notEnough'));return}const slot=firstEmpty();if(slot<0){showToast(t('noSpace'));return}state.coins-=250;state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');shopModal()}else if(type==='energy'){if(state.coins<80){showToast(t('notEnough'));return}state.coins-=80;restoreEnergy(30);playSfx('pop');shopModal()}}
+function claim(id){const defs={merge:{goal:3,val:state.merges,reward:60},summon:{goal:5,val:state.summons,reward:45},gen:{goal:1,val:state.genUpgrades,reward:100}};const d=defs[id];if(!d||d.val<d.goal||state.claimed[id])return;state.claimed[id]=true;state.coins+=d.reward;save();render();playSfx('merge');showToast(t('missionDone')+' +'+d.reward);missionsModal()}
+function audio(){if(!audioCtx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;audioCtx=new A()}if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
+function playSfx(kind){if(!state.effects)return;const ctx=audio();if(!ctx)return;const now=ctx.currentTime;const notes=kind==='merge'?[523.25,659.25,783.99]:[392,587.33];notes.forEach((freq,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=kind==='merge'?'sine':'triangle';o.frequency.setValueAtTime(freq,now+i*.065);g.gain.setValueAtTime(.0001,now+i*.065);g.gain.exponentialRampToValueAtTime(kind==='merge'?.07:.045,now+i*.065+.015);g.gain.exponentialRampToValueAtTime(.0001,now+i*.065+.22);o.connect(g);g.connect(ctx.destination);o.start(now+i*.065);o.stop(now+i*.065+.24)})}
+function startMusic(){const ctx=audio();if(!ctx)return;stopMusic(false);const now=ctx.currentTime;[130.81,196,261.63].forEach((f,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();osc.type='sine';osc.frequency.value=f;filter.type='lowpass';filter.frequency.value=550;gain.gain.value=i===0?.023:i===1?.013:.009;osc.connect(filter);filter.connect(gain);gain.connect(ctx.destination);osc.start();musicNodes.push({osc,gain,filter})});const seq=[392,493.88,587.33,493.88,440,523.25,659.25,523.25];let step=0;musicTimer=setInterval(()=>{if(!state.music||!audioCtx)return;const c=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=seq[step++%seq.length];g.gain.setValueAtTime(.0001,c);g.gain.exponentialRampToValueAtTime(.022,c+.035);g.gain.exponentialRampToValueAtTime(.0001,c+.42);o.connect(g);g.connect(audioCtx.destination);o.start(c);o.stop(c+.45)},570)}
+function stopMusic(update=true){clearInterval(musicTimer);musicTimer=null;musicNodes.forEach(n=>{try{n.osc.stop()}catch{}});musicNodes=[];if(update){state.music=false;save();render()}}
+function toggleMusic(){state.music=!state.music;if(state.music)startMusic();else stopMusic(false);save();render();if(state.music)showToast(lang==='he'?'מוזיקת היער התחילה':'Forest music started')}
+$('#board').addEventListener('pointerdown',pointerDown);window.addEventListener('pointermove',pointerMove,{passive:false});window.addEventListener('pointerup',pointerUp);window.addEventListener('pointercancel',cancelDrag);
+$('#summonBtn').addEventListener('click',summonButton);$('#shopBtn').addEventListener('click',shopModal);$('#missionsBtn').addEventListener('click',missionsModal);$('#collectionBtn').addEventListener('click',collectionModal);$('#settingsBtn').addEventListener('click',settingsModal);$('#soundBtn').addEventListener('click',toggleMusic);$('#languageBtn').addEventListener('click',()=>{lang=lang==='he'?'en':'he';state.lang=lang;save();render();if($('#modalBackdrop').classList.contains('open'))settingsModal()});$('#closeModal').addEventListener('click',closeModal);$('#modalBackdrop').addEventListener('click',e=>{if(e.target===$('#modalBackdrop'))closeModal()});
+$('#modalBody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.shopTab){shopModal(b.dataset.shopTab);return}if(b.dataset.shopItem){shopItemAction(b.dataset.shopItem);return}if(b.dataset.buy){buy(b.dataset.buy);return}
+if(b.dataset.claim){claim(b.dataset.claim);return}if(b.dataset.setlang){lang=b.dataset.setlang;state.lang=lang;save();render();settingsModal();return}if(b.dataset.sound==='music'){toggleMusic();settingsModal();return}if(b.dataset.sound==='effects'){state.effects=!state.effects;save();settingsModal();return}if(b.dataset.test==='energy'){restoreEnergy(50);showToast(t('testEnergy'));settingsModal();return}if(b.dataset.test==='coins'){state.coins+=500;save();render();showToast(t('testCoins'));settingsModal();return}if(b.dataset.test==='gems'){state.gems+=25;save();render();showToast(t('testGems'));settingsModal();return}if(b.dataset.reset){if(confirm(t('resetConfirm'))){stopMusic(false);localStorage.removeItem(SAVE_KEY);state=defaultState();lang=state.lang;save();render();closeModal();showToast(lang==='he'?'המשחק אופס':'Game reset')}}});
+let regenTick=0;function regenerate(){const now=Date.now();if(state.energy<ENERGY_MAX){const elapsed=now-(state.lastEnergyAt||now);const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS;save()}}if(++regenTick%4===0)render();}
+// Reconcile saved energy timestamp, and restore energy earned while the game was closed.
+if(state.energy<ENERGY_MAX){const elapsed=Date.now()-(state.lastEnergyAt||Date.now());const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS}}
+lang=state.lang||'he';render();save();setInterval(regenerate,15000);
+})();
+</script>
+ <script src="./assets/creatures/creature-sprites.js?v=png1"></script>
+ <script src="./assets/creatures/png-gallery.js"></script>
+ <script src="generator.js"></script>
+ 
+<script src="./animation-engine.js"></script>
+<script>
+  if (window.MergivolveAnimationEngine) {
+    window.MergivolveAnimationEngine.init({
+      sceneSelector: ".world-card",
+      particleCount: 8
+    });
+  }
+</script>
+
+</body>
+</html>
