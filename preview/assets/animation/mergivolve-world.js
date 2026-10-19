@@ -169,7 +169,6 @@ scene.add(ground);
   const randomRange = (min, max) => min + Math.random() * (max - min);
   const trees = [];
 
-  const trunkMaterial = toon(0x80543a);
     const barkTexture = (() => {
     const canvas = document.createElement('canvas');
     canvas.width = 128;
