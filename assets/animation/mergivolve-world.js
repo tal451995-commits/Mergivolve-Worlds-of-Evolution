@@ -645,7 +645,7 @@ tree.traverse((object) => {
       13 + Math.random() * 7,
       -18 - Math.random() * 22
     );
-    bird.scale.setScalar(1.2 + Math.random() * 0.8);
+    bird.scale.setScalar(0.85 + Math.random() * 0.35);
     scene.add(bird);
 
     birds.push({
