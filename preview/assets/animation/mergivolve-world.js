@@ -136,7 +136,7 @@ scene.add(sun);
   const toon = (color) =>
     new THREE.MeshToonMaterial({ color, gradientMap: rampTexture });
 
-  const grassMat = toon(0x77d86b);
+  const grassMat = toon(0x347b32);
   const hillMat = toon(0x58b966);
   const hillLightMat = toon(0x9ddc79);
   const rockMat = toon(0x7eafc2);
