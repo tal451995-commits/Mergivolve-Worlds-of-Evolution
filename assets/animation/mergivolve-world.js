@@ -136,7 +136,7 @@ scene.add(sun);
   const toon = (color) =>
     new THREE.MeshToonMaterial({ color, gradientMap: rampTexture });
 
-  const grassMat = toon(0x347b32);
+  const grassMat = toon(0x6eaf48);
   const hillMat = toon(0x58b966);
   const hillLightMat = toon(0x9ddc79);
   const rockMat = toon(0x7eafc2);
@@ -174,7 +174,7 @@ scene.add(ground);
     const bx = Math.cos(angle) * radius;
     const bz = Math.sin(angle) * radius;
     const width = 0.025 + Math.random() * 0.02;
-    const height = 0.16 + Math.random() * 0.18;
+    const height = 0.11 + Math.random() * 0.11;
     const lean = 0.035 + Math.random() * 0.09;
 
     tuftPositions.push(
@@ -211,10 +211,10 @@ scene.add(ground);
   const grassColor = new THREE.Color();
 
   const grassPalette = [
-    0x245d27, 0x2d702b, 0x347b2e, 0x408532,
-    0x478d35, 0x51953a, 0x356b2a, 0x639b3d,
-    0x2b6529, 0x3a7830, 0x4b8734, 0x397a34
-  ];
+  0x4f9138, 0x5da63d, 0x69b846, 0x78c84d,
+  0x83cf56, 0x91d65f, 0x579b39, 0x70bd45,
+  0x62ad3e, 0x7bc34b, 0x8acb53, 0x6ab044
+];
 
   const grassColumns = Math.ceil(Math.sqrt(grassCount));
   const grassSpacing = 110 / grassColumns;
