@@ -36,6 +36,8 @@ import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
   );
 
   renderer.setPixelRatio(pixelRatio);
+  renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
