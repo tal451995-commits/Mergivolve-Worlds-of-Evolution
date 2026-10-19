@@ -155,82 +155,94 @@ import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
     worldDecor.add(cap);
   }
 
-  function makeTreeTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 320;
-
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, 256, 320);
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#28543c';
-    ctx.lineWidth = 9;
-
-    ctx.beginPath();
-    ctx.moveTo(128, 296);
-    ctx.lineTo(128, 177);
-    ctx.stroke();
-
-    ctx.fillStyle = '#875d43';
-    ctx.beginPath();
-    ctx.moveTo(112, 296);
-    ctx.lineTo(113, 206);
-    ctx.quadraticCurveTo(128, 194, 143, 206);
-    ctx.lineTo(145, 296);
-    ctx.closePath();
-    ctx.fill();
-
-    const tiers = [
-      { x: 128, y: 58, r: 63, c: '#2e8656', edge: '#245e43' },
-      { x: 91, y: 105, r: 62, c: '#43a65e', edge: '#2c7c4d' },
-      { x: 164, y: 109, r: 61, c: '#50b769', edge: '#2c7c4d' },
-      { x: 128, y: 151, r: 72, c: '#348e55', edge: '#245e43' },
-      { x: 77, y: 155, r: 42, c: '#61c971', edge: '#347f4b' },
-      { x: 178, y: 157, r: 43, c: '#5dc56b', edge: '#347f4b' }
-    ];
-
-    for (const t of tiers) {
-      ctx.fillStyle = t.c;
-      ctx.strokeStyle = t.edge;
-      ctx.lineWidth = 5;
-
-      ctx.beginPath();
-      ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = '#d0f39a99';
-      ctx.beginPath();
-      ctx.ellipse(
-        t.x - t.r * 0.23,
-        t.y - t.r * 0.3,
-        t.r * 0.25,
-        t.r * 0.12,
-        -0.5,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-    }
-
-    return new THREE.CanvasTexture(canvas);
-  }
-
-  const treeTexture = makeTreeTexture();
-  treeTexture.colorSpace = THREE.SRGBColorSpace;
-
-  const treeMaterial = new THREE.SpriteMaterial({
-    map: treeTexture,
-    transparent: true,
-    alphaTest: 0.04,
-    depthWrite: false
-  });
-
+  
   const randomRange = (min, max) => min + Math.random() * (max - min);
   const trees = [];
 
+  const trunkMaterial = toon(0x80543a);
+  const trunkLightMaterial = toon(0x9a6a45);
+
+  const foliageMaterials = [
+    toon(0x287b49),
+    toon(0x359653),
+    toon(0x45aa5e),
+    toon(0x5bbd6a),
+    toon(0x72ca73)
+  ];
+
+  function makeTree(size) {
+    const tree = new THREE.Group();
+
+    // גזע תלת־ממדי
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        size * 0.075,
+        size * 0.12,
+        size * 0.66,
+        7
+      ),
+      trunkMaterial
+    );
+
+    trunk.position.y = size * 0.33;
+    tree.add(trunk);
+
+    // ענפים קצרים היוצאים מהגזע
+    for (let i = 0; i < 3; i++) {
+      const branch = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+          size * 0.025,
+          size * 0.055,
+          size * 0.42,
+          6
+        ),
+        trunkLightMaterial
+      );
+
+      branch.position.set(
+        (i - 1) * size * 0.16,
+        size * (0.43 + i * 0.09),
+        0
+      );
+
+      branch.rotation.z = (i - 1) * -0.65;
+      tree.add(branch);
+    }
+
+    // שכבות עלווה בעלות נפח אמיתי
+    const crownLayers = [
+      { y: 0.58, scale: 0.35 },
+      { y: 0.78, scale: 0.31 },
+      { y: 0.96, scale: 0.25 }
+    ];
+
+    crownLayers.forEach((layer, index) => {
+      const crown = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(size * layer.scale, 1),
+        foliageMaterials[
+          Math.floor(Math.random() * foliageMaterials.length)
+        ]
+      );
+
+      crown.position.set(
+        randomRange(-size * 0.045, size * 0.045),
+        size * layer.y,
+        randomRange(-size * 0.045, size * 0.045)
+      );
+
+      crown.scale.set(
+        randomRange(0.9, 1.12),
+        randomRange(0.9, 1.15),
+        randomRange(0.9, 1.12)
+      );
+
+      tree.add(crown);
+    });
+
+    return tree;
+  }
+
   for (let i = 0; i < 36; i++) {
-    const sprite = new THREE.Sprite(treeMaterial);
     let x = 0;
     let z = 0;
 
@@ -239,16 +251,16 @@ import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
       z = randomRange(-43, 42);
     } while (Math.hypot(x, z) < 7.5);
 
-    sprite.position.set(x, 0.02, z);
-    sprite.center.set(0.5, 0);
-
     const size = randomRange(2.9, 5.4);
-    sprite.scale.set(size * 0.82, size, 1);
-    sprite.material = treeMaterial;
+    const tree = makeTree(size);
 
-    scene.add(sprite);
-    trees.push(sprite);
+    tree.position.set(x, 0, z);
+    tree.rotation.y = randomRange(0, Math.PI * 2);
+
+    scene.add(tree);
+    trees.push(tree);
   }
+
 
   for (let i = 0; i < 25; i++) {
     const rock = new THREE.Mesh(
