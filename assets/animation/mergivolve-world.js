@@ -76,6 +76,51 @@ scene.add(sun);
   fill.position.set(18, 12, -20);
   scene.add(fill);
 
+  // Visible sun, moon and stars for the evolving sky.
+  const sunDisc = new THREE.Mesh(
+    new THREE.SphereGeometry(3.2, 24, 16),
+    new THREE.MeshBasicMaterial({ color: 0xffe6a0 })
+  );
+  sunDisc.position.copy(sun.position).normalize().multiplyScalar(78);
+  scene.add(sunDisc);
+
+  const moonDisc = new THREE.Mesh(
+    new THREE.SphereGeometry(2.5, 24, 16),
+    new THREE.MeshBasicMaterial({ color: 0xe4edff })
+  );
+  moonDisc.position.copy(sunDisc.position).negate();
+  scene.add(moonDisc);
+
+  const starCount = isSmallScreen ? 180 : 420;
+  const starPositions = new Float32Array(starCount * 3);
+
+  for (let i = 0; i < starCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    starPositions[i * 3] = Math.cos(angle) * 75;
+    starPositions[i * 3 + 1] = 25 + Math.random() * 48;
+    starPositions[i * 3 + 2] = Math.sin(angle) * 75;
+  }
+
+  const starGeometry = new THREE.BufferGeometry();
+  starGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(starPositions, 3)
+  );
+
+  const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.42,
+    transparent: true,
+    opacity: 0,
+    sizeAttenuation: false
+  });
+
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  scene.add(stars);
+
+  const daySky = new THREE.Color(0x78d4f2);
+  const nightSky = new THREE.Color(0x101a3d);
+
   const rampTexture = new THREE.DataTexture(
     new Uint8Array([72, 150, 255]),
     3,
