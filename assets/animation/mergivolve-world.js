@@ -902,6 +902,25 @@ tree.traverse((object) => {
 
     updateMovement(dt);
 
+    // Smooth day-night cycle.
+    const cycle = (elapsed % 240) / 240;
+    const night = (1 - Math.cos(cycle * Math.PI * 2)) / 2;
+
+    skyColor.copy(daySky).lerp(nightSky, night);
+    scene.fog.color.copy(skyColor);
+
+    sun.intensity = 2.1 * (1 - night * 0.92);
+    fill.intensity = 0.55 * (1 - night * 0.65);
+
+    sunDisc.position.set(
+      Math.cos(cycle * Math.PI * 2) * 65,
+      18 + Math.sin(cycle * Math.PI * 2) * 38,
+      18
+    );
+
+    moonDisc.position.copy(sunDisc.position).negate();
+    starMaterial.opacity = night * 0.95;
+
     for (let i = 0; i < clouds.length; i++) {
       const cloud = clouds[i];
 
