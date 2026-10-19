@@ -194,12 +194,11 @@ scene.add(ground);
 
   const grassCount = isSmallScreen ? 80000 : 130000;
 
-  const grassMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    roughness: 1,
-    side: THREE.DoubleSide,
-    vertexColors: true
-  });
+  const grassMaterial = new THREE.MeshLambertMaterial({
+  color: 0xffffff,
+  side: THREE.DoubleSide,
+  vertexColors: true
+});
 
   const grass = new THREE.InstancedMesh(
     grassBladeGeometry,
