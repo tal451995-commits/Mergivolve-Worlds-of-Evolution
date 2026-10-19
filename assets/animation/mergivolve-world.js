@@ -170,15 +170,51 @@ scene.add(ground);
   const trees = [];
 
   const trunkMaterial = toon(0x80543a);
-  const trunkLightMaterial = toon(0x9a6a45);
+    const barkTexture = (() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#65442f';
+    ctx.fillRect(0, 0, 128, 256);
+
+    for (let i = 0; i < 100; i++) {
+      ctx.strokeStyle = i % 2
+        ? 'rgba(190,145,100,0.22)'
+        : 'rgba(25,17,12,0.28)';
+      ctx.lineWidth = 1 + Math.random() * 4;
+      const x = Math.random() * 128;
+
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.bezierCurveTo(x - 8, 80, x + 8, 170, x, 256);
+      ctx.stroke();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  })();
+
+  const trunkMaterial = new THREE.MeshStandardMaterial({
+    map: barkTexture,
+    color: 0xc4a080,
+    roughness: 0.96
+  });
+
+  const trunkLightMaterial = new THREE.MeshStandardMaterial({
+    map: barkTexture,
+    color: 0x9a7656,
+    roughness: 0.98
+  });
 
   const foliageMaterials = [
-    toon(0x287b49),
-    toon(0x359653),
-    toon(0x45aa5e),
-    toon(0x5bbd6a),
-    toon(0x72ca73)
-  ];
+    0x244d2b, 0x2f6034, 0x39743b, 0x477f40, 0x568d49
+  ].map(color => new THREE.MeshStandardMaterial({
+    color,
+    roughness: 0.94
+  }));
 
     function makeTree(size) {
     const tree = new THREE.Group();
