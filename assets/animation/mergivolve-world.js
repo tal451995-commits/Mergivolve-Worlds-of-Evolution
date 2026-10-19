@@ -111,8 +111,9 @@ scene.add(sun);
     grassMat
   );
   ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.08;
-  scene.add(ground);
+ground.position.y = -0.08;
+ground.receiveShadow = true;
+scene.add(ground);
 
   const worldDecor = new THREE.Group();
   scene.add(worldDecor);
