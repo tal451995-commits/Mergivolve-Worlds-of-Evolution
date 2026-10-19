@@ -59,12 +59,20 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   controls.target.set(0, 1.1, 0);
   controls.update();
 
-  scene.add(new THREE.HemisphereLight(0xf4fcff, 0x60905a, 1.7));
+  scene.add(new THREE.HemisphereLight(0xf4fcff, 0x60905a, 
 
-  const sun = new THREE.DirectionalLight(0xfff3d5, 2.1);
-  sun.position.set(-22, 38, 18);
-  scene.add(sun);
-
+   const sun = new THREE.DirectionalLight(0xfff3d5, 2.1);
+sun.position.set(-22, 38, 18);
+sun.castShadow = true;
+sun.shadow.mapSize.set(isSmallScreen ? 512 : 1024, isSmallScreen ? 512 : 1024);
+sun.shadow.camera.left = -55;
+sun.shadow.camera.right = 55;
+sun.shadow.camera.top = 55;
+sun.shadow.camera.bottom = -55;
+sun.shadow.bias = -0.0002;
+sun.shadow.normalBias = 0.03;
+sun.shadow.radius = 4;
+scene.add(sun);                                   
   const fill = new THREE.DirectionalLight(0xa6eaff, 0.55);
   fill.position.set(18, 12, -20);
   scene.add(fill);
