@@ -641,5 +641,16 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
  <script src="./assets/creatures/creature-sprites.js?v=png1"></script>
  <script src="./assets/creatures/png-gallery.js"></script>
  <script src="generator.js"></script>
+ 
+<script src="./animation-engine.js"></script>
+<script>
+  if (window.MergivolveAnimationEngine) {
+    window.MergivolveAnimationEngine.init({
+      sceneSelector: ".world-card",
+      particleCount: 8
+    });
+  }
+</script>
+
 </body>
 </html>
