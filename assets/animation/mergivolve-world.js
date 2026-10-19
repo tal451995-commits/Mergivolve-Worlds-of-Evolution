@@ -252,7 +252,7 @@ scene.add(ground);
 
   grass.instanceMatrix.needsUpdate = true;
   if (grass.instanceColor) grass.instanceColor.needsUpdate = true;
-  grass.receiveShadow = true;
+  grass.receiveShadow = false;
   grass.frustumCulled = false;
   worldDecor.add(grass);
 
