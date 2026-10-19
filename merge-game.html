@@ -244,6 +244,31 @@
   <section class="companion-strip"><div class="companion-avatar" id="companionAvatar"></div><div class="companion-copy"><div class="companion-name" id="companionName">Sprig — Forest Wyrmling</div><div class="companion-desc" id="companionDesc">Every merge helps your companion grow.</div><div class="xp-bar"><span id="xpFill"></span></div></div><div class="companion-stage"><div data-i18n="growth">GROWTH</div><div id="stageText">1 / 4</div></div></section>
   <div class="tiny-footer" data-i18n="footer">A little merge. A whole new world. · Progress saves on this device</div>
 </main>
+ <div id="world3dOverlay" aria-hidden="true">
+  <section
+    class="world3d-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Mergivolve 3D Forest"
+  >
+    <div class="world3d-head">
+      <span>🌿 Mergivolve · 3D Forest</span>
+      <button
+        type="button"
+        id="closeWorld3d"
+        aria-label="Close 3D forest"
+      >×</button>
+    </div>
+
+    <iframe
+      id="world3dFrame"
+      title="Mergivolve 3D Forest"
+      loading="lazy"
+      allow="fullscreen; autoplay; gamepad"
+    ></iframe>
+  </section>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="modal-backdrop" id="modalBackdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div class="modal-title" id="modalTitle">Settings</div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div><div id="modalBody"></div></section></div>
  <script src="./assets/creatures/species-catalog.js"></script>
@@ -745,6 +770,72 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
       particleCount: 8
     });
   }
+</script>
+
+ 
+<script>
+(() => {
+  const openBtn = document.getElementById('world3dBtn');
+  const overlay = document.getElementById('world3dOverlay');
+  const frame = document.getElementById('world3dFrame');
+  const closeBtn = document.getElementById('closeWorld3d');
+
+  if (!openBtn || !overlay || !frame || !closeBtn) {
+    console.error('Mergivolve 3D preview: missing HTML elements');
+    return;
+  }
+
+  let previousOverflow = '';
+  let previousFocus = null;
+
+  function openWorld3D() {
+    if (overlay.classList.contains('open')) return;
+
+    previousOverflow = document.body.style.overflow;
+    previousFocus = document.activeElement;
+
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    frame.src = './animation-lab.html?embedded=1';
+    closeBtn.focus();
+  }
+
+  function closeWorld3D() {
+    if (!overlay.classList.contains('open')) return;
+
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+
+    // Stop the 3D renderer while the preview is closed.
+    frame.removeAttribute('src');
+
+    document.body.style.overflow = previousOverflow;
+
+    if (previousFocus && typeof previousFocus.focus === 'function') {
+      previousFocus.focus();
+    }
+  }
+
+  openBtn.addEventListener('click', openWorld3D);
+  closeBtn.addEventListener('click', closeWorld3D);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closeWorld3D();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key === 'Escape' &&
+      overlay.classList.contains('open')
+    ) {
+      closeWorld3D();
+    }
+  });
+})();
 </script>
 
 </body>
