@@ -163,21 +163,24 @@ scene.add(ground);
   scene.add(worldDecor);
 
   
-  // Dense grass carpet — multiple blades in every grass tuft.
+
+  // Dense, natural grass carpet with varied blades.
   const tuftPositions = [];
 
-  for (let i = 0; i < 5; i++) {
-    const angle = (i / 5) * Math.PI * 2;
-    const bx = Math.cos(angle) * 0.09;
-    const bz = Math.sin(angle) * 0.09;
-    const tx = Math.cos(angle + 0.35) * 0.15;
-    const tz = Math.sin(angle + 0.35) * 0.15;
-    const h = 0.45 + (i % 3) * 0.13;
+  for (let i = 0; i < 9; i++) {
+    const angle = i * 2.399;
+    const radius = 0.04 + Math.random() * 0.17;
+    const bx = Math.cos(angle) * radius;
+    const bz = Math.sin(angle) * radius;
+    const width = 0.018 + Math.random() * 0.018;
+    const height = 0.28 + Math.random() * 0.42;
+    const lean = 0.04 + Math.random() * 0.12;
 
     tuftPositions.push(
-      bx - 0.045, 0, bz,
-      bx + 0.045, 0, bz,
-      tx, h, tz
+      bx - width, 0, bz,
+      bx + width, 0, bz,
+      bx + Math.cos(angle) * lean, height,
+      bz + Math.sin(angle) * lean
     );
   }
 
@@ -188,7 +191,8 @@ scene.add(ground);
   );
   grassBladeGeometry.computeVertexNormals();
 
-  const grassCount = isSmallScreen ? 14000 : 30000;
+  const grassCount = isSmallScreen ? 65000 : 110000;
+
   const grassMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     roughness: 1,
@@ -204,32 +208,44 @@ scene.add(ground);
 
   const grassDummy = new THREE.Object3D();
   const grassColor = new THREE.Color();
+
   const grassPalette = [
-    0x347c32, 0x438f36, 0x4f9e42, 0x60aa43,
-    0x6ebd4e, 0x83c957, 0x91cb62, 0x3c873c,
-    0x72a943, 0x57963b, 0x2f7130
+    0x28652a, 0x347b2e, 0x408b32, 0x4c9638,
+    0x579e3c, 0x63a744, 0x39732c, 0x719b3d,
+    0x326d2b, 0x4a8534, 0x5b8c35, 0x397e36
   ];
 
+  const grassColumns = Math.ceil(Math.sqrt(grassCount));
+  const grassSpacing = 110 / grassColumns;
+  const grassRows = Math.ceil(grassCount / grassColumns);
+
   for (let i = 0; i < grassCount; i++) {
+    const column = i % grassColumns;
+    const row = Math.floor(i / grassColumns);
+
     grassDummy.position.set(
-      -55 + Math.random() * 110,
+      -55 + (column + 0.15 + Math.random() * 0.7) * grassSpacing,
       -0.075,
-      -55 + Math.random() * 110
+      -55 + (row + 0.15 + Math.random() * 0.7) *
+        (110 / grassRows)
     );
 
     grassDummy.rotation.set(
-      (Math.random() - 0.5) * 0.18,
+      (Math.random() - 0.5) * 0.12,
       Math.random() * Math.PI * 2,
-      (Math.random() - 0.5) * 0.18
+      (Math.random() - 0.5) * 0.12
     );
 
-    const scale = 0.8 + Math.random() * 0.8;
+    const scale = 0.85 + Math.random() * 0.7;
     grassDummy.scale.set(scale, scale, scale);
     grassDummy.updateMatrix();
 
     grass.setMatrixAt(i, grassDummy.matrix);
+
     grassColor.setHex(
-      grassPalette[Math.floor(Math.random() * grassPalette.length)]
+      grassPalette[
+        Math.floor(Math.random() * grassPalette.length)
+      ]
     );
     grass.setColorAt(i, grassColor);
   }
@@ -239,6 +255,7 @@ scene.add(ground);
   grass.receiveShadow = true;
   grass.frustumCulled = false;
   worldDecor.add(grass);
+
 
 
   const sphereGeo = new THREE.SphereGeometry(1, 22, 15);
