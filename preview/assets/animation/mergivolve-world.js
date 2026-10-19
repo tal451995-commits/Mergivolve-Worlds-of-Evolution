@@ -529,7 +529,7 @@ import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
   const vectorRight = new THREE.Vector3();
   const movement = new THREE.Vector3();
   const target = new THREE.Vector3();
-  const worldUp = new THREE.Vector3();
+  const worldUp = new THREE.Vector3(0, 1, 0);
 
   const clock = new THREE.Clock();
   let elapsed = 0;
