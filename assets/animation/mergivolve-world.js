@@ -137,7 +137,7 @@ scene.add(sun);
   const toon = (color) =>
     new THREE.MeshToonMaterial({ color, gradientMap: rampTexture });
 
-  const grassMat = toon(0x6eaf48);
+  
   const hillMat = toon(0x58b966);
   const hillLightMat = toon(0x9ddc79);
   const rockMat = toon(0x7eafc2);
@@ -151,14 +151,7 @@ scene.add(sun);
     toon(0xfff7da)
   ];
 
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(116, 116, 1, 1),
-    grassMat
-  );
-  ground.rotation.x = -Math.PI / 2;
-ground.position.y = -0.08;
-ground.receiveShadow = true;
-scene.add(ground);
+  
 
   const worldDecor = new THREE.Group();
   scene.add(worldDecor);
