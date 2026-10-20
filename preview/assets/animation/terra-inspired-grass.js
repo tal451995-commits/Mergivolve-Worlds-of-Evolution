@@ -422,7 +422,7 @@ export function createTerraGrass(THREE, { scene, isSmallScreen = false }) {
       uniforms.uSunStrength.value = Math.min(1, Math.max(0, sunIntensity / 2.1));
       if (cameraPosition) uniforms.uCameraPosition.value.copy(cameraPosition);
       if (playerPosition) uniforms.uDrawPosition.value.set(playerPosition.x, playerPosition.z);
-            if (lightPosition) uniforms.uLightDirection.value.copy(lightPosition).normalize();
+      if (lightPosition) uniforms.uLightDirection.value.copy(lightPosition).normalize();
     }
   };
 }
