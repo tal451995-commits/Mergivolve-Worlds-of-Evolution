@@ -201,6 +201,21 @@ void main() {
   float edgeDistance = max(abs(baseXZ.x), abs(baseXZ.y));
   float worldEdgeFade = 1.0 - smoothstep(53.5, 57.0, edgeDistance);
 
+  // Natural density variation: leave irregular patches of visible ground.
+  float densityNoise = valueNoise(baseXZ * 0.31 + vec2(17.0, -9.0));
+  if (densityNoise < 0.22) {
+    gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+    return;
+  }
+
+  // Keep a small, clear area around the moving monster's feet.
+  float playerDistance = length(baseXZ - uDrawPosition);
+  float footClear = smoothstep(0.55, 1.15, playerDistance);
+  if (footClear < 0.04) {
+    gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+    return;
+  }
+
   float clumpWave = smoothstep(0.20, 0.82, valueNoise(baseXZ * 0.24));
   float clumpHeight = mix(0.82, 1.10, clumpWave);
   float bladeHeight = mix(0.17, 0.36, pow(hash11(seed + 5.4), 1.35)) * clumpHeight * worldEdgeFade;
