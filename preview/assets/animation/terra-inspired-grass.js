@@ -218,7 +218,10 @@ void main() {
 
   float clumpWave = smoothstep(0.20, 0.82, valueNoise(baseXZ * 0.24));
   float clumpHeight = mix(0.82, 1.10, clumpWave);
-  float bladeHeight = mix(0.17, 0.36, pow(hash11(seed + 5.4), 1.35)) * clumpHeight * worldEdgeFade;
+  
+  float bladeHeight = mix(0.17, 0.36, pow(hash11(seed + 5.4), 1.35)) * clumpHeight * worldEdgeFade * footClear;
+  float bladeWidth = mix(0.027, 0.047, hash11(seed + 7.2)) * worldEdgeFade * footClear;
+
   float bladeWidth = mix(0.027, 0.047, hash11(seed + 7.2)) * worldEdgeFade;
   float yaw = hash11(seed + 9.9) * 6.28318530718;
   float lean = mix(0.025, 0.075, hash11(seed + 11.6));
