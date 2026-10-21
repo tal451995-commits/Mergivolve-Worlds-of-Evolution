@@ -310,15 +310,39 @@ scene.add(sun);
     const height = size * (0.85 + Math.random() * 0.2);
     const radius = size * 0.09;
 
-    const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        radius * 0.55,
-        radius * 1.25,
-        height,
-        10,
-        4
-      ),
-      trunkMaterial
+    
+    const trunkGeometry = new THREE.CylinderGeometry(
+      radius * 0.48,
+      radius * 1.4,
+      height,
+      12,
+      12
+    );
+
+    const trunkPositions = trunkGeometry.attributes.position;
+
+    for (let i = 0; i < trunkPositions.count; i++) {
+      const y = trunkPositions.getY(i);
+      const x = trunkPositions.getX(i);
+      const z = trunkPositions.getZ(i);
+
+      const heightFactor = (y + height / 2) / height;
+      const bend = Math.sin(heightFactor * Math.PI * 1.4) * radius * 0.12;
+
+      trunkPositions.setX(
+        i,
+        x + bend + Math.sin(y * 1.7 + z * 3) * radius * 0.025
+      );
+      trunkPositions.setZ(
+        i,
+        z + Math.sin(y * 1.2 + x * 2) * radius * 0.025
+      );
+    }
+
+    trunkGeometry.computeVertexNormals();
+
+    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+
     );
 
     trunk.position.y = height / 2;
