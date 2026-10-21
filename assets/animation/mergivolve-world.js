@@ -343,7 +343,7 @@ scene.add(sun);
 
     const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
 
-    );
+    
 
     trunk.position.y = height / 2;
     trunk.castShadow = true;
