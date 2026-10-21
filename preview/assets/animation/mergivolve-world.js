@@ -307,17 +307,16 @@ scene.add(sun);
     function makeTree(size) {
     const tree = new THREE.Group();
 
-    const height = size * (0.85 + Math.random() * 0.2);
-    const radius = size * 0.09;
-
+    const height = size * (1.15 + Math.random() * 0.15);
+const radius = size * 0.105;
     
     const trunkGeometry = new THREE.CylinderGeometry(
-      radius * 0.48,
-      radius * 1.4,
-      height,
-      12,
-      12
-    );
+  radius * 0.42,
+  radius * 1.65,
+  height,
+  24,
+  32
+);
 
     const trunkPositions = trunkGeometry.attributes.position;
 
