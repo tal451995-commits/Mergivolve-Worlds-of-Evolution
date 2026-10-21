@@ -419,12 +419,14 @@ scene.add(sun);
       tree.add(branch);
     }
 
-    const clusterCount = 18;
+    
+    const clusterCount = 32;
 
     for (let i = 0; i < clusterCount; i++) {
-      const angle = i * 2.399;
-      const distance = size * (0.08 + Math.random() * 0.3);
-      const leafSize = size * (0.17 + Math.random() * 0.1);
+      const angle = i * 2.399 + (Math.random() - 0.5) * 0.3;
+      const distance = size * (0.07 + Math.random() * 0.32);
+      const leafSize = size * (0.09 + Math.random() * 0.065);
+
 
       const leaves = new THREE.Mesh(
         new THREE.SphereGeometry(leafSize, 10, 8),
