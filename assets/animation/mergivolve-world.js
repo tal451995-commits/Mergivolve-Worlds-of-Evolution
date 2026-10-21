@@ -321,7 +321,7 @@ scene.add(sun);
       const leafSize = size * (0.17 + Math.random() * 0.1);
 
       const leaves = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(leafSize, 2),
+        new THREE.SphereGeometry(leafSize, 10, 8),
         foliageMaterials[
           Math.floor(Math.random() * foliageMaterials.length)
         ]
