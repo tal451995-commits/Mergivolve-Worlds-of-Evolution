@@ -1,10 +1,7 @@
 
 import * as THREE from 'three';
 import { createTerraGrass } from './terra-inspired-grass.js';
-import * as THREE from 'three';
 import 'https://cdn.jsdelivr.net/gh/supereggbert/proctree.js@c1ea9dc2c1b0d3cc37cb7645b50b27c984505382/proctree.js';
-import { createTerraGrass } from './terra-inspired-grass.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
