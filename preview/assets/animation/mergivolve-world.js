@@ -284,6 +284,38 @@ scene.add(sun);
     trunk.receiveShadow = true;
     tree.add(trunk);
 
+    // Exposed roots that spread naturally from the trunk.
+    const rootCount = 6;
+
+    for (let i = 0; i < rootCount; i++) {
+      const angle = (i / rootCount) * Math.PI * 2
+        + (Math.random() - 0.5) * 0.35;
+      const rootLength = size * (0.16 + Math.random() * 0.1);
+
+      const root = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+          size * 0.008,
+          size * 0.035,
+          rootLength,
+          6
+        ),
+        trunkMaterial
+      );
+
+      root.position.set(
+        Math.cos(angle) * rootLength * 0.24,
+        rootLength * 0.12,
+        Math.sin(angle) * rootLength * 0.24
+      );
+
+      root.rotation.z = -Math.cos(angle) * 0.95;
+      root.rotation.x = Math.sin(angle) * 0.95;
+      root.rotation.y = angle;
+      root.castShadow = true;
+      root.receiveShadow = true;
+      tree.add(root);
+    }
+
     const branchCount = 8;
 
     for (let i = 0; i < branchCount; i++) {
