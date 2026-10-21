@@ -423,55 +423,158 @@ const radius = size * 0.105;
       );
 
       branch.rotation.z = -Math.cos(angle) * (0.65 + Math.random() * 0.35);
-      branch.rotation.x = Math.sin(angle) * (0.65 + Math.random() * 0.35);
-      branch.rotation.y = angle;
 
-      branch.castShadow = true;
-      branch.receiveShadow = true;
-      tree.add(branch);
+  function makeTree(size) {
+    const tree = new THREE.Group();
+
+    // ProcTree creates the trunk and branching structure.
+    const height = size * (1.25 + Math.random() * 0.18);
+
+    if (typeof window.Tree !== 'function') {
+      console.error('ProcTree failed to load: window.Tree is unavailable.');
+      return tree;
     }
 
-    
-    const clusterCount = 32;
+    const seed = Math.floor(Math.random() * 100000);
 
-    for (let i = 0; i < clusterCount; i++) {
-      const angle = i * 2.399 + (Math.random() - 0.5) * 0.3;
-      const distance = size * (0.07 + Math.random() * 0.32);
-      const leafSize = size * (0.09 + Math.random() * 0.065);
+    const proceduralTree = new window.Tree({
+      seed,
+      segments: 7,
+      levels: 4,
+      treeSteps: 3,
+      vMultiplier: 0.22,
+      twigScale: 0.24,
+      initalBranchLength: 0.82,
+      lengthFalloffFactor: 0.78,
+      lengthFalloffPower: 1.1,
+      clumpMax: 0.52,
+      clumpMin: 0.32,
+      branchFactor: 2.2,
+      dropAmount: 0.08,
+      growAmount: 0.08,
+      sweepAmount: 0.12,
+      maxRadius: 0.22,
+      climbRate: 0.72,
+      trunkKink: 0.08,
+      taperRate: 0.94,
+      radiusFalloffRate: 0.72,
+      twistRate: 10,
+      trunkLength: 2.5
+    });
 
+    const scaleX = size * 0.42;
+    const scaleY = height / 2.5;
+    const scaleZ = size * 0.42;
 
-      const leaves = new THREE.Mesh(
-        new THREE.SphereGeometry(leafSize, 7, 6),
-        foliageMaterials[
-          Math.floor(Math.random() * foliageMaterials.length)
-        ]
+    function buildGeometry(vertices, faces, uvs) {
+      const geometry = new THREE.BufferGeometry();
+
+      const positions = [];
+      for (const vertex of vertices) {
+        positions.push(
+          vertex[0] * scaleX,
+          vertex[1] * scaleY,
+          vertex[2] * scaleZ
+        );
+      }
+
+      geometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(positions, 3)
       );
 
-      leaves.position.set(
-        Math.cos(angle) * distance,
-        height * 0.78 + (Math.random() - 0.3) * size * 0.4,
-        Math.sin(angle) * distance
-      );
+      geometry.setIndex(window.Tree.flattenArray(faces));
 
-      leaves.scale.set(
-        0.9 + Math.random() * 0.5,
-        0.8 + Math.random() * 0.4,
-        0.9 + Math.random() * 0.5
-      );
+      if (uvs && uvs.length === vertices.length) {
+        const uvValues = [];
+        for (const uv of uvs) {
+          uvValues.push(uv[0], uv[1]);
+        }
 
-      leaves.rotation.set(
-        Math.random() * 0.4,
-        angle,
-        Math.random() * 0.4
-      );
+        geometry.setAttribute(
+          'uv',
+          new THREE.Float32BufferAttribute(uvValues, 2)
+        );
+      }
 
-      leaves.castShadow = true;
-      leaves.receiveShadow = true;
-      tree.add(leaves);
+      geometry.computeVertexNormals();
+      geometry.computeBoundingSphere();
+      return geometry;
     }
+
+    const trunkGeometry = buildGeometry(
+      proceduralTree.verts,
+      proceduralTree.faces,
+      proceduralTree.UV
+    );
+
+    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+    trunk.castShadow = true;
+    trunk.receiveShadow = true;
+    tree.add(trunk);
+
+    // Create a leaf-shaped alpha texture for the procedural twig cards.
+    const leafCanvas = document.createElement('canvas');
+    leafCanvas.width = 64;
+    leafCanvas.height = 64;
+
+    const leafContext = leafCanvas.getContext('2d');
+    leafContext.clearRect(0, 0, 64, 64);
+
+    leafContext.save();
+    leafContext.translate(32, 32);
+    leafContext.rotate(-0.35);
+
+    const leafGradient = leafContext.createLinearGradient(-20, 0, 20, 0);
+    leafGradient.addColorStop(0, '#285b2e');
+    leafGradient.addColorStop(0.48, '#548d43');
+    leafGradient.addColorStop(1, '#8eb95b');
+
+    leafContext.fillStyle = leafGradient;
+    leafContext.beginPath();
+    leafContext.moveTo(-25, 0);
+    leafContext.quadraticCurveTo(-9, -17, 22, -3);
+    leafContext.quadraticCurveTo(29, 0, 22, 3);
+    leafContext.quadraticCurveTo(-9, 17, -25, 0);
+    leafContext.fill();
+
+    leafContext.strokeStyle = 'rgba(218,224,151,0.8)';
+    leafContext.lineWidth = 1.2;
+    leafContext.beginPath();
+    leafContext.moveTo(-23, 0);
+    leafContext.lineTo(24, 0);
+    leafContext.stroke();
+
+    leafContext.restore();
+
+    const leafTexture = new THREE.CanvasTexture(leafCanvas);
+    leafTexture.colorSpace = THREE.SRGBColorSpace;
+    leafTexture.needsUpdate = true;
+
+    const leafMaterial = new THREE.MeshStandardMaterial({
+      map: leafTexture,
+      color: 0xffffff,
+      roughness: 0.9,
+      side: THREE.DoubleSide,
+      transparent: true,
+      alphaTest: 0.35,
+      depthWrite: true
+    });
+
+    const twigGeometry = buildGeometry(
+      proceduralTree.vertsTwig,
+      proceduralTree.facesTwig,
+      proceduralTree.uvsTwig
+    );
+
+    const foliage = new THREE.Mesh(twigGeometry, leafMaterial);
+    foliage.castShadow = true;
+    foliage.receiveShadow = true;
+    tree.add(foliage);
 
     return tree;
   }
+
 
   for (let i = 0; i < 36; i++) {
     let x = 0;
