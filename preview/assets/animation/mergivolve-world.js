@@ -321,24 +321,36 @@ scene.add(sun);
 
     const trunkPositions = trunkGeometry.attributes.position;
 
-    for (let i = 0; i < trunkPositions.count; i++) {
+        for (let i = 0; i < trunkPositions.count; i++) {
       const y = trunkPositions.getY(i);
       const x = trunkPositions.getX(i);
       const z = trunkPositions.getZ(i);
 
       const heightFactor = (y + height / 2) / height;
-      const bend = Math.sin(heightFactor * Math.PI * 1.4) * radius * 0.12;
+      const angle = Math.atan2(z, x);
+
+      const ridgePattern =
+        1
+        + 0.075 * Math.sin(angle * 7 + Math.sin(heightFactor * 5) * 0.5)
+        + 0.025 * Math.sin(angle * 13 + y * 0.4)
+        + 0.018 * Math.sin(angle * 19 + heightFactor * 8);
+
+      const bend =
+        Math.sin(heightFactor * Math.PI * 1.4) * radius * 0.12;
 
       trunkPositions.setX(
         i,
-        x + bend + Math.sin(y * 1.7 + z * 3) * radius * 0.025
+        x * ridgePattern
+          + bend
+          + Math.sin(y * 1.7 + z * 3) * radius * 0.025
       );
+
       trunkPositions.setZ(
         i,
-        z + Math.sin(y * 1.2 + x * 2) * radius * 0.025
+        z * ridgePattern
+          + Math.sin(y * 1.2 + x * 2) * radius * 0.025
       );
     }
-
     trunkGeometry.computeVertexNormals();
 
     const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
