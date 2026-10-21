@@ -382,32 +382,40 @@ scene.add(sun);
       tree.add(root);
     }
 
-    const branchCount = 8;
+    
+    const branchCount = 12;
 
     for (let i = 0; i < branchCount; i++) {
-      const angle = (i / branchCount) * Math.PI * 2;
-      const length = size * (0.22 + Math.random() * 0.16);
+      const angle = (i / branchCount) * Math.PI * 2
+        + (Math.random() - 0.5) * 0.45;
+
+      const length = size * (0.18 + Math.random() * 0.22);
+      const thickness = size * (0.018 + Math.random() * 0.012);
+      const branchHeight = height * (0.38 + Math.random() * 0.42);
 
       const branch = new THREE.Mesh(
         new THREE.CylinderGeometry(
-          size * 0.012,
-          size * 0.035,
+          thickness * 0.12,
+          thickness,
           length,
-          7
+          8,
+          4
         ),
         trunkLightMaterial
       );
 
       branch.position.set(
-        Math.cos(angle) * size * 0.12,
-        height * (0.4 + Math.random() * 0.4),
-        Math.sin(angle) * size * 0.12
+        Math.cos(angle) * size * (0.08 + Math.random() * 0.08),
+        branchHeight,
+        Math.sin(angle) * size * (0.08 + Math.random() * 0.08)
       );
 
-      branch.rotation.z = -Math.cos(angle) * 0.8;
-      branch.rotation.x = Math.sin(angle) * 0.8;
+      branch.rotation.z = -Math.cos(angle) * (0.65 + Math.random() * 0.35);
+      branch.rotation.x = Math.sin(angle) * (0.65 + Math.random() * 0.35);
       branch.rotation.y = angle;
+
       branch.castShadow = true;
+      branch.receiveShadow = true;
       tree.add(branch);
     }
 
