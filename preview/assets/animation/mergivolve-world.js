@@ -217,26 +217,68 @@ scene.add(sun);
   const trees = [];
 
     const barkTexture = (() => {
+    
     const canvas = document.createElement('canvas');
-    canvas.width = 128;
-    canvas.height = 256;
+    canvas.width = 256;
+    canvas.height = 512;
     const ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = '#65442f';
-    ctx.fillRect(0, 0, 128, 256);
+    // Warm, natural bark base.
+    ctx.fillStyle = '#987653';
+    ctx.fillRect(0, 0, 256, 512);
 
-    for (let i = 0; i < 100; i++) {
-      ctx.strokeStyle = i % 2
-        ? 'rgba(190,145,100,0.22)'
-        : 'rgba(25,17,12,0.28)';
-      ctx.lineWidth = 1 + Math.random() * 4;
-      const x = Math.random() * 128;
+    // Broad, irregular strips of bark.
+    for (let i = 0; i < 75; i++) {
+      const x = Math.random() * 256;
+      const width = 2 + Math.random() * 12;
 
+      ctx.strokeStyle = i % 3 === 0
+        ? 'rgba(218,177,126,0.30)'
+        : 'rgba(65,42,25,0.22)';
+      ctx.lineWidth = width;
       ctx.beginPath();
       ctx.moveTo(x, 0);
-      ctx.bezierCurveTo(x - 8, 80, x + 8, 170, x, 256);
+      ctx.bezierCurveTo(
+        x - 12 + Math.random() * 24, 150,
+        x - 10 + Math.random() * 20, 350,
+        x + (Math.random() - 0.5) * 12, 512
+      );
       ctx.stroke();
     }
+
+    // Fine vertical bark grooves.
+    for (let i = 0; i < 190; i++) {
+      const x = Math.random() * 256;
+      const y = Math.random() * 512;
+      const length = 12 + Math.random() * 100;
+
+      ctx.strokeStyle = i % 2 === 0
+        ? 'rgba(48,31,20,0.42)'
+        : 'rgba(231,193,145,0.32)';
+      ctx.lineWidth = 0.5 + Math.random() * 1.8;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(
+        x + (Math.random() - 0.5) * 7,
+        Math.min(512, y + length)
+      );
+      ctx.stroke();
+    }
+
+    // Small irregular cracks across the bark.
+    for (let i = 0; i < 90; i++) {
+      const x = Math.random() * 256;
+      const y = Math.random() * 512;
+
+      ctx.strokeStyle = 'rgba(45,30,20,0.28)';
+      ctx.lineWidth = 0.7 + Math.random();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 2 + Math.random() * 5, y + 3 + Math.random() * 12);
+      ctx.lineTo(x - 1 + Math.random() * 5, y + 8 + Math.random() * 16);
+      ctx.stroke();
+    }
+
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
