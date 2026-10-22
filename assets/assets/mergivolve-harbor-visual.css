@@ -1,0 +1,417 @@
+
+/* Mergivolve — polished casual merge visual redesign
+   Original styling inspired by the quality of modern merge games.
+   UI only: no gameplay, economy or save-system changes. */
+
+:root {
+  --ui-ink: #34565a;
+  --ui-teal: #398779;
+  --ui-teal-dark: #28685f;
+  --ui-mint: #dcefe0;
+  --ui-cream: #fffdf3;
+  --ui-sand: #f5ebd4;
+  --ui-leaf: #9acb79;
+  --ui-gold: #f6d16f;
+  --ui-border: #dce4ca;
+  --ui-shadow: 0 4px 0 #d8dec5, 0 9px 20px #315c4d16;
+}
+
+html {
+  background: #8bcac4;
+}
+
+body {
+  color: var(--ui-ink);
+  background:
+    radial-gradient(ellipse at 12% 8%, #fff5d5 0, transparent 29%),
+    radial-gradient(ellipse at 92% 24%, #c6e8d1 0, transparent 33%),
+    linear-gradient(160deg, #80c4bd, #d6e8ca 58%, #b6d4ad);
+}
+
+.game-shell {
+  background:
+    radial-gradient(ellipse at 0 20%, #ffffffb0, transparent 34%),
+    linear-gradient(180deg, #fffef7 0%, #fff8e8 65%, #f5efdd 100%);
+  border-inline: 1px solid #ffffffb0;
+  box-shadow: 0 0 50px #285e5730;
+}
+
+.brand-mark {
+  background: linear-gradient(145deg, #fff2b2, #bce7a1 55%, #83d0b6);
+  border: 2px solid #fffdf0;
+  box-shadow: 0 4px 0 #7fb989, 0 7px 14px #387c6930;
+}
+
+.brand-title {
+  color: #285b62;
+  letter-spacing: .2px;
+}
+
+.brand-sub {
+  color: #71948a;
+}
+
+.icon-btn,
+.language-btn {
+  color: #3b726b;
+  background: linear-gradient(180deg, #fffef8, #edf4e5);
+  border: 1px solid #d5e3d4;
+  box-shadow: 0 3px 0 #d7e0ce, 0 5px 10px #476e5b12;
+}
+
+.resource {
+  border-radius: 16px;
+  background: linear-gradient(155deg, #fffef8, #f3f3df);
+  border: 1px solid #e0e5cf;
+  box-shadow: 0 3px 0 #dfe4ce, 0 6px 13px #557d6410;
+}
+
+.resource:first-child {
+  background: linear-gradient(145deg, #fff8d9, #f4efc9);
+}
+
+.resource-top {
+  color: #67817a;
+}
+
+.resource-value {
+  color: #315c60;
+  font-size: 19px;
+}
+
+.energy-bar {
+  height: 7px;
+  background: #e0e8d1;
+  border: 1px solid #ffffffb0;
+}
+
+.energy-fill {
+  background: linear-gradient(90deg, #79c875, #c9e87c, #f4dc75);
+}
+
+.resource-note {
+  color: #84968a;
+}
+
+.world-card {
+  min-height: 118px;
+  border: 1px solid #ffffff75;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 82% 22%, #fff4bd 0 4%, transparent 4.8%),
+    radial-gradient(ellipse at 91% 100%, #8fca83 0 23%, transparent 24%),
+    radial-gradient(ellipse at 65% 115%, #399b83 0 34%, transparent 35%),
+    linear-gradient(120deg, #397f79, #59a99a 48%, #a5cc91);
+  box-shadow: 0 5px 0 #3b8172, 0 10px 18px #427d6b20;
+}
+
+.world-card:before {
+  background:
+    radial-gradient(circle at 20% 24%, #ffffff80 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 62%, #ffffff70 0 1px, transparent 2px),
+    linear-gradient(180deg, transparent 45%, #174b403d);
+}
+
+.world-eyebrow {
+  color: #f9f2c4;
+}
+
+.world-title {
+  text-shadow: 0 2px 3px #23594d40;
+}
+
+.world-desc {
+  color: #f2fae8;
+}
+
+.world-progress {
+  height: 7px;
+  background: #174f4866;
+  border: 1px solid #ffffff45;
+}
+
+.world-progress span {
+  background: linear-gradient(90deg, #fff2a5, #ffd16e);
+}
+
+.goal-badge {
+  background: linear-gradient(145deg, #fff9dc, #ffe8b8);
+  border-color: #efdbab;
+  box-shadow: 0 2px 0 #e9dcc0;
+}
+
+.goal-title {
+  color: #41666a;
+}
+
+.goal-count {
+  color: #398b78;
+}
+
+.board-frame {
+  padding: 9px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #c7955d, #a97043 48%, #805234);
+  border: 1px solid #f2d4a0;
+  box-shadow:
+    inset 0 2px 1px #fff0c680,
+    0 5px 0 #70492f,
+    0 11px 20px #456b5225;
+}
+
+.board-frame:before {
+  border-color: #f8ddb27a;
+  border-radius: 17px;
+}
+
+.board {
+  gap: 5px;
+}
+
+.cell {
+  border-radius: 11px;
+  background: linear-gradient(145deg, #e5eabc, #d0dda0 58%, #b8ce8c);
+  border: 1px solid #abc083;
+  box-shadow:
+    inset 0 2px 2px #ffffffa8,
+    inset 0 -3px 0 #89a76c70;
+}
+
+.cell.empty {
+  background:
+    radial-gradient(circle at 18% 20%, #ffffffa0 0 1px, transparent 2px),
+    radial-gradient(circle at 78% 76%, #f8ffe680 0 1px, transparent 2px),
+    linear-gradient(145deg, #e1e9b9, #cbdba0);
+  border-color: #b3c68c;
+}
+
+.cell.selected {
+  outline: 3px solid #fff1a0;
+  box-shadow:
+    inset 0 0 0 2px #efd16b,
+    0 0 13px #fff2a5d9;
+}
+
+.cell.drop-target {
+  outline-color: #fff8c4;
+}
+
+.board-item svg {
+  filter: drop-shadow(0 3px 2px #25462d45);
+}
+
+.level-badge {
+  min-width: 18px;
+  height: 18px;
+  border-radius: 7px;
+  color: #42665a;
+  background: linear-gradient(180deg, #fffdf0, #f5e6b6);
+  border-color: #e4d39c;
+  box-shadow: 0 2px 3px #254a3740;
+}
+
+.gen-tag {
+  background: #367d70;
+  color: #fffce8;
+  border-color: #a6d8ad;
+}
+
+.board-footer {
+  padding-top: 10px;
+  color: #fff4d5;
+}
+
+.bottom-tools {
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.tool-btn {
+  min-height: 63px;
+  border-radius: 17px;
+  background: linear-gradient(180deg, #fffef8, #f5f0dc);
+  border: 1px solid #e7dfc5;
+  box-shadow: 0 4px 0 #dfd5b8, 0 7px 12px #58745c12;
+  transition: transform .12s, box-shadow .12s;
+}
+
+.tool-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #dfd5b8;
+}
+
+.tool-label {
+  color: #45686a;
+}
+
+.tool-sub {
+  color: #87988a;
+}
+
+.tool-btn.primary {
+  background: linear-gradient(145deg, #e8f7bd, #c4e8a2 58%, #a0d8a2);
+  border-color: #acd58f;
+  box-shadow: 0 4px 0 #83b879, 0 7px 12px #5c9a631c;
+}
+
+.tool-btn.primary .tool-label {
+  color: #315e50;
+}
+
+.tool-btn.primary .tool-sub {
+  color: #5a8466;
+}
+
+.companion-strip {
+  padding: 9px 10px;
+  border-radius: 18px;
+  background: linear-gradient(110deg, #edf3d9, #dcefdc 60%, #d2ebe5);
+  border: 1px solid #c9dfc5;
+  box-shadow: inset 0 1px 0 #ffffffc7, 0 4px 10px #5a846c0d;
+}
+
+.companion-avatar {
+  border-radius: 15px;
+  background: linear-gradient(145deg, #fff6c9, #d8f0bb 58%, #b9e6d6);
+  border-color: #c5dfb1;
+}
+
+.companion-name {
+  color: #3e6260;
+}
+
+.companion-desc {
+  color: #718b7d;
+}
+
+.xp-bar {
+  background: #c7dfc8;
+}
+
+.xp-bar span {
+  background: linear-gradient(90deg, #69b78c, #a8d96f, #f4d477);
+}
+
+.companion-stage {
+  color: #39866e;
+}
+
+.modal-backdrop {
+  background: #244e4699;
+  backdrop-filter: blur(7px);
+}
+
+.modal {
+  background: linear-gradient(160deg, #fffef6, #fff7e5);
+  border: 1px solid #fff;
+  border-radius: 25px;
+  box-shadow: 0 22px 65px #1d4b3b50;
+}
+
+.modal-title {
+  color: #315e60;
+}
+
+.close-btn {
+  color: #4c756a;
+  background: #e6f0df;
+}
+
+.shop-art {
+  background: linear-gradient(145deg, #f0f5d8, #dcebd0);
+  border: 1px solid #d8e5c8;
+  border-radius: 15px;
+}
+
+.shop-wallet {
+  background: linear-gradient(110deg, #e8f2d8, #d9eee4);
+  border-color: #cde2cb;
+  color: #426a65;
+}
+
+.shop-tab {
+  background: #f5f0dc;
+  border-color: #e5dec6;
+  color: #688078;
+}
+
+.shop-tab.active {
+  background: linear-gradient(120deg, #398c7b, #367d73);
+  border-color: #367d73;
+  box-shadow: 0 3px 0 #286355;
+}
+
+.shop-product {
+  background: linear-gradient(160deg, #fffef6, #f5f0dc);
+  border-color: #e8dfc4;
+  border-radius: 16px;
+  box-shadow: 0 3px 0 #ded4b7;
+}
+
+.shop-product-icon {
+  background: linear-gradient(145deg, #f0f8dc, #d7edcf);
+  border-color: #cfe3c3;
+}
+
+.shop-product-name {
+  color: #3d6262;
+}
+
+.shop-product-desc {
+  color: #7c9184;
+}
+
+.shop-product-action,
+.buy-btn {
+  background: linear-gradient(180deg, #4b9a78, #337b68);
+  color: #fffdf0;
+}
+
+.shop-product-action {
+  box-shadow: 0 2px 0 #27614f;
+}
+
+.shop-product-action.owned {
+  background: #e2f0d7;
+  color: #48775a;
+  border-color: #c8e0bd;
+  box-shadow: none;
+}
+
+.shop-product-action:disabled {
+  background: #e4e8d7;
+  color: #98a292;
+  box-shadow: none;
+}
+
+.mission-progress {
+  background: #e0e9d4;
+}
+
+.mission-progress span {
+  background: linear-gradient(90deg, #64b78b, #a9d96f);
+}
+
+@media (max-width: 370px) {
+  .resource {
+    padding-inline: 7px;
+  }
+
+  .resource-value {
+    font-size: 17px;
+  }
+
+  .board-frame {
+    padding: 7px;
+  }
+
+  .tool-btn {
+    min-height: 59px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-btn {
+    transition: none;
+  }
+}
