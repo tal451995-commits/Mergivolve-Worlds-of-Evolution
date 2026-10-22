@@ -415,3 +415,30 @@ body {
     transition: none;
   }
 }
+/* --- Board item depth and soft studio lighting --- */
+
+.board-item {
+  isolation: isolate;
+}
+
+.board-item svg {
+  filter:
+    drop-shadow(0 4px 2px #24462f55)
+    drop-shadow(0 1px 0 #ffffff80);
+}
+
+.board-item:not(.dragging)::after {
+  content: "";
+  position: absolute;
+  inset: 9% 12% 20%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 35% 18%,
+    #ffffff70 0%,
+    #ffffff25 25%,
+    transparent 58%
+  );
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
