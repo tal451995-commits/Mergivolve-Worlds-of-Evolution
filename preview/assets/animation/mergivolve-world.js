@@ -1131,7 +1131,14 @@ try {
     controls.update();
     grassSystem.update(elapsed, sun.intensity, camera.position, monsterRoot.position, sun.position);
     renderer.render(scene, camera);
+    } catch (error) {
+    if (statusEl) {
+      statusEl.textContent =
+        'תקלה באנימציה: ' + (error?.message || String(error));
+    }
+    console.error('Animation loop failed:', error);
   }
+}
 
   function resize() {
     const width = Math.max(1, window.innerWidth);
