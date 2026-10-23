@@ -1130,7 +1130,7 @@ tree.traverse((object) => {
 
     controls.update();
     grassSystem.update(elapsed, sun.intensity, camera.position, monsterRoot.position, sun.position);
-    composer.render();
+    renderer.render(scene, camera);
   }
 
   function resize() {
