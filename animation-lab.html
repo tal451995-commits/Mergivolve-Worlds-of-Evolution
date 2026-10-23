@@ -94,7 +94,24 @@ html.embedded .back-link {
     document.documentElement.classList.add('embedded');
   }
 </script>
+<script>
+window.addEventListener('error', function (event) {
+  const status = document.getElementById('status');
+  if (status) {
+    status.textContent = 'שגיאה: ' +
+      (event.message || 'טעינת העולם נכשלה') +
+      (event.filename ? ' · ' + event.filename.split('/').pop() : '');
+  }
+});
 
+window.addEventListener('unhandledrejection', function (event) {
+  const status = document.getElementById('status');
+  if (status) {
+    status.textContent = 'שגיאת טעינה: ' +
+      String(event.reason?.message || event.reason || 'לא ידועה');
+  }
+});
+</script>
   <script type="module" src="./assets/animation/mergivolve-world.js"></script>
 </body>
 </html>
