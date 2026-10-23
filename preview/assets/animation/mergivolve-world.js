@@ -313,9 +313,42 @@ scene.add(sun);
     const height = size * (1.25 + Math.random() * 0.18);
 
     if (typeof window.Tree !== 'function') {
-      console.error('ProcTree failed to load: window.Tree is unavailable.');
-      return tree;
-    }
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(
+      size * 0.09,
+      size * 0.14,
+      height * 0.58,
+      8
+    ),
+    trunkMaterial
+  );
+
+  trunk.position.y = height * 0.29;
+  trunk.castShadow = true;
+  tree.add(trunk);
+
+  const leafColors = [0x39743b, 0x477f40, 0x568d49];
+
+  for (let i = 0; i < 3; i++) {
+    const crown = new THREE.Mesh(
+      new THREE.ConeGeometry(
+        size * (0.48 - i * 0.07),
+        height * 0.42,
+        8
+      ),
+      new THREE.MeshStandardMaterial({
+        color: leafColors[i],
+        roughness: 0.92
+      })
+    );
+
+    crown.position.y = height * (0.52 + i * 0.17);
+    crown.castShadow = true;
+    tree.add(crown);
+  }
+
+  return tree;
+}
 
     const seed = Math.floor(Math.random() * 100000);
 
