@@ -335,7 +335,7 @@ export function createTerraGrass(THREE, { scene, isSmallScreen = false }) {
 
   // Keep the phone preset close to Terra's light/mobile budgets.
   // Three blades per tuft balance a natural clumped look with draw cost.
-  const tuftCount = isSmallScreen ? 16000 : 32000;
+  const tuftCount = isSmallScreen ? 3000 : 12000;
   const patchRadius = 35;
   const patchSize = patchRadius * 2;
   const vertexCount = BLADES_PER_TUFT * VERTS_PER_BLADE;
