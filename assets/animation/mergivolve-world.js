@@ -1073,7 +1073,7 @@ tree.traverse((object) => {
 
   function animate() {
     requestAnimationFrame(animate);
-
+try {
     const dt = Math.min(clock.getDelta(), 0.04);
     elapsed += dt;
 
