@@ -30,7 +30,10 @@ jobs:
           rm -rf /tmp/pkg && mkdir /tmp/pkg
           unzip -q mergivolve-update.zip -d /tmp/pkg
           test -d /tmp/pkg/upload
-          cp -r /tmp/pkg/upload/. .
+          rsync -a \
+  --exclude='/.github/***' \
+  --exclude='/.git/***' \
+  /tmp/pkg/upload/ ./
           if [ -f /tmp/pkg/DELETE_LIST.txt ]; then
             while read -r f; do
               case "$f" in ''|/*|*..*|.github*) continue;; esac
