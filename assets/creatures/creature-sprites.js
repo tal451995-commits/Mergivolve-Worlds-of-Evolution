@@ -60,7 +60,9 @@
       .querySelectorAll('.board-item[data-type="wild"]')
       .forEach((node) => {
         const level = Number(node.dataset.level || 1);
-        const creature = CREATURES_BY_LEVEL[level];
+        if (node.dataset.egg) return; // species eggs are drawn by evolution-ui.js (dev mode only)
+        const spUrl = node.dataset.species && window.MergivolveArt ? window.MergivolveArt.url(node.dataset.species, Number(node.dataset.stage) || 1) : null;
+        const creature = spUrl ? { file: spUrl.replace(/^\.\//, ''), alt: node.dataset.species } : CREATURES_BY_LEVEL[level];
 
         if (!creature) return;
 
