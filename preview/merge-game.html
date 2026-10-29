@@ -213,7 +213,7 @@
 }
 
 </style>
-<link rel="stylesheet" href="./assets/assets/mergivolve-harbor-visual.css?v=1">
+<link rel="stylesheet" href="./assets/mergivolve/harbor-visual.css?v=1">
 </head>
 <body>
 <main class="game-shell" id="gameRoot">
@@ -274,12 +274,19 @@
 <div class="modal-backdrop" id="modalBackdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div class="modal-title" id="modalTitle">Settings</div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div><div id="modalBody"></div></section></div>
  <script src="./assets/creatures/species-catalog.js"></script>
  <script src="./assets/creatures/species-catalog-expansion.js"></script>
+<script src="./assets/mergivolve/storage-env.js"></script>
+<script>window.MergivolveEnv=window.MergivolveEnv||{dev:false,LIVE_KEY:"mergivolve-merge-prototype-v1",SAVE_KEY:"mergivolve-merge-prototype-v1",blocked:[]};</script>
+<script src="./assets/creatures/species-catalog-fixes.js"></script>
+<script src="./assets/creatures/species-image-map.js"></script>
+<script src="./assets/mergivolve/evolution-layer.js"></script>
+<script src="./assets/mergivolve/species-art.js"></script>
+<script src="./assets/mergivolve/monster-fx.js"></script>
 <script>
 (() => {
 'use strict';
 const $ = (s,root=document) => root.querySelector(s);
 const SIZE=25, MAX_ITEM=8, MAX_GEN=5, ENERGY_MAX=100, ENERGY_COST=5, ENERGY_REGEN_MS=180000;
-const SAVE_KEY='mergivolve-merge-prototype-v1';
+const SAVE_KEY=MergivolveEnv.SAVE_KEY;
 const STORE_WORDS = {
  he:{shopTitle:'חנות האבולוציה',shopIntro:'קנו כוחות, מראה ואפקטים בעזרת המטבעות והגבישים שהרווחתם במשחק.',all:'הכול',boost:'כוחות',boards:'לוחות',looks:'מראה',effects:'אפקטים',companion:'המלווה',wallet:'היתרה שלך',buyItem:'קנייה',equipItem:'לבישה',equippedItem:'בשימוש',itemOwned:'במלאי',notEnoughFunds:'אין מספיק מטבעות או גבישים.',needPair:'כדי להשתמש בכוח הזה צריך זוג פריטים תואמים בלוח.',needSelection:'קודם בחרו פריט בלוח, ואז פתחו את החנות.',needSpace:'צריך לפחות תא פנוי אחד בלוח.',energyFull:'האנרגיה כבר מלאה.',itemBought:'נרכש בהצלחה!',itemEquipped:'המראה עודכן!',energyUsed:'האנרגיה מולאה.',luckyUsed:'אבקת מזל הופעלה לשלוש היצירות הבאות.',coinRushUsed:'בונוס המטבעות פעיל לחמשת המיזוגים הבאים.',wildSeedUsed:'זרע נדיר נוצר בלוח.',makerBought:'יוצר חדש נוסף ללוח.',hammerUsed:'הפטיש שדרג את הפריט!',magnetUsed:'המגנט מצא זוג ומיזג אותו!',shopUnavailable:'כרגע לא ניתן להשתמש',luckyRemaining:'יצירות משודרגות',coinRushRemaining:'מיזוגים עם בונוס',tabHint:'כל הרכישות הן במטבעות משחק. אין תשלום אמיתי.',buyWithCoins:'מטבעות',buyWithGems:'גבישים'},
  en:{shopTitle:'Evolution Store',shopIntro:'Spend the coins and crystals you earn in-game on boosts, looks and effects.',all:'All',boost:'Boosts',boards:'Boards',looks:'Looks',effects:'Effects',companion:'Companion',wallet:'Your balance',buyItem:'Buy',equipItem:'Equip',equippedItem:'Equipped',itemOwned:'Owned',notEnoughFunds:'Not enough coins or crystals.',needPair:'This boost needs a matching pair on the board.',needSelection:'Select an item on the board before opening the store.',needSpace:'You need at least one free board space.',energyFull:'Your energy is already full.',itemBought:'Purchased!',itemEquipped:'Look updated!',energyUsed:'Energy refilled.',luckyUsed:'Lucky pollen is active for your next three summons.',coinRushUsed:'Double coins is active for your next five merges.',wildSeedUsed:'A rare seed appeared on the board.',makerBought:'A new maker was added to your board.',hammerUsed:'The hammer upgraded your item!',magnetUsed:'The magnet found a pair and merged it!',shopUnavailable:'Unavailable right now',luckyRemaining:'boosted summons',coinRushRemaining:'double-coin merges',tabHint:'All purchases use in-game currency. No real-money payments.',buyWithCoins:'Coins',buyWithGems:'Crystals'}
@@ -318,11 +325,12 @@ const TEXT={
  en:{subtitle:'WORLDS OF EVOLUTION',energy:'Energy',coins:'Coins',crystals:'Crystals',coinsNote:'Earn with every merge',gemsNote:'Rare discoveries',ready:'Ready to explore',energyWait:'Next in',chapter:'WORLD 01 · FIRST AWAKENING',worldName:'Verdant Wilds',worldDesc:'A little magic is growing under every leaf.',goalTitle:'Wake up the forest',goalSub:'Merge objects to discover new forms',merges:' MERGES',boardTip:'Drag or tap matching items',freeSpaces:'spaces free',summon:'Summon',summonSub:'5 energy',shop:'Forest shop',shopSub:'Upgrade tools',missions:'Missions',missionsSub:'Free rewards',sanctuary:'Sanctuary',sanctuarySub:'Your companion',growth:'GROWTH',footer:'A little merge. A whole new world. · Progress saves on this device',genLabel:'Maker',genDesc:'Tap a maker to create an item. Merge two matching makers to raise its level and improve output.',merge:'Merged!',genUpgrade:'Maker evolved!',newForm:'A new form discovered!',energyLow:'Not enough energy. Wait a little or use free test energy.',noSpace:'No free space on the board. Merge some items first.',sameItem:'Only items of the same level can merge.',tapMatch:'Item selected. Tap a matching item to merge.',moved:'Item moved.',earned:'You earned',coinsWord:'coins',xpWord:'XP',summoned:'A new item appeared!',summonNeed:'Tap a maker on the board or use Summon to create an item.',maxLevel:'This item is already at max level!',buyGen:'Buy a maker',buyGenDesc:'A starter maker that produces seeds. Merge two matching makers to upgrade it.',energyPack:'Energy refill',energyPackDesc:'Adds 30 energy. No real payment or purchase is involved.',upgrade:'Upgrade',buy:'Buy',notEnough:'Not enough coins.',settings:'Settings',language:'Language',music:'Background music',effects:'Sound effects',on:'On',off:'Off',testTools:'Free test tools',testEnergy:'+50 energy',testCoins:'+500 coins',testGems:'+25 crystals',reset:'Reset progress',resetConfirm:'Reset all local progress for this game?',settingsNote:'Progress is saved in this browser on this device. Test tools are not purchases and are not connected to payments.',missionsTitle:'Forest missions',missionMerge:'Make 3 merges',missionSummon:'Summon 5 items',missionGen:'Upgrade a maker once',claim:'Claim reward',claimed:'Claimed',progress:'Progress',rewards:'Reward',collectionTitle:'Creature sanctuary',collectionDesc:'Your companion evolves from merge XP. Each new form changes its silhouette, wings and aura.',stageNames:['Little Sprout','Young Dragon','Forest Warden','Forest Dragon'],stageDescs:['Just hatched from a magical egg.','Its wings are growing stronger.','Forest magic flows through it.','A legendary guardian of the forest.'],stageLabel:'Stage',worldUnlock:'More worlds will unlock as you progress.',itemNames:['','Forest seed','Young sprout','Forest mushroom','Mooncap','Magic crystal','Dragon egg','Young dragon','Forest dragon'],genNames:['','Enchanted roots','Awakened stump','Mushroom grove','Crystal tree','Spirit tree'],genDesc:'Tap the maker to create an item. Merge two matching makers to raise its level and improve its output.',noMissions:'All missions completed. Well done!',missionDone:'Mission complete! Your reward is ready.',shopTitle:'Forest shop'}
 };
 let lang='he', toastTimer=0, drag=null, selected=null, ghost=null, dragRaf=0, dragTarget=null, audioCtx=null, musicNodes=[], musicTimer=null, lastMergeAt=0, mergeCombo=0;
+const EVO_ON=!!(window.MergivolveEnv&&MergivolveEnv.dev&&window.MergivolveEvolution&&window.MERGIVOLVE_SPECIES),EVO=EVO_ON?window.MergivolveEvolution:null,EVO_IDX=EVO_ON?EVO.buildIndex(window.MERGIVOLVE_SPECIES):{count:0,byId:{}},EVO_POL=EVO_ON?EVO.POLICIES.proposedA:null;
 let state=loadState();
 function defaultState(){const b=Array(SIZE).fill(null);b[12]={type:'gen',level:1};b[6]={type:'wild',level:1};b[8]={type:'wild',level:1};b[10]={type:'wild',level:2};b[14]={type:'wild',level:2};b[16]={type:'wild',level:3};b[18]={type:'wild',level:3};b[21]={type:'wild',level:4};return {board:b,energy:100,coins:800,gems:12,xp:0,merges:0,summons:0,genUpgrades:0,claimed:{},ownedItems:[],equipped:{boardSkin:'forest',mergeFx:'leaf',companionAura:'none',generatorLook:'classic',companionCharm:'none'},boosters:{luckySummons:0,coinRush:0},lastEnergyAt:Date.now(),music:false,effects:true,lang:'he',created:Date.now()}}
  
 
-function normalizeBoardItem(item) {
+function normalizeBoardItemLegacy(item) {
   if (!item || typeof item !== 'object' || item.type !== 'wild') {
     return item;
   }
@@ -351,7 +359,7 @@ function normalizeBoardItem(item) {
 
 
 
-function mergedBoardItem(item) {
+function mergedBoardItemLegacy(item) {
   const next = {
     ...item,
     type: item.type,
@@ -511,7 +519,20 @@ function triggerWorldReaction(){
  hero.classList.remove('world-react');void hero.offsetWidth;hero.classList.add('world-react');
  window.setTimeout(()=>hero.classList.remove('world-react'),820);
 }
-function renderBoard(){const board=$('#board');board.innerHTML='';state.board.forEach((item,i)=>{const cell=document.createElement('div');cell.className='cell'+(!item?' empty':'')+(selected===i?' selected':'');cell.dataset.index=i;cell.setAttribute('role','gridcell');cell.setAttribute('aria-label',item?`${levelName(item)} ${item.level}`:'Empty');if(item){const node=document.createElement('div');node.className='board-item'+(item.type==='gen'?' generator':'');node.dataset.index=i;node.dataset.type=item.type;node.dataset.level=String(item.level);node.innerHTML=svgArt(item.type,item.level)+(item.type==='gen'?`<span class="gen-tag">${t('genLabel')}</span>`:'')+`<span class="level-badge">${item.level}</span>`;node.title=levelName(item);cell.append(node)}board.append(cell)});$('#emptyCount').textContent=state.board.filter(x=>!x).length;}
+
+/* ===== DEV-ONLY species/evolution hooks. With EVO_ON=false (live mode) every wrapper falls back to main's original behaviour. ===== */
+function evoRng(){if(!state.evo||typeof state.evo.seed!=='number')state.evo={seed:((window.crypto&&crypto.getRandomValues)?crypto.getRandomValues(new Uint32Array(1))[0]:Math.floor(Math.random()*4294967296))>>>0,n:0};
+ const n=state.evo.n++;let t=(state.evo.seed+Math.imul(n+1,0x9E3779B9))>>>0;t=Math.imul(t^t>>>15,1|t);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+function normalizeBoardItem(item){return EVO_ON?EVO.normalizeItem(item,EVO_IDX,EVO_POL):normalizeBoardItemLegacy(item)}
+function mergedBoardItem(item){if(!EVO_ON||!item||item.type!=='wild')return mergedBoardItemLegacy(item);let it=item;if(it.egg){const h=EVO.hatch(it,EVO_IDX,EVO_POL);if(h)it=h}return EVO.mergeResult(it,EVO_IDX,EVO_POL,evoRng).item}
+function canMergeItems(a,b){if(EVO_ON)return EVO.canMerge(a,b,EVO_IDX);return a.type===b.type&&a.level===b.level}
+function evoAscend(a){if(!EVO_ON)return a;const r=EVO.mergeResult(a,EVO_IDX,EVO_POL,evoRng);return r.event==='ascend'?r.item:a}
+function evoMigrateBoard(){if(!EVO_ON||!state||!Array.isArray(state.board))return;let ch=false;state.board=state.board.map(it=>{if(it&&it.type==='wild'&&it.level>=EVO_POL.assignAt&&!it.speciesId){ch=true;return EVO.assignMissing(it,EVO_IDX,EVO_POL,evoRng)}return it});if(!state.album||state.album.v!==1){state.album=EVO.migrateSave(state,EVO_IDX,Date.now()).album;ch=true}if(ch)save()}
+function evoDiscover(item,eid){if(!EVO_ON||!item||!item.speciesId||item.egg)return;const st=item.evolutionStage||1,r=EVO.recordDiscovery(state,item.speciesId,st,eid+':'+item.speciesId+':'+st,EVO_IDX,Date.now());state.album=r.save.album;if(r.events.length){save();const sp=EVO_IDX.byId[item.speciesId];showToast((lang==='he'?'התגלה: ':'Discovered: ')+(lang==='he'?sp.nameHe:sp.nameEn)+(r.events[0]==='new_stage'?(lang==='he'?' · שלב חדש':' · new stage'):''));window.dispatchEvent(new CustomEvent('mergivolve:discovery',{detail:{speciesId:item.speciesId,events:r.events,stage:st}}))}}
+function evoHatch(idx){const it=state.board[idx],h=EVO_ON?EVO.hatch(it,EVO_IDX,EVO_POL):null;if(!h)return;let done=false;const apply=()=>{if(done)return;done=true;state.board[idx]=h;save();render();evoDiscover(h,'hatch'+idx+':'+state.merges)};const node=document.querySelector('.board-item[data-index="'+idx+'"]');if(window.MergivolveFX&&window.MergivolveFX.hatchOnBoard&&node)window.MergivolveFX.hatchOnBoard(node,apply);else apply()}
+function evoImportLive(){const he=lang==='he';if(!confirm(he?'להעתיק עותק של השמירה החיה לסביבת הפיתוח? השמירה החיה לא תשתנה.':'Copy a read-only snapshot of the LIVE save into the dev save? The live save is never modified.'))return;const r=MergivolveEnv.importLive();showToast(r.ok?(he?'יובא: ':'Imported: ')+r.msg:(he?'הייבוא נכשל: ':'Import failed: ')+r.msg);if(r.ok)setTimeout(()=>location.reload(),900)}
+window.__mergivolveDev={get state(){return state},get EVO_ON(){return EVO_ON},get env(){return MergivolveEnv},get idx(){return EVO_IDX}};
+function renderBoard(){evoMigrateBoard();const board=$('#board');board.innerHTML='';state.board.forEach((item,i)=>{const cell=document.createElement('div');cell.className='cell'+(!item?' empty':'')+(selected===i?' selected':'');cell.dataset.index=i;cell.setAttribute('role','gridcell');cell.setAttribute('aria-label',item?`${levelName(item)} ${item.level}`:'Empty');if(item){const node=document.createElement('div');node.className='board-item'+(item.type==='gen'?' generator':'');node.dataset.index=i;node.dataset.type=item.type;node.dataset.level=String(item.level);if(item.speciesId){node.dataset.species=item.speciesId;node.dataset.stage=String(item.evolutionStage||1)}if(item.egg)node.dataset.egg='1';node.innerHTML=svgArt(item.type,item.level)+(item.type==='gen'?`<span class="gen-tag">${t('genLabel')}</span>`:'')+`<span class="level-badge">${item.level}</span>`;node.title=levelName(item);cell.append(node)}board.append(cell)});$('#emptyCount').textContent=state.board.filter(x=>!x).length;}
 function companionStage(){return state.xp>=36?3:state.xp>=20?2:state.xp>=8?1:0}
 function renderCompanion(){const stage=companionStage();$('#companionAvatar').innerHTML=svgArt('wild',7+stage,true);$('#companionName').textContent=(lang==='he'?['נבטי · דרקון היער','נבטי · דרקון צעיר','נבטי · שומר היער','נבטי · דרקון היער'][stage]:['Sprig · Forest Wyrmling','Sprig · Young Dragon','Sprig · Forest Warden','Sprig · Forest Dragon'][stage]);$('#companionDesc').textContent=t('stageDescs')[stage];const mins=[0,8,20,36,52];const next=mins[stage+1]||52;const base=mins[stage];$('#xpFill').style.width=Math.min(100,((state.xp-base)/(next-base))*100)+'%';$('#stageText').textContent=`${stage+1} / 4`;}
 function render(){if(!['he','en'].includes(lang))lang=state.lang||'he';document.documentElement.lang=lang;document.documentElement.dir=lang==='he'?'rtl':'ltr';document.body.dir=lang==='he'?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(TEXT[lang][k]!=null)el.textContent=TEXT[lang][k]});$('#languageBtn').textContent=lang==='he'?'EN':'עב';$('#energyVal').textContent=fmt(Math.floor(state.energy));$('#coinsVal').textContent=fmt(state.coins);$('#gemsVal').textContent=fmt(state.gems);$('#energyFill').style.width=(state.energy/ENERGY_MAX*100)+'%';$('#energyNote').textContent=state.energy>=ENERGY_MAX?t('ready'):t('energyWait')+' '+Math.max(1,Math.ceil((ENERGY_REGEN_MS-(Date.now()-state.lastEnergyAt))/1000))+'s';$('#mergeCount').textContent=fmt(state.merges);$('#worldProgress').style.width=Math.min(100,5+state.merges*2)+'%';if(!$('#worldArt').firstElementChild)$('#worldArt').innerHTML=worldIllustration();renderBoard();renderCompanion();applyCosmetics();renderBoostStatus();$('#soundBtn').textContent=state.music?'♫':'♪';$('#soundBtn').style.background=state.music?'#e5f3c4':'';}
@@ -555,14 +576,14 @@ function registerMergeCombo(){const now=performance.now();mergeCombo=now-lastMer
 function mergeAt(from,to){
  if(from===to)return false;const a=state.board[from],b=state.board[to];if(!a)return false;
  if(!b){const flight=createBoardFlight(from,to,false);state.board[to]=a;state.board[from]=null;selected=null;save();render();finishBoardFlight(flight,to,false,'move');showToast(t('moved'));return true}
-if(a.type!==b.type||a.level!==b.level){showToast(t('sameItem'));return false}
+if(!canMergeItems(a,b)){showToast((EVO_ON&&(a.egg||b.egg))?(lang==='he'?'קודם בוקעים את הביצה (לחיצה עליה)':'Hatch the egg first (tap it)'):t('sameItem'));return false}
  if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)&&a.type!=='wild'){showToast(t('maxLevel'));return false}
  const combo=registerMergeCombo();
  if(a.level>=(a.type==='gen'?MAX_GEN:MAX_ITEM)){
-  if(a.type==='wild'){const flight=createBoardFlight(from,to,true);state.board[to]=a;state.board[from]=null;selected=null;const base=35;const boosted=state.boosters.coinRush>0;if(boosted)state.boosters.coinRush--;const earned=base*(boosted?2:1);state.coins+=earned;state.gems+=1;state.merges++;addXp(5);save();render();triggerWorldReaction();const rewardLabel='+'+earned+' 🪙 +1 💎'+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,'gold',rewardLabel);playSfx('merge');announce(t('earned')+' +'+earned+' '+t('coinsWord')+' 💎');return true}
+  if(a.type==='wild'){const flight=createBoardFlight(from,to,true);const asc=evoAscend(a);state.board[to]=asc;state.board[from]=null;selected=null;const base=35;const boosted=state.boosters.coinRush>0;if(boosted)state.boosters.coinRush--;const earned=base*(boosted?2:1);state.coins+=earned;state.gems+=1;state.merges++;addXp(5);evoDiscover(asc,'a'+state.merges+':'+to);save();render();triggerWorldReaction();const rewardLabel='+'+earned+' 🪙 +1 💎'+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,'gold',rewardLabel);playSfx('merge');announce(t('earned')+' +'+earned+' '+t('coinsWord')+' 💎');return true}
   showToast(t('maxLevel'));return false
  }
-const flight=createBoardFlight(from,to,true);const next=mergedBoardItem(a);state.board[to]=next;;state.board[from]=null;selected=null;state.merges++;
+const flight=createBoardFlight(from,to,true);const next=mergedBoardItem(a);state.board[to]=next;;state.board[from]=null;selected=null;state.merges++;evoDiscover(next,'m'+state.merges+':'+to);
  const baseCoins=a.type==='gen'?18:10+a.level*2;const boosted=state.boosters.coinRush>0;if(boosted)state.boosters.coinRush--;const earned=baseCoins*(boosted?2:1);state.coins+=earned;addXp(a.type==='gen'?3:2+a.level);if(a.type==='gen')state.genUpgrades++;
  save();render();triggerWorldReaction();const isEvolution=next.type==='wild'&&next.level>=7;const fx=isEvolution?'evolve':((state.equipped&&state.equipped.mergeFx)||'leaf');const topReward=next.level===MAX_ITEM&&next.type==='wild';const rewardLabel='+'+(earned+(topReward?50:0))+' 🪙'+(topReward?' +2 💎':'')+(combo>1?' · COMBO ×'+combo:'');finishBoardFlight(flight,to,true,fx,rewardLabel);playSfx('merge');const msg=a.type==='gen'?t('genUpgrade'):t('merge');announce(msg);
  if(next.level===MAX_ITEM&&next.type==='wild'){state.gems+=2;state.coins+=50;save();showToast(t('newForm')+' 💎 +2')}else showToast(msg+' · +'+earned+' '+t('coinsWord')+(boosted?' ✨':''));updateMissions();return true
@@ -584,6 +605,7 @@ function tapCell(idx){
     incubateFrom(idx);
     return;
   }
+  if(EVO_ON&&item.egg){evoHatch(idx);return;}
 
   if(selected===null){
     selected=idx;
@@ -600,7 +622,7 @@ function tapCell(idx){
 
   const other=state.board[selected];
 
-  if(other&&other.type===item.type&&other.level===item.level){
+  if(other&&canMergeItems(item,other)){
     mergeAt(selected,idx);
   }else{
     selected=idx;
@@ -708,7 +730,7 @@ function finishBoardFlight(flight,index,isMerge,effect,rewardLabel=''){
     {transform:'translate3d('+(dx*.76-side*.35)+'px,'+(dy*.76+3)+'px,0) scale(1) rotate('+(piece.rotation*.8)+'deg)',opacity:isMerge?.72:1,offset:.76},
     {transform:'translate3d('+dx+'px,'+dy+'px,0) scale('+endScale+') rotate('+endRotate+'deg)',opacity:isMerge?0:1,offset:1}
    ];
-   const anim=piece.node.animate(keyframes,{duration:isMerge?238:255,easing:'cubic-bezier(.18,.82,.24,1)',fill:'forwards'});
+   const anim=piece.node.animate(keyframes,{duration:isMerge?330:255,easing:'cubic-bezier(.18,.82,.24,1)',fill:'forwards'});
    return anim.finished.catch(()=>{});
   });
   Promise.all(jobs).then(async()=>{
@@ -722,7 +744,7 @@ function finishBoardFlight(flight,index,isMerge,effect,rewardLabel=''){
  };
  if(isMerge)window.setTimeout(launchFlights,48);else launchFlights();
 }
-function findMergePair(){for(let i=0;i<state.board.length;i++){const a=state.board[i];if(!a)continue;const max=a.type==='gen'?MAX_GEN:MAX_ITEM;if(a.level>=max&&a.type!=='wild')continue;for(let j=i+1;j<state.board.length;j++){const b=state.board[j];if(b&&b.type===a.type&&b.level===a.level)return [i,j]}}return null}
+function findMergePair(){for(let i=0;i<state.board.length;i++){const a=state.board[i];if(!a)continue;const max=a.type==='gen'?MAX_GEN:MAX_ITEM;if(a.level>=max&&a.type!=='wild')continue;for(let j=i+1;j<state.board.length;j++){const b=state.board[j];if(b&&canMergeItems(a,b))return [i,j]}}return null}
 function canAffordShopItem(item){return item.currency==='gems'?state.gems>=item.price:state.coins>=item.price}
 function canUseShopItem(item){if(item.kind==='cosmetic')return true;switch(item.effect){case'energy':return state.energy<ENERGY_MAX;case'magnet':return !!findMergePair();case'hammer':{const chosen=selected===null?null:state.board[selected];return !!(chosen&&chosen.level<(chosen.type==='gen'?MAX_GEN:MAX_ITEM))}case'wildSeed':case'maker':return firstEmpty()>=0;default:return true}}
 function shopPrice(item){return (item.currency==='gems'?'💎 ':'🪙 ')+fmt(item.price)}
@@ -736,12 +758,12 @@ function shopItemAction(id){const item=SHOP_ITEMS.find(it=>it.id===id);if(!item)
  else if(effect==='coinRush'){state.boosters.coinRush+=5;save();render();playSfx('pop');showToast(storeText('coinRushUsed'))}
  else if(effect==='wildSeed'){const slot=firstEmpty();state.board[slot]={type:'wild',level:2};state.summons++;addXp(1);save();render();playSfx('pop');playBoardAction(slot,false,'leaf');showToast(storeText('wildSeedUsed'))}
  else if(effect==='maker'){const slot=firstEmpty();state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');playBoardAction(slot,false,'leaf');showToast(storeText('makerBought'))}
- else if(effect==='hammer'){const slot=selected;const chosen=state.board[slot];if(!chosen){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(storeText('needSelection'));shopModal(activeShopTab);return}if(chosen.level>=(chosen.type==='gen'?MAX_GEN:MAX_ITEM)){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(t('maxLevel'));shopModal(activeShopTab);return}state.board[slot]=mergedBoardItem(chosen);if(chosen.type==='gen')state.genUpgrades++;state.xp+=2;selected=null;save();render();playSfx('merge');playBoardAction(slot,true,(state.equipped&&state.equipped.mergeFx)||'leaf');showToast(storeText('hammerUsed'))}
+ else if(effect==='hammer'){const slot=selected;const chosen=state.board[slot];if(!chosen){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(storeText('needSelection'));shopModal(activeShopTab);return}if(chosen.level>=(chosen.type==='gen'?MAX_GEN:MAX_ITEM)){if(item.currency==='gems')state.gems+=item.price;else state.coins+=item.price;showToast(t('maxLevel'));shopModal(activeShopTab);return}state.board[slot]=mergedBoardItem(chosen);evoDiscover(state.board[slot],'h'+Date.now()+':'+slot);if(chosen.type==='gen')state.genUpgrades++;state.xp+=2;selected=null;save();render();playSfx('merge');playBoardAction(slot,true,(state.equipped&&state.equipped.mergeFx)||'leaf');showToast(storeText('hammerUsed'))}
  shopModal(activeShopTab)}
 
 function missionsModal(){const defs=[{id:'merge',goal:3,val:state.merges,reward:60,title:t('missionMerge')},{id:'summon',goal:5,val:state.summons,reward:45,title:t('missionSummon')},{id:'gen',goal:1,val:state.genUpgrades,reward:100,title:t('missionGen')}];const html=defs.map(m=>{const done=m.val>=m.goal,claimed=!!state.claimed[m.id];return `<div class="mission-row"><div class="shop-art">${m.id==='merge'?'🔗':m.id==='summon'?'🌱':'🌳'}</div><div class="shop-info"><div class="shop-title">${m.title}</div><div class="shop-desc">${t('progress')}: ${Math.min(m.val,m.goal)} / ${m.goal}</div><div class="mission-progress"><span style="width:${Math.min(100,m.val/m.goal*100)}%"></span></div><div class="mission-reward">${t('rewards')}: 🪙 ${m.reward}</div></div><button class="buy-btn" data-claim="${m.id}" ${(!done||claimed)?'disabled':''}>${claimed?t('claimed'):t('claim')}</button></div>`}).join('');openModal(t('missionsTitle'),html+(defs.every(m=>m.val>=m.goal&&state.claimed[m.id])?`<div class="modal-note">${t('noMissions')}</div>`:''))}
 function collectionModal(){const stage=companionStage();const names=t('stageNames');openModal(t('collectionTitle'),`<div style="display:flex;align-items:center;gap:12px;margin:5px 0 13px"><div class="shop-art" style="width:86px;height:86px">${svgArt('wild',7+stage,true)}</div><div><div class="shop-title" style="font-size:16px">${names[stage]}</div><div class="shop-desc">${t('stageLabel')} ${stage+1} / 4 · ${fmt(state.xp)} ${t('xpWord')}</div><div class="mission-progress" style="width:190px"><span style="width:${Math.min(100,state.xp/52*100)}%"></span></div></div></div><div class="modal-desc">${t('collectionDesc')}</div>${t('worldUnlock')}<div class="modal-note">${t('stageDescs')[stage]}</div>`)}
-function settingsModal(){openModal(t('settings'),'<div class="shop-title">'+t('language')+'</div><div class="sound-row"><button data-setlang="he" class="'+(lang==='he'?'active':'')+'">עברית · RTL</button><button data-setlang="en" class="'+(lang==='en'?'active':'')+'">English · LTR</button></div><div class="shop-title" style="margin-top:13px">'+t('music')+' / '+t('effects')+'</div><div class="sound-row"><button data-sound="music" class="'+(state.music?'active':'')+'">♫ '+t('music')+': '+(state.music?t('on'):t('off'))+'</button><button data-sound="effects" class="'+(state.effects?'active':'')+'">✦ '+t('effects')+': '+(state.effects?t('on'):t('off'))+'</button></div><div class="shop-title" style="margin:15px 0 9px">'+t('testTools')+'</div><div class="test-actions"><button data-test="energy">⚡ '+t('testEnergy')+'</button><button data-test="coins">🪙 '+t('testCoins')+'</button><button data-test="gems">💎 '+t('testGems')+'</button></div><div style="margin-top:11px"><button class="buy-btn" style="background:#985b4d" data-reset="yes">'+t('reset')+'</button></div><div class="modal-note">'+t('settingsNote')+'</div>')}
+function settingsModal(){openModal(t('settings'),'<div class="shop-title">'+t('language')+'</div><div class="sound-row"><button data-setlang="he" class="'+(lang==='he'?'active':'')+'">עברית · RTL</button><button data-setlang="en" class="'+(lang==='en'?'active':'')+'">English · LTR</button></div><div class="shop-title" style="margin-top:13px">'+t('music')+' / '+t('effects')+'</div><div class="sound-row"><button data-sound="music" class="'+(state.music?'active':'')+'">♫ '+t('music')+': '+(state.music?t('on'):t('off'))+'</button><button data-sound="effects" class="'+(state.effects?'active':'')+'">✦ '+t('effects')+': '+(state.effects?t('on'):t('off'))+'</button></div><div class="shop-title" style="margin:15px 0 9px">'+t('testTools')+'</div><div class="test-actions"><button data-test="energy">⚡ '+t('testEnergy')+'</button><button data-test="coins">🪙 '+t('testCoins')+'</button><button data-test="gems">💎 '+t('testGems')+'</button></div>'+(MergivolveEnv.dev?'<div style="margin-top:11px"><button class="buy-btn" style="background:#2d6a8f" data-import-live="yes">'+(lang==='he'?'ייבוא עותק מהשמירה החיה (קריאה בלבד)':'Import copy of live save (read-only)')+'</button></div>':'')+'<div style="margin-top:11px"><button class="buy-btn" style="background:#985b4d" data-reset="yes">'+t('reset')+'</button></div><div class="modal-note">'+t('settingsNote')+'</div>')}
 function buy(type){if(type==='gen'){if(state.coins<250){showToast(t('notEnough'));return}const slot=firstEmpty();if(slot<0){showToast(t('noSpace'));return}state.coins-=250;state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');shopModal()}else if(type==='energy'){if(state.coins<80){showToast(t('notEnough'));return}state.coins-=80;restoreEnergy(30);playSfx('pop');shopModal()}}
 function claim(id){const defs={merge:{goal:3,val:state.merges,reward:60},summon:{goal:5,val:state.summons,reward:45},gen:{goal:1,val:state.genUpgrades,reward:100}};const d=defs[id];if(!d||d.val<d.goal||state.claimed[id])return;state.claimed[id]=true;state.coins+=d.reward;save();render();playSfx('merge');showToast(t('missionDone')+' +'+d.reward);missionsModal()}
 function audio(){if(!audioCtx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;audioCtx=new A()}if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
@@ -752,18 +774,19 @@ function toggleMusic(){state.music=!state.music;if(state.music)startMusic();else
 $('#board').addEventListener('pointerdown',pointerDown);window.addEventListener('pointermove',pointerMove,{passive:false});window.addEventListener('pointerup',pointerUp);window.addEventListener('pointercancel',cancelDrag);
 $('#summonBtn').addEventListener('click',summonButton);$('#shopBtn').addEventListener('click',shopModal);$('#missionsBtn').addEventListener('click',missionsModal);$('#collectionBtn').addEventListener('click',collectionModal);$('#settingsBtn').addEventListener('click',settingsModal);$('#soundBtn').addEventListener('click',toggleMusic);$('#languageBtn').addEventListener('click',()=>{lang=lang==='he'?'en':'he';state.lang=lang;save();render();if($('#modalBackdrop').classList.contains('open'))settingsModal()});$('#closeModal').addEventListener('click',closeModal);$('#modalBackdrop').addEventListener('click',e=>{if(e.target===$('#modalBackdrop'))closeModal()});
 $('#modalBody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.shopTab){shopModal(b.dataset.shopTab);return}if(b.dataset.shopItem){shopItemAction(b.dataset.shopItem);return}if(b.dataset.buy){buy(b.dataset.buy);return}
-if(b.dataset.claim){claim(b.dataset.claim);return}if(b.dataset.setlang){lang=b.dataset.setlang;state.lang=lang;save();render();settingsModal();return}if(b.dataset.sound==='music'){toggleMusic();settingsModal();return}if(b.dataset.sound==='effects'){state.effects=!state.effects;save();settingsModal();return}if(b.dataset.test==='energy'){restoreEnergy(50);showToast(t('testEnergy'));settingsModal();return}if(b.dataset.test==='coins'){state.coins+=500;save();render();showToast(t('testCoins'));settingsModal();return}if(b.dataset.test==='gems'){state.gems+=25;save();render();showToast(t('testGems'));settingsModal();return}if(b.dataset.reset){if(confirm(t('resetConfirm'))){stopMusic(false);localStorage.removeItem(SAVE_KEY);state=defaultState();lang=state.lang;save();render();closeModal();showToast(lang==='he'?'המשחק אופס':'Game reset')}}});
+if(b.dataset.importLive){evoImportLive();return}if(b.dataset.claim){claim(b.dataset.claim);return}if(b.dataset.setlang){lang=b.dataset.setlang;state.lang=lang;save();render();settingsModal();return}if(b.dataset.sound==='music'){toggleMusic();settingsModal();return}if(b.dataset.sound==='effects'){state.effects=!state.effects;save();settingsModal();return}if(b.dataset.test==='energy'){restoreEnergy(50);showToast(t('testEnergy'));settingsModal();return}if(b.dataset.test==='coins'){state.coins+=500;save();render();showToast(t('testCoins'));settingsModal();return}if(b.dataset.test==='gems'){state.gems+=25;save();render();showToast(t('testGems'));settingsModal();return}if(b.dataset.reset){if(confirm(t('resetConfirm'))){stopMusic(false);localStorage.removeItem(SAVE_KEY);state=defaultState();lang=state.lang;save();render();closeModal();showToast(lang==='he'?'המשחק אופס':'Game reset')}}});
 let regenTick=0;function regenerate(){const now=Date.now();if(state.energy<ENERGY_MAX){const elapsed=now-(state.lastEnergyAt||now);const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS;save()}}if(++regenTick%4===0)render();}
 // Reconcile saved energy timestamp, and restore energy earned while the game was closed.
 if(state.energy<ENERGY_MAX){const elapsed=Date.now()-(state.lastEnergyAt||Date.now());const units=Math.floor(elapsed/ENERGY_REGEN_MS);if(units>0){state.energy=Math.min(ENERGY_MAX,state.energy+units);state.lastEnergyAt+=units*ENERGY_REGEN_MS}}
 lang=state.lang||'he';render();save();setInterval(regenerate,15000);
 })();
 </script>
- <script src="./assets/creatures/creature-sprites.js?v=png1"></script>
+ <script src="./assets/creatures/creature-sprites.js?v=png2"></script>
+ <script src="./assets/mergivolve/evolution-ui.js"></script>
  <script src="./assets/creatures/png-gallery.js"></script>
  <script src="generator.js"></script>
  
-<script src="./animation-engine.js"></script>
+<script src="./assets/animation/animation-engine.js"></script>
 <script>
   if (window.MergivolveAnimationEngine) {
     window.MergivolveAnimationEngine.init({
