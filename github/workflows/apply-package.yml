@@ -16,7 +16,9 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply:
+    if: github.ref == 'refs/heads/animation-engine-development'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout this branch
         uses: actions/checkout@v4
