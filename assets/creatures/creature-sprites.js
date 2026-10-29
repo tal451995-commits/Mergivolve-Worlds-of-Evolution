@@ -136,7 +136,7 @@
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['data-level', 'data-type']
+      attributeFilter: ['data-level', 'data-type', 'data-species', 'data-stage', 'data-egg']
     });
   }
 
