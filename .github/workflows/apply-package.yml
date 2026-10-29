@@ -31,11 +31,26 @@ jobs:
           unzip -q mergivolve-update.zip -d /tmp/pkg
           test -d /tmp/pkg/upload
                     rsync -a --exclude='/.github/***' --exclude='/.git/***' /tmp/pkg/upload/ ./
-          if [ -f /tmp/pkg/DELETE_LIST.txt ]; then
-            while read -r f; do
-              case "$f" in ''|/*|*..*|.github*) continue;; esac
-              [ -f "$f" ] && git rm -q "$f" || true
-            done < /tmp/pkg/DELETE_LIST.txt
+                    if [ -f /tmp/pkg/DELETE_LIST.txt ]; then
+            python3 - <<'PY'
+          import subprocess
+          from pathlib import Path
+
+          for raw in Path("/tmp/pkg/DELETE_LIST.txt").read_text(encoding="utf-8").splitlines():
+              f = raw.strip()
+              if not f or "\\" in f or f.startswith("/"):
+                  continue
+              parts = f.split("/")
+              if any(part in ("", ".", "..", ".git", ".github") for part in parts):
+                  continue
+              tracked = subprocess.run(
+                  ["git", "ls-files", "--error-unmatch", "--", f],
+                  stdout=subprocess.DEVNULL,
+                  stderr=subprocess.DEVNULL
+              )
+              if tracked.returncode == 0:
+                  subprocess.run(["git", "rm", "-q", "--", f], check=False)
+          PY
           fi
           rm -f mergivolve-update.zip
 
