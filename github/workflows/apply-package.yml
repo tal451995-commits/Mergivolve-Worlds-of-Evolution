@@ -4,6 +4,8 @@ name: Apply Mergivolve update package
 # It copies the files from the ZIP into that same branch and commits them. It never touches main unless you pushed the ZIP to main.
 on:
   push:
+    branches:
+      - animation-engine-development
     paths:
       - 'mergivolve-update.zip'
 
