@@ -594,7 +594,7 @@ function createImportedForestTree(size) {
 
   if (dimensions.y <= 0.001) return null;
 
-  const targetHeight = size * 1.45;
+  const targetHeight = size * 1.8;
   const scale = targetHeight / dimensions.y;
 
   tree.scale.multiplyScalar(scale);
