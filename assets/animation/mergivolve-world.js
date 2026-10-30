@@ -640,8 +640,14 @@ scene.add(sun);
       start, middle, end
     ]);
 
-    const branch = new THREE.Mesh(
-      new THREE.TubeGeometry(branchCurve, 12, size * 0.023, 8, false),
+        const branch = new THREE.Mesh(
+      createTaperedTreeTube(
+        branchCurve,
+        size * 0.035,
+        size * 0.006,
+        16,
+        8
+      ),
       trunkMaterial
     );
 
