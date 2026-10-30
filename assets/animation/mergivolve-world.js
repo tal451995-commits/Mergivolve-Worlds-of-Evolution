@@ -655,42 +655,43 @@ scene.add(sun);
     tree.add(branch);
   }
 
-  // One continuous-looking broad canopy
-  const canopy = new THREE.Group();
+    // Organic unified canopy
+  const canopyGeometry = new THREE.IcosahedronGeometry(1, 5);
+  const canopyPositions = canopyGeometry.attributes.position;
 
-  const crownParts = [
-    [0, 0, 0, 1.0, 0.72, 0.9],
-    [-0.48, 0.05, 0.12, 0.72, 0.62, 0.72],
-    [0.48, 0.08, -0.08, 0.76, 0.66, 0.74],
-    [0.08, 0.28, 0.48, 0.72, 0.62, 0.72],
-    [-0.12, 0.3, -0.46, 0.78, 0.68, 0.76],
-    [0.05, 0.68, 0.02, 0.7, 0.68, 0.7]
-  ];
+  for (let i = 0; i < canopyPositions.count; i++) {
+    const x = canopyPositions.getX(i);
+    const y = canopyPositions.getY(i);
+    const z = canopyPositions.getZ(i);
 
-  crownParts.forEach((part) => {
-    const leaf = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 20, 16),
-      leafMaterial
+    const variation =
+      1 +
+      Math.sin(x * 8.5 + z * 5.2) * 0.045 +
+      Math.cos(y * 9.2 + x * 4.7) * 0.035 +
+      Math.sin(z * 11.0 - y * 3.8) * 0.025;
+
+    canopyPositions.setXYZ(
+      i,
+      x * variation,
+      y * variation,
+      z * variation
     );
+  }
 
-    leaf.position.set(
-      part[0] * size * 0.55,
-      height * 0.76 + part[1] * size,
-      part[2] * size * 0.55
-    );
+  canopyGeometry.computeVertexNormals();
 
-    leaf.scale.set(
-      part[3] * size * 0.75,
-      part[4] * size * 0.75,
-      part[5] * size * 0.75
-    );
+  const canopy = new THREE.Mesh(canopyGeometry, leafMaterial);
+  canopy.position.set(0, height * 0.76, 0);
+  canopy.scale.set(
+    size * 0.92,
+    size * 0.78,
+    size * 0.88
+  );
 
-    leaf.castShadow = true;
-    leaf.receiveShadow = true;
-    canopy.add(leaf);
-  });
-
+  canopy.castShadow = true;
+  canopy.receiveShadow = true;
   tree.add(canopy);
+  
   tree.userData.forestSize = size;
 
   return tree;
