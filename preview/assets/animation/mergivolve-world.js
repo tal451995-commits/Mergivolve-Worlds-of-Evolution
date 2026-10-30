@@ -673,7 +673,8 @@ forestGLTFLoader.load(
     } while (Math.hypot(x, z) < 7.5);
 
     const size = randomRange(2.9, 5.4);
-    const tree = makeTree(size);
+    const tree = createImportedForestTree(size) || makeTree(size);
+tree.userData.forestSize = size;
 
     tree.position.set(x, 0, z);
     tree.rotation.y = randomRange(0, Math.PI * 2);
