@@ -689,7 +689,7 @@ forestGLTFLoader.load(
   }
 );
 
-  for (let i = 0; i < 36; i++) {
+  for (let i = 0; i < 52; i++) {
     let x = 0;
     let z = 0;
 
@@ -698,7 +698,7 @@ forestGLTFLoader.load(
       z = randomRange(-43, 42);
     } while (Math.hypot(x, z) < 7.5);
 
-    const size = randomRange(2.9, 5.4);
+    const size = randomRange(3.2, 4.8);
     const tree = createImportedForestTree(size) || makeTree(size);
 tree.userData.forestSize = size;
 
