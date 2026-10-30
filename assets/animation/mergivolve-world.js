@@ -54,12 +54,17 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   controls.enableDamping = true;
   controls.dampingFactor = 0.075;
   controls.enablePan = false;
-  controls.minDistance = 6.5;
-  controls.maxDistance = 18;
-  controls.minPolarAngle = 0.28;
-  controls.maxPolarAngle = Math.PI / 2.05;
-  controls.target.set(0, 1.1, 0);
-  controls.update();
+controls.enableZoom = true;
+
+controls.minDistance = 6.5;
+controls.maxDistance = 36;
+controls.zoomSpeed = 1.15;
+
+controls.minPolarAngle = 0.28;
+controls.maxPolarAngle = Math.PI / 2.05;
+
+controls.target.set(0, 1.1, 0);
+controls.update();
 
   scene.add(new THREE.HemisphereLight(0xf4fcff, 0x60905a, 1.7));
    const sun = new THREE.DirectionalLight(0xfff3d5, 2.1);
