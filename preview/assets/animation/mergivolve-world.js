@@ -603,16 +603,42 @@ function createImportedForestTree(size) {
 
   tree.position.y -= finalBounds.min.y;
 
-  tree.traverse((object) => {
-    if (!object.isMesh) return;
+ tree.traverse((object) => {
+  if (!object.isMesh) return;
 
-    object.castShadow = true;
-    object.receiveShadow = true;
+  object.castShadow = true;
+  object.receiveShadow = true;
 
-    if (object.material) {
-      object.material.side = THREE.FrontSide;
+  const meshName = (object.name || '').toLowerCase();
+
+  const materials = Array.isArray(object.material)
+    ? object.material
+    : [object.material];
+
+  const updatedMaterials = materials.map((sourceMaterial) => {
+    const material = sourceMaterial.clone();
+    const materialName = (material.name || '').toLowerCase();
+    const name = meshName + ' ' + materialName;
+
+    material.side = THREE.DoubleSide;
+    material.roughness = 0.96;
+    material.metalness = 0;
+
+    if (/bark|trunk|wood|stem/.test(name)) {
+      material.color.multiply(new THREE.Color(0xb18b68));
+    } else if (/leaf|leaves|foliage|crown/.test(name)) {
+      material.color.multiply(new THREE.Color(0x78966b));
+    } else {
+      material.color.multiply(new THREE.Color(0xb8b8b8));
     }
+
+    return material;
   });
+
+  object.material = Array.isArray(object.material)
+    ? updatedMaterials
+    : updatedMaterials[0];
+}); 
 
   tree.userData.isImportedForestTree = true;
 
