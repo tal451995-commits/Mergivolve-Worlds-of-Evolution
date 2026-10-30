@@ -318,39 +318,91 @@ scene.add(sun);
     const height = size * (1.25 + Math.random() * 0.18);
 
     if (typeof window.Tree !== 'function') {
+  const trunkHeight = height * 0.74;
+
+  // Main trunk
   const trunk = new THREE.Mesh(
     new THREE.CylinderGeometry(
-      size * 0.09,
+      size * 0.085,
       size * 0.14,
-      height * 0.58,
-      8
+      trunkHeight,
+      9
     ),
     trunkMaterial
   );
 
-  trunk.position.y = height * 0.29;
+  trunk.position.y = trunkHeight * 0.5;
   trunk.castShadow = true;
+  trunk.receiveShadow = true;
   tree.add(trunk);
 
-  const leafColors = [0x39743b, 0x477f40, 0x568d49];
+  // Natural branches
+  for (let i = 0; i < 6; i++) {
+    const angle = i * 2.399;
+    const branchLength = size * (0.32 + (i % 2) * 0.08);
 
-  for (let i = 0; i < 3; i++) {
-    const crown = new THREE.Mesh(
-      new THREE.ConeGeometry(
-        size * (0.48 - i * 0.07),
-        height * 0.42,
-        8
+    const branch = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        size * 0.018,
+        size * 0.055,
+        branchLength,
+        7
       ),
-      new THREE.MeshStandardMaterial({
-        color: leafColors[i],
-        roughness: 0.92
-      })
+      trunkLightMaterial
     );
 
-    crown.position.y = height * (0.52 + i * 0.17);
-    crown.castShadow = true;
-    tree.add(crown);
+    const offset = branchLength * 0.34;
+
+    branch.position.set(
+      Math.cos(angle) * offset,
+      height * (0.42 + (i % 3) * 0.075),
+      Math.sin(angle) * offset
+    );
+
+    branch.rotation.z = -Math.cos(angle) * 0.78;
+    branch.rotation.x = Math.sin(angle) * 0.78;
+    branch.castShadow = true;
+
+    tree.add(branch);
   }
+
+  // Rounded broadleaf crown
+  const crownGeometry = new THREE.IcosahedronGeometry(1, 2);
+
+  const crownLayout = [
+    [0, .77, 0, .38, .29, .38],
+    [-.31, .70, .05, .29, .24, .30],
+    [.30, .71, .03, .30, .25, .30],
+    [0, .68, -.31, .30, .25, .29],
+    [-.13, .68, .31, .31, .25, .30],
+    [-.25, .88, -.17, .25, .21, .25],
+    [.24, .87, -.17, .27, .22, .25],
+    [.20, .86, .20, .26, .22, .26],
+    [-.20, .86, .20, .25, .22, .26]
+  ];
+
+  crownLayout.forEach((part, index) => {
+    const crown = new THREE.Mesh(
+      crownGeometry,
+      foliageMaterials[index % foliageMaterials.length]
+    );
+
+    crown.position.set(
+      part[0] * size,
+      part[1] * height,
+      part[2] * size
+    );
+
+    crown.scale.set(
+      part[3] * size,
+      part[4] * size,
+      part[5] * size
+    );
+
+    crown.castShadow = true;
+    crown.receiveShadow = true;
+    tree.add(crown);
+  });
 
   return tree;
 }
