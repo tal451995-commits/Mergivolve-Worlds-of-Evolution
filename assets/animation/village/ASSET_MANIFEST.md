@@ -1,0 +1,35 @@
+# Village Asset Manifest
+
+## Nature
+- Trees
+- Bushes
+- Flowers
+- Grass
+- Rocks
+- Water
+- Mushrooms
+- Logs
+- Moss
+- Vines
+- Leaves
+- Seeds
+- Soil
+- Pebbles
+- Sand
+- Cliffs
+- Roots
+- Branches
+- Stumps
+- Pollen
+- Nature Particles
+- Coral
+- Seaweed
+- Aquatic Plants
+- Ice and Snow
+- Natural Arches
+- Crystals
+- Natural Debris
+- Natural Pools
+- Waterfalls
+- Lakes
+- Rivers
