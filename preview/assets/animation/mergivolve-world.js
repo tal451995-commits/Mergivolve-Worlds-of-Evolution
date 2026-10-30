@@ -615,7 +615,9 @@ scene.add(sun);
     ),
     trunkMaterial
   );
-
+  trunk.castShadow = true;
+  trunk.receiveShadow = true;
+  tree.add(trunk);
   // Organic branches
   for (let i = 0; i < 7; i++) {
     const angle = i * 2.399;
