@@ -549,7 +549,108 @@ scene.add(sun);
 // ============================================
 // MERGIVOLVE - 3D FOREST ASSET SYSTEM
 // ============================================
+function createNaturalForestTree(size) {
+  const tree = new THREE.Group();
 
+  const height = size * 1.8;
+  const trunkMaterial = new THREE.MeshStandardMaterial({
+    color: 0x70513a,
+    roughness: 1
+  });
+
+  const leafMaterial = new THREE.MeshStandardMaterial({
+    color: 0x426b3d,
+    roughness: 0.96
+  });
+
+  // Curved, tapered trunk
+  const trunkCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0.08, height * 0.3, 0.02),
+    new THREE.Vector3(-0.04, height * 0.65, 0.04),
+    new THREE.Vector3(0, height, 0)
+  ]);
+
+  const trunk = new THREE.Mesh(
+    new THREE.TubeGeometry(trunkCurve, 24, size * 0.075, 12, false),
+    trunkMaterial
+  );
+
+  trunk.castShadow = true;
+  trunk.receiveShadow = true;
+  tree.add(trunk);
+
+  // Organic branches
+  for (let i = 0; i < 7; i++) {
+    const angle = i * 2.399;
+    const y = height * (0.42 + (i % 4) * 0.105);
+    const length = size * (0.38 + (i % 3) * 0.08);
+
+    const start = new THREE.Vector3(0, y, 0);
+    const middle = new THREE.Vector3(
+      Math.cos(angle) * length * 0.48,
+      y + length * 0.22,
+      Math.sin(angle) * length * 0.48
+    );
+    const end = new THREE.Vector3(
+      Math.cos(angle) * length,
+      y + length * 0.48,
+      Math.sin(angle) * length
+    );
+
+    const branchCurve = new THREE.CatmullRomCurve3([
+      start, middle, end
+    ]);
+
+    const branch = new THREE.Mesh(
+      new THREE.TubeGeometry(branchCurve, 12, size * 0.023, 8, false),
+      trunkMaterial
+    );
+
+    branch.castShadow = true;
+    tree.add(branch);
+  }
+
+  // One continuous-looking broad canopy
+  const canopy = new THREE.Group();
+
+  const crownParts = [
+    [0, 0, 0, 1.0, 0.72, 0.9],
+    [-0.48, 0.05, 0.12, 0.72, 0.62, 0.72],
+    [0.48, 0.08, -0.08, 0.76, 0.66, 0.74],
+    [0.08, 0.28, 0.48, 0.72, 0.62, 0.72],
+    [-0.12, 0.3, -0.46, 0.78, 0.68, 0.76],
+    [0.05, 0.68, 0.02, 0.7, 0.68, 0.7]
+  ];
+
+  crownParts.forEach((part) => {
+    const leaf = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 20, 16),
+      leafMaterial
+    );
+
+    leaf.position.set(
+      part[0] * size * 0.55,
+      height * 0.76 + part[1] * size,
+      part[2] * size * 0.55
+    );
+
+    leaf.scale.set(
+      part[3] * size * 0.75,
+      part[4] * size * 0.75,
+      part[5] * size * 0.75
+    );
+
+    leaf.castShadow = true;
+    leaf.receiveShadow = true;
+    canopy.add(leaf);
+  });
+
+  tree.add(canopy);
+  tree.userData.forestSize = size;
+
+  return tree;
+}
 const forestGLTFLoader = new GLTFLoader();
 
 let importedForestTree = null;
