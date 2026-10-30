@@ -8,7 +8,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 (() => {
   'use strict';
 
@@ -651,121 +651,7 @@ function createNaturalForestTree(size) {
 
   return tree;
 }
-const forestGLTFLoader = new GLTFLoader();
 
-let importedForestTree = null;
-
-function getBestTreeModel(gltfScene) {
-  const candidates = [];
-
-  gltfScene.children.forEach((child) => {
-    const box = new THREE.Box3().setFromObject(child);
-    const dimensions = new THREE.Vector3();
-
-    box.getSize(dimensions);
-
-    if (
-      dimensions.y > 0.5 &&
-      dimensions.y > dimensions.x * 0.65 &&
-      dimensions.y > dimensions.z * 0.55
-    ) {
-      candidates.push({
-        object: child,
-        height: dimensions.y
-      });
-    }
-  });
-
-  candidates.sort((a, b) => b.height - a.height);
-
-  return candidates.length
-    ? candidates[0].object
-    : gltfScene;
-}
-
-function createImportedForestTree(size) {
-  if (!importedForestTree) return null;
-
-  const tree = importedForestTree.clone(true);
-
-  const bounds = new THREE.Box3().setFromObject(tree);
-  const dimensions = new THREE.Vector3();
-
-  bounds.getSize(dimensions);
-
-  if (dimensions.y <= 0.001) return null;
-
-  const targetHeight = size * 1.8;
-  const scale = targetHeight / dimensions.y;
-
-  tree.scale.multiplyScalar(scale);
-
-  const finalBounds = new THREE.Box3().setFromObject(tree);
-
-  tree.position.y -= finalBounds.min.y;
-
- tree.traverse((object) => {
-  if (!object.isMesh) return;
-
-  object.castShadow = true;
-  object.receiveShadow = true;
-
-  const meshName = (object.name || '').toLowerCase();
-
-  const materials = Array.isArray(object.material)
-    ? object.material
-    : [object.material];
-
-  const updatedMaterials = materials.map((sourceMaterial) => {
-    const material = sourceMaterial.clone();
-    const materialName = (material.name || '').toLowerCase();
-    const name = meshName + ' ' + materialName;
-
-    material.side = THREE.DoubleSide;
-    material.roughness = 0.96;
-    material.metalness = 0;
-
-    if (/bark|trunk|wood|stem/.test(name)) {
-      material.color.multiply(new THREE.Color(0xb18b68));
-    } else if (/leaf|leaves|foliage|crown/.test(name)) {
-      material.color.multiply(new THREE.Color(0x78966b));
-    } else {
-      material.color.multiply(new THREE.Color(0xb8b8b8));
-    }
-
-    return material;
-  });
-
-  object.material = Array.isArray(object.material)
-    ? updatedMaterials
-    : updatedMaterials[0];
-}); 
-
-  tree.userData.isImportedForestTree = true;
-
-  return tree;
-}
-
-function replaceForestTreesWithImportedModel() {
-  if (!importedForestTree) return;
-
-  trees.forEach((oldTree, index) => {
-    const size = oldTree.userData.forestSize || 3.5;
-
-    const newTree = createImportedForestTree(size);
-
-    if (!newTree) return;
-
-    newTree.position.x = oldTree.position.x;
-    newTree.position.z = oldTree.position.z;
-    newTree.rotation.y = oldTree.rotation.y;
-
-    scene.remove(oldTree);
-    scene.add(newTree);
-
-    trees[index] = newTree;
-  });
-}
 
 
 
