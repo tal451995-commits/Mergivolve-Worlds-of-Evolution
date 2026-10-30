@@ -549,7 +549,43 @@ scene.add(sun);
 // ============================================
 // MERGIVOLVE - 3D FOREST ASSET SYSTEM
 // ============================================
-function createNaturalForestTree(size) {
+  function createTaperedTreeTube(curve, startRadius, endRadius, segments = 28, radialSegments = 12) {
+  const frames = curve.computeFrenetFrames(segments, false);
+  const positions = [];
+  const indices = [];
+
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const center = curve.getPointAt(t);
+    const radius = THREE.MathUtils.lerp(startRadius, endRadius, t);
+
+    for (let j = 0; j <= radialSegments; j++) {
+      const angle = (j / radialSegments) * Math.PI * 2;
+      const normal = frames.normals[i].clone().multiplyScalar(Math.cos(angle));
+      const binormal = frames.binormals[i].clone().multiplyScalar(Math.sin(angle));
+      const vertex = center.clone()
+        .addScaledVector(normal, radius)
+        .addScaledVector(binormal, radius);
+
+      positions.push(vertex.x, vertex.y, vertex.z);
+    }
+  }
+
+  for (let i = 0; i < segments; i++) {
+    for (let j = 0; j < radialSegments; j++) {
+      const a = i * (radialSegments + 1) + j;
+      const b = a + radialSegments + 1;
+      indices.push(a, b, a + 1, b, b + 1, a + 1);
+    }
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+  }
+  function createNaturalForestTree(size) {
   const tree = new THREE.Group();
 
   const height = size * 1.8;
