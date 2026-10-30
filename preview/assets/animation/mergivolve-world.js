@@ -715,29 +715,37 @@ tree.traverse((object) => {
   }
 
 
-  for (let i = 0; i < 25; i++) {
-    const rock = new THREE.Mesh(
-      new THREE.DodecahedronGeometry(randomRange(0.18, 0.42), 0),
-      rockMat
-    );
+ for (let i = 0; i < 6; i++) {
+  const rock = new THREE.Mesh(
+    new THREE.DodecahedronGeometry(randomRange(0.22, 0.38), 1),
+    rockMat
+  );
 
-    let x = randomRange(-42, 42);
-    let z = randomRange(-40, 40);
+  const anchor = trees[Math.floor(Math.random() * trees.length)];
 
-    if (Math.hypot(x, z) < 5.5) {
-      x += x < 0 ? -9 : 9;
-    }
+  const angle = randomRange(0, Math.PI * 2);
+  const distance = randomRange(1.1, 2.2);
 
-    rock.position.set(x, -0.01, z);
-    rock.scale.set(1.25, 0.65, 0.9);
-    rock.rotation.set(
-      randomRange(0, 0.5),
-      randomRange(0, 6),
-      randomRange(0, 0.4)
-    );
+  rock.position.set(
+    anchor.position.x + Math.cos(angle) * distance,
+    -0.12,
+    anchor.position.z + Math.sin(angle) * distance
+  );
 
-    worldDecor.add(rock);
-  }
+  rock.scale.set(
+    randomRange(0.8, 1.2),
+    randomRange(0.55, 0.8),
+    randomRange(0.8, 1.15)
+  );
+
+  rock.rotation.set(
+    randomRange(-0.15, 0.15),
+    randomRange(0, Math.PI * 2),
+    randomRange(-0.15, 0.15)
+  );
+
+  worldDecor.add(rock);
+} 
 
   const stemMat = new THREE.MeshToonMaterial({ color: 0x2e9450 });
 
