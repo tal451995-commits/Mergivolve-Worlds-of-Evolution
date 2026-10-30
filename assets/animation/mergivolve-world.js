@@ -8,7 +8,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
-
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 (() => {
   'use strict';
 
@@ -546,7 +546,122 @@ scene.add(sun);
 
     return tree;
   }
+// ============================================
+// MERGIVOLVE - 3D FOREST ASSET SYSTEM
+// ============================================
 
+const forestGLTFLoader = new GLTFLoader();
+
+let importedForestTree = null;
+
+function getBestTreeModel(gltfScene) {
+  const candidates = [];
+
+  gltfScene.children.forEach((child) => {
+    const box = new THREE.Box3().setFromObject(child);
+    const dimensions = new THREE.Vector3();
+
+    box.getSize(dimensions);
+
+    if (
+      dimensions.y > 0.5 &&
+      dimensions.y > dimensions.x * 0.65 &&
+      dimensions.y > dimensions.z * 0.55
+    ) {
+      candidates.push({
+        object: child,
+        height: dimensions.y
+      });
+    }
+  });
+
+  candidates.sort((a, b) => b.height - a.height);
+
+  return candidates.length
+    ? candidates[0].object
+    : gltfScene;
+}
+
+function createImportedForestTree(size) {
+  if (!importedForestTree) return null;
+
+  const tree = importedForestTree.clone(true);
+
+  const bounds = new THREE.Box3().setFromObject(tree);
+  const dimensions = new THREE.Vector3();
+
+  bounds.getSize(dimensions);
+
+  if (dimensions.y <= 0.001) return null;
+
+  const targetHeight = size * 1.45;
+  const scale = targetHeight / dimensions.y;
+
+  tree.scale.multiplyScalar(scale);
+
+  const finalBounds = new THREE.Box3().setFromObject(tree);
+
+  tree.position.y -= finalBounds.min.y;
+
+  tree.traverse((object) => {
+    if (!object.isMesh) return;
+
+    object.castShadow = true;
+    object.receiveShadow = true;
+
+    if (object.material) {
+      object.material.side = THREE.FrontSide;
+    }
+  });
+
+  tree.userData.isImportedForestTree = true;
+
+  return tree;
+}
+
+function replaceForestTreesWithImportedModel() {
+  if (!importedForestTree) return;
+
+  trees.forEach((oldTree, index) => {
+    const size = oldTree.userData.forestSize || 3.5;
+
+    const newTree = createImportedForestTree(size);
+
+    if (!newTree) return;
+
+    newTree.position.x = oldTree.position.x;
+    newTree.position.z = oldTree.position.z;
+    newTree.rotation.y = oldTree.rotation.y;
+
+    scene.remove(oldTree);
+    scene.add(newTree);
+
+    trees[index] = newTree;
+  });
+}
+
+forestGLTFLoader.load(
+  './assets/animation/village/nature/trees/model.glb',
+
+  (gltf) => {
+    importedForestTree = getBestTreeModel(gltf.scene);
+
+    replaceForestTreesWithImportedModel();
+
+    console.info(
+      'MERGIVOLVE: Imported 3D forest tree loaded successfully.'
+    );
+  },
+
+  undefined,
+
+  (error) => {
+    console.warn(
+      'MERGIVOLVE: Forest GLB could not load. Using procedural trees.',
+      error
+    );
+  }
+);
 
   for (let i = 0; i < 36; i++) {
     let x = 0;
