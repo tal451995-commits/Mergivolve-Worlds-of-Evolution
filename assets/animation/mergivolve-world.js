@@ -767,28 +767,7 @@ function replaceForestTreesWithImportedModel() {
   });
 }
 
-forestGLTFLoader.load(
-  './assets/animation/village/nature/trees/model.glb',
 
-  (gltf) => {
-    importedForestTree = getBestTreeModel(gltf.scene);
-
-    replaceForestTreesWithImportedModel();
-
-    console.info(
-      'MERGIVOLVE: Imported 3D forest tree loaded successfully.'
-    );
-  },
-
-  undefined,
-
-  (error) => {
-    console.warn(
-      'MERGIVOLVE: Forest GLB could not load. Using procedural trees.',
-      error
-    );
-  }
-);
 
   for (let i = 0; i < 68; i++) {
     let x = 0;
@@ -799,7 +778,7 @@ forestGLTFLoader.load(
       z = randomRange(-43, 42);
     } while (Math.hypot(x, z) < 7.5);
 
-    const size = randomRange(4.2, 4.8);
+    const size = randomRange(4.6, 4.9);
     const tree = createNaturalForestTree(size);
 tree.userData.forestSize = size;
 
