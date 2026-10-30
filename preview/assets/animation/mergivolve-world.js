@@ -599,7 +599,7 @@ scene.add(sun);
     roughness: 0.96
   });
 
-  // Curved, tapered trunk
+    // Naturally curved trunk with a wide base and narrow crown
   const trunkCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, 0, 0),
     new THREE.Vector3(0.08, height * 0.3, 0.02),
@@ -608,13 +608,13 @@ scene.add(sun);
   ]);
 
   const trunk = new THREE.Mesh(
-    new THREE.TubeGeometry(trunkCurve, 24, size * 0.075, 12, false),
+    createTaperedTreeTube(
+      trunkCurve,
+      size * 0.105,
+      size * 0.012
+    ),
     trunkMaterial
   );
-
-  trunk.castShadow = true;
-  trunk.receiveShadow = true;
-  tree.add(trunk);
 
   // Organic branches
   for (let i = 0; i < 7; i++) {
