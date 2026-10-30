@@ -33,3 +33,13 @@
 - Waterfalls
 - Lakes
 - Rivers
+## Village Assets
+- Buildings
+- Interiors
+- Props
+- Paths
+- Lighting
+- Environment
+- Characters
+- Animations
+- Audio
