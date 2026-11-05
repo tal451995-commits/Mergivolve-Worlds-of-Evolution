@@ -784,7 +784,37 @@ function shopItemAction(id){const item=SHOP_ITEMS.find(it=>it.id===id);if(!item)
  shopModal(activeShopTab)}
 
 function missionsModal(){const defs=[{id:'merge',goal:3,val:state.merges,reward:60,title:t('missionMerge')},{id:'summon',goal:5,val:state.summons,reward:45,title:t('missionSummon')},{id:'gen',goal:1,val:state.genUpgrades,reward:100,title:t('missionGen')}];const html=defs.map(m=>{const done=m.val>=m.goal,claimed=!!state.claimed[m.id];return `<div class="mission-row"><div class="shop-art">${m.id==='merge'?'🔗':m.id==='summon'?'🌱':'🌳'}</div><div class="shop-info"><div class="shop-title">${m.title}</div><div class="shop-desc">${t('progress')}: ${Math.min(m.val,m.goal)} / ${m.goal}</div><div class="mission-progress"><span style="width:${Math.min(100,m.val/m.goal*100)}%"></span></div><div class="mission-reward">${t('rewards')}: 🪙 ${m.reward}</div></div><button class="buy-btn" data-claim="${m.id}" ${(!done||claimed)?'disabled':''}>${claimed?t('claimed'):t('claim')}</button></div>`}).join('');openModal(t('missionsTitle'),html+(defs.every(m=>m.val>=m.goal&&state.claimed[m.id])?`<div class="modal-note">${t('noMissions')}</div>`:''))}
-function collectionModal(){const stage=companionStage();const names=t('stageNames');openModal(t('collectionTitle'),`<div style="display:flex;align-items:center;gap:12px;margin:5px 0 13px"><div class="shop-art" style="width:86px;height:86px">${svgArt('wild',7+stage,true)}</div><div><div class="shop-title" style="font-size:16px">${names[stage]}</div><div class="shop-desc">${t('stageLabel')} ${stage+1} / 4 · ${fmt(state.xp)} ${t('xpWord')}</div><div class="mission-progress" style="width:190px"><span style="width:${Math.min(100,state.xp/52*100)}%"></span></div></div></div><div class="modal-desc">${t('collectionDesc')}</div>${t('worldUnlock')}<div class="modal-note">${t('stageDescs')[stage]}</div>`)}
+function collectionModal(){
+  const catalog = Object.values(window.MERGIVOLVE_SPECIES || {});
+  const images = window.MERGIVOLVE_SPECIES_IMAGES || {};
+  const discovered = new Set(
+    state.board.filter(Boolean).map(item => item.speciesId).filter(Boolean)
+  );
+
+  const cards = catalog.map(species => {
+    const unlocked = discovered.has(species.id);
+    const art = images[species.id];
+    const portrait = art && art.portrait
+      ? `<img src="./${art.portrait}" alt="" style="width:100%;height:100%;object-fit:contain">`
+      : '🥚';
+
+    return `
+      <div style="min-width:0;padding:8px 5px;text-align:center;background:linear-gradient(160deg,#fff8e5,#ead7ad);border:2px solid #c99b61;border-radius:15px;box-shadow:0 3px 0 #a87949">
+        <div style="height:76px;display:grid;place-items:center;${unlocked?'':'filter:grayscale(1);opacity:.48'}">${portrait}</div>
+        <div style="font-size:11px;font-weight:900;color:#633b20;overflow-wrap:anywhere">${unlocked?(lang==='he'?species.nameHe:species.nameEn):'???'}</div>
+        <div style="font-size:9px;font-weight:800;color:#89653d;margin-top:4px">${unlocked?'✓ '+(lang==='he'?'התגלה':'Discovered'):'🔒 '+(lang==='he'?'נעול':'Locked')}</div>
+      </div>`;
+  }).join('');
+
+  openModal(
+    lang==='he'?'🐉 קטלוג המפלצות':'🐉 Creature Catalog',
+    `<div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:12px;font-weight:900;color:#70451f">
+      <span>${lang==='he'?'מינים':'Species'}: ${catalog.length}</span>
+      <span>${lang==='he'?'התגלה':'Discovered'}: ${discovered.size}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${cards}</div>`
+  );
+}
 function settingsModal(){openModal(t('settings'),'<div class="shop-title">'+t('language')+'</div><div class="sound-row"><button data-setlang="he" class="'+(lang==='he'?'active':'')+'">עברית · RTL</button><button data-setlang="en" class="'+(lang==='en'?'active':'')+'">English · LTR</button></div><div class="shop-title" style="margin-top:13px">'+t('music')+' / '+t('effects')+'</div><div class="sound-row"><button data-sound="music" class="'+(state.music?'active':'')+'">♫ '+t('music')+': '+(state.music?t('on'):t('off'))+'</button><button data-sound="effects" class="'+(state.effects?'active':'')+'">✦ '+t('effects')+': '+(state.effects?t('on'):t('off'))+'</button></div><div class="shop-title" style="margin:15px 0 9px">'+t('testTools')+'</div><div class="test-actions"><button data-test="energy">⚡ '+t('testEnergy')+'</button><button data-test="coins">🪙 '+t('testCoins')+'</button><button data-test="gems">💎 '+t('testGems')+'</button></div>'+(MergivolveEnv.dev?'<div style="margin-top:11px"><button class="buy-btn" style="background:#2d6a8f" data-import-live="yes">'+(lang==='he'?'ייבוא עותק מהשמירה החיה (קריאה בלבד)':'Import copy of live save (read-only)')+'</button></div>':'')+'<div style="margin-top:11px"><button class="buy-btn" style="background:#985b4d" data-reset="yes">'+t('reset')+'</button></div><div class="modal-note">'+t('settingsNote')+'</div>')}
 function buy(type){if(type==='gen'){if(state.coins<250){showToast(t('notEnough'));return}const slot=firstEmpty();if(slot<0){showToast(t('noSpace'));return}state.coins-=250;state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');shopModal()}else if(type==='energy'){if(state.coins<80){showToast(t('notEnough'));return}state.coins-=80;restoreEnergy(30);playSfx('pop');shopModal()}}
 function claim(id){const defs={merge:{goal:3,val:state.merges,reward:60},summon:{goal:5,val:state.summons,reward:45},gen:{goal:1,val:state.genUpgrades,reward:100}};const d=defs[id];if(!d||d.val<d.goal||state.claimed[id])return;state.claimed[id]=true;state.coins+=d.reward;save();render();playSfx('merge');showToast(t('missionDone')+' +'+d.reward);missionsModal()}
