@@ -1093,6 +1093,52 @@ tree.traverse((object) => {
 
   const initialPosition = new THREE.Vector3(0, 0, 0);
   monsterRoot.position.copy(initialPosition);
+  // Sync collected board creatures from the main game.
+const boardCreatureRoots = [];
+let lastBoardSignature = '';
+
+function syncBoardCreatures() {
+  try {
+    const bridge = window.parent.__MergivolveWorldBridge;
+    if (!bridge || typeof bridge.getSnapshot !== 'function') return;
+
+    const snapshot = bridge.getSnapshot();
+    const creatures = snapshot.board.filter(item =>
+      item && item.type !== 'gen'
+    );
+
+    const signature = creatures.map(item =>
+      `${item.slot}:${item.type}:${item.level}:${item.speciesId || ''}`
+    ).join('|');
+
+    if (signature === lastBoardSignature) return;
+    lastBoardSignature = signature;
+
+    boardCreatureRoots.forEach(root => scene.remove(root));
+    boardCreatureRoots.length = 0;
+
+    creatures.forEach((item, index) => {
+      const root = monsterRoot.clone(true);
+      const angle = (index / Math.max(creatures.length, 1)) * Math.PI * 2;
+      const radius = 4.5 + (index % 3) * 1.1;
+
+      root.scale.setScalar(0.42);
+      root.position.set(
+        Math.cos(angle) * radius,
+        0,
+        Math.sin(angle) * radius
+      );
+
+      scene.add(root);
+      boardCreatureRoots.push(root);
+    });
+  } catch (error) {
+    console.warn('Could not sync board creatures:', error);
+  }
+}
+
+syncBoardCreatures();
+setInterval(syncBoardCreatures, 1500);
 
   const moveSpeed = 6.1;
   const keys = new Set();
