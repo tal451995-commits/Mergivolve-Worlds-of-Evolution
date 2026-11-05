@@ -379,6 +379,27 @@ function mergedBoardItemLegacy(item) {
 
 function loadState(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(!s||!Array.isArray(s.board)||s.board.length!==SIZE)return defaultState();const d=defaultState();return {...d,...s,board:s.board.map(x=>x&&typeof x==='object'?normalizeBoardItem(x):null),ownedItems:Array.isArray(s.ownedItems)?s.ownedItems:[],equipped:{...d.equipped,...(s.equipped||{})},boosters:{...d.boosters,...(s.boosters||{})}}}catch{return defaultState()}}
 function save(){try{state.lastEnergyAt=state.lastEnergyAt||Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
+ // Mergivolve 3D World Bridge — read-only game snapshot
+window.__MergivolveWorldBridge = {
+  getSnapshot() {
+    return {
+      board: state.board.map((item, slot) => {
+        if (!item) return null;
+
+        return {
+          slot,
+          type: item.type || null,
+          level: Number(item.level) || 0,
+          speciesId: item.speciesId || null,
+          familyId: item.familyId || null,
+          evolutionStage: Number(item.evolutionStage) || 0,
+          egg: Boolean(item.egg)
+        };
+      }),
+      species: window.MERGIVOLVE_SPECIES || {}
+    };
+  }
+};
  
 if (!state.starterEggsGranted) {
   const emptySlots = state.board
