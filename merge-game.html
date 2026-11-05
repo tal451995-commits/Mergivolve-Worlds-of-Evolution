@@ -784,37 +784,148 @@ function shopItemAction(id){const item=SHOP_ITEMS.find(it=>it.id===id);if(!item)
  shopModal(activeShopTab)}
 
 function missionsModal(){const defs=[{id:'merge',goal:3,val:state.merges,reward:60,title:t('missionMerge')},{id:'summon',goal:5,val:state.summons,reward:45,title:t('missionSummon')},{id:'gen',goal:1,val:state.genUpgrades,reward:100,title:t('missionGen')}];const html=defs.map(m=>{const done=m.val>=m.goal,claimed=!!state.claimed[m.id];return `<div class="mission-row"><div class="shop-art">${m.id==='merge'?'🔗':m.id==='summon'?'🌱':'🌳'}</div><div class="shop-info"><div class="shop-title">${m.title}</div><div class="shop-desc">${t('progress')}: ${Math.min(m.val,m.goal)} / ${m.goal}</div><div class="mission-progress"><span style="width:${Math.min(100,m.val/m.goal*100)}%"></span></div><div class="mission-reward">${t('rewards')}: 🪙 ${m.reward}</div></div><button class="buy-btn" data-claim="${m.id}" ${(!done||claimed)?'disabled':''}>${claimed?t('claimed'):t('claim')}</button></div>`}).join('');openModal(t('missionsTitle'),html+(defs.every(m=>m.val>=m.goal&&state.claimed[m.id])?`<div class="modal-note">${t('noMissions')}</div>`:''))}
+
 function collectionModal(){
   const catalog = Object.values(window.MERGIVOLVE_SPECIES || {});
   const images = window.MERGIVOLVE_SPECIES_IMAGES || {};
+
   const discovered = new Set(
     state.board.filter(Boolean).map(item => item.speciesId).filter(Boolean)
   );
 
-  const cards = catalog.map(species => {
+  const extraCreatures = [
+    ['extra-amethyst','טיטאן אמטיסט','Amethyst Titan','Amethyst-Titan.png'],
+    ['extra-ash','נבט האפר','Ash Sprout','Ash-Sprout.png'],
+    ['extra-cinder','כלב הלהבה','Cinder Hound','Cinder-Hound.png'],
+    ['extra-cloud','נודד העננים','Cloud Drifter','Cloud-Drifter.png'],
+    ['extra-coral','פיית האלמוגים','Coral Sprite','Coral-Sprite.png'],
+    ['extra-gem','מגדל האבנים','Gem Grower','Gem-Grower.png'],
+    ['extra-geode','שדון הגאודה','Geode Mite','Geode-Mite.png'],
+    ['extra-mossheart','לב הטחב המוזהב','Gilded Mossheart','Gilded Mossheart.png'],
+    ['extra-larva','זחל ורדיאני מוזהב','Gilded Verdian Larva','Gilded verdian larva.png'],
+    ['extra-hydromorph','הידרומורף','Hydromorph','Hydromorph.png'],
+    ['extra-mersprout','נבט הים','Mersprout','Mersprout.png'],
+    ['extra-mist','צייד הערפל','Mist Stalker','Mist-Stalker.png'],
+    ['extra-root','שומר השורשים','Root Guardian','Root-Guardian.png'],
+    ['extra-seed','שומר הזרעים','Seed Keeper','Seed-Keeper.png'],
+    ['extra-tempest','דרקון הסערה','Tempest Wyvern','Tempest-Wyvern.png'],
+    ['extra-treant','מלך העצים','Treant King','Treant-King.png'],
+    ['extra-hatchling','בקיע ורדיאני','Verdian Hatchling','Verdian Hatchling.png'],
+    ['extra-volcanis','וולקניס','Volcanis','Volcanis.png'],
+    ['bonus-art-1','יצירת בונוס 1','Bonus Artwork 1','16a11ea4-ad82-4da3-be7d-af647211a0ac.png'],
+    ['bonus-art-2','יצירת בונוס 2','Bonus Artwork 2','3a7f3ad3-3f06-439f-8d50-f5b9c4b5189b.png'],
+    ['bonus-art-3','יצירת בונוס 3','Bonus Artwork 3','416a5d1e-e8fc-4c4c-954d-75df4c2eb495.png'],
+    ['bonus-art-4','יצירת בונוס 4','Bonus Artwork 4','4b2f46df-8d4e-4d3e-9243-84b12f7d315b.png'],
+    ['bonus-art-5','יצירת בונוס 5','Bonus Artwork 5','ac7c16a0-f014-45ee-a821-1ef7b2083b6a.png']
+  ];
+
+  const cardStyle = `
+    min-width:0;
+    padding:9px 6px;
+    text-align:center;
+    border:1px solid #ffffffa8;
+    border-radius:17px;
+    background:linear-gradient(155deg,#ffffffed,#dff8edeb);
+    box-shadow:0 5px 13px #174d4430,inset 0 1px 0 #fff;
+    overflow:hidden;
+  `;
+
+  const artStyle = `
+    height:108px;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+    border-radius:12px;
+    background:radial-gradient(ellipse,#ffffff 0%,#d9f5ed 72%,#bce8d8 100%);
+    margin-bottom:8px;
+  `;
+
+  const speciesCards = catalog.map(species => {
     const unlocked = discovered.has(species.id);
     const art = images[species.id];
     const portrait = art && art.portrait
-      ? `<img src="./${art.portrait}" alt="" style="width:100%;height:100%;object-fit:contain">`
+      ? `<img src="./${art.portrait}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:contain">`
       : '🥚';
 
     return `
-      <div style="min-width:0;padding:8px 5px;text-align:center;background:linear-gradient(160deg,#fff8e5,#ead7ad);border:2px solid #c99b61;border-radius:15px;box-shadow:0 3px 0 #a87949">
-        <div style="height:76px;display:grid;place-items:center;${unlocked?'':'filter:grayscale(1);opacity:.48'}">${portrait}</div>
-        <div style="font-size:11px;font-weight:900;color:#633b20;overflow-wrap:anywhere">${unlocked?(lang==='he'?species.nameHe:species.nameEn):'???'}</div>
-        <div style="font-size:9px;font-weight:800;color:#89653d;margin-top:4px">${unlocked?'✓ '+(lang==='he'?'התגלה':'Discovered'):'🔒 '+(lang==='he'?'נעול':'Locked')}</div>
+      <div style="${cardStyle}">
+        <div style="${artStyle}${unlocked?'':'filter:grayscale(1);opacity:.55'}">${portrait}</div>
+        <div style="font-size:12px;font-weight:900;color:#174c43;overflow-wrap:anywhere">
+          ${unlocked?(lang==='he'?(species.nameHe||species.nameEn):(species.nameEn||species.nameHe)):'???'}
+        </div>
+        <div style="font-size:10px;font-weight:800;color:${unlocked?'#16845c':'#8b9690'};margin-top:5px">
+          ${unlocked?'✓ '+(lang==='he'?'התגלה':'Discovered'):'🔒 '+(lang==='he'?'טרם התגלה':'Undiscovered')}
+        </div>
       </div>`;
   }).join('');
 
-  openModal(
-    lang==='he'?'🐉 קטלוג המפלצות':'🐉 Creature Catalog',
-    `<div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:12px;font-weight:900;color:#70451f">
-      <span>${lang==='he'?'מינים':'Species'}: ${catalog.length}</span>
-      <span>${lang==='he'?'התגלה':'Discovered'}: ${discovered.size}</span>
+  const bonusCards = extraCreatures.map(creature => `
+    <div style="${cardStyle}">
+      <div style="${artStyle}">
+        <img src="./assets/creatures/${creature[3]}" alt="${creature[2]}" loading="lazy"
+          style="width:100%;height:100%;object-fit:contain">
+      </div>
+      <div style="font-size:12px;font-weight:900;color:#174c43;overflow-wrap:anywhere">
+        ${lang==='he'?creature[1]:creature[2]}
+      </div>
+      <div style="font-size:10px;font-weight:800;color:#b07827;margin-top:5px">
+        ✨ ${lang==='he'?'יצירת בונוס':'Bonus Artwork'}
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">${cards}</div>`
+  `).join('');
+
+  openModal(
+    lang==='he'?'🐉 עולם המפלצות':'🐉 Creature Collection',
+    `
+    <div style="
+      padding:13px;
+      margin-bottom:14px;
+      border-radius:17px;
+      background:linear-gradient(120deg,#d9fff0,#b8eee0);
+      color:#155747;
+      box-shadow:0 4px 12px #174d4420;
+    ">
+      <div style="font-size:18px;font-weight:1000">
+        ${lang==='he'?'אוסף המפלצות שלך':'Your Creature Collection'}
+      </div>
+      <div style="font-size:12px;font-weight:800;margin-top:7px">
+        ${lang==='he'?'מינים':'Species'}: ${catalog.length}
+        &nbsp; • &nbsp;
+        ${lang==='he'?'התגלה':'Discovered'}: ${discovered.size}
+      </div>
+      <div style="font-size:12px;font-weight:800;margin-top:4px">
+        ${lang==='he'?'יצירות בונוס':'Bonus Artwork'}: ${extraCreatures.length}
+      </div>
+    </div>
+
+    <div style="font-size:15px;font-weight:1000;color:#155747;margin:12px 2px">
+      🌿 ${lang==='he'?'המינים בעולם':'World Species'}
+    </div>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:9px;
+    ">${speciesCards}</div>
+
+    <div style="
+      font-size:15px;
+      font-weight:1000;
+      color:#155747;
+      margin:20px 2px 10px;
+    ">
+      ✨ ${lang==='he'?'מפלצות ויצירות נוספות':'Extra Creatures & Artwork'}
+    </div>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:9px;
+    ">${bonusCards}</div>
+    `
   );
 }
+
 function settingsModal(){openModal(t('settings'),'<div class="shop-title">'+t('language')+'</div><div class="sound-row"><button data-setlang="he" class="'+(lang==='he'?'active':'')+'">עברית · RTL</button><button data-setlang="en" class="'+(lang==='en'?'active':'')+'">English · LTR</button></div><div class="shop-title" style="margin-top:13px">'+t('music')+' / '+t('effects')+'</div><div class="sound-row"><button data-sound="music" class="'+(state.music?'active':'')+'">♫ '+t('music')+': '+(state.music?t('on'):t('off'))+'</button><button data-sound="effects" class="'+(state.effects?'active':'')+'">✦ '+t('effects')+': '+(state.effects?t('on'):t('off'))+'</button></div><div class="shop-title" style="margin:15px 0 9px">'+t('testTools')+'</div><div class="test-actions"><button data-test="energy">⚡ '+t('testEnergy')+'</button><button data-test="coins">🪙 '+t('testCoins')+'</button><button data-test="gems">💎 '+t('testGems')+'</button></div>'+(MergivolveEnv.dev?'<div style="margin-top:11px"><button class="buy-btn" style="background:#2d6a8f" data-import-live="yes">'+(lang==='he'?'ייבוא עותק מהשמירה החיה (קריאה בלבד)':'Import copy of live save (read-only)')+'</button></div>':'')+'<div style="margin-top:11px"><button class="buy-btn" style="background:#985b4d" data-reset="yes">'+t('reset')+'</button></div><div class="modal-note">'+t('settingsNote')+'</div>')}
 function buy(type){if(type==='gen'){if(state.coins<250){showToast(t('notEnough'));return}const slot=firstEmpty();if(slot<0){showToast(t('noSpace'));return}state.coins-=250;state.board[slot]={type:'gen',level:1};save();render();playSfx('pop');shopModal()}else if(type==='energy'){if(state.coins<80){showToast(t('notEnough'));return}state.coins-=80;restoreEnergy(30);playSfx('pop');shopModal()}}
 function claim(id){const defs={merge:{goal:3,val:state.merges,reward:60},summon:{goal:5,val:state.summons,reward:45},gen:{goal:1,val:state.genUpgrades,reward:100}};const d=defs[id];if(!d||d.val<d.goal||state.claimed[id])return;state.claimed[id]=true;state.coins+=d.reward;save();render();playSfx('merge');showToast(t('missionDone')+' +'+d.reward);missionsModal()}
