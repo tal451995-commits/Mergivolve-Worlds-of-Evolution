@@ -1,1 +1,0 @@
-Mushrooms and fungi

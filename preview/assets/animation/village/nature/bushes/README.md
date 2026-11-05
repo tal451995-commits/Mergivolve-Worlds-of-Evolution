@@ -1,1 +1,0 @@
-Bushes and shrubs

@@ -1,1 +1,0 @@
-Village nature assets

@@ -1,1 +1,0 @@
-Grass and ground vegetation
