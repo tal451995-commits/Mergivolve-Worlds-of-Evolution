@@ -1,0 +1,62 @@
+name: Apply Mergivolve update package
+
+# Runs ONLY when the file mergivolve-update.zip is pushed to a branch.
+# It copies the files from the ZIP into that same branch and commits them. It never touches main unless you pushed the ZIP to main.
+on:
+  push:
+    branches:
+      - animation-engine-development
+    paths:
+      - 'mergivolve-update.zip'
+
+permissions:
+  contents: write
+concurrency:
+  group: apply-package-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  apply:
+    if: github.ref == 'refs/heads/animation-engine-development'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout this branch
+        uses: actions/checkout@v4
+
+      - name: Apply package
+        run: |
+          set -e
+          test -f mergivolve-update.zip
+          rm -rf /tmp/pkg && mkdir /tmp/pkg
+          unzip -q mergivolve-update.zip -d /tmp/pkg
+          test -d /tmp/pkg/upload
+                    rsync -a --exclude='/.github/***' --exclude='/.git/***' /tmp/pkg/upload/ ./
+                    if [ -f /tmp/pkg/DELETE_LIST.txt ]; then
+            python3 - <<'PY'
+          import subprocess
+          from pathlib import Path
+
+          for raw in Path("/tmp/pkg/DELETE_LIST.txt").read_text(encoding="utf-8").splitlines():
+              f = raw.strip()
+              if not f or "\\" in f or f.startswith("/"):
+                  continue
+              parts = f.split("/")
+              if any(part in ("", ".", "..", ".git", ".github") for part in parts):
+                  continue
+              tracked = subprocess.run(
+                  ["git", "ls-files", "--error-unmatch", "--", f],
+                  stdout=subprocess.DEVNULL,
+                  stderr=subprocess.DEVNULL
+              )
+              if tracked.returncode == 0:
+                  subprocess.run(["git", "rm", "-q", "--", f], check=False)
+          PY
+          fi
+          rm -f mergivolve-update.zip
+
+      - name: Commit and push
+        run: |
+          git config user.name "mergivolve-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "Apply Mergivolve update package" && git push; fi

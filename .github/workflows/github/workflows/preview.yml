@@ -1,0 +1,39 @@
+
+name: Mergivolve Development Preview
+
+on:
+  push:
+    branches:
+      - animation-engine-development
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout development branch
+        uses: actions/checkout@v4
+
+      - name: Prepare preview files
+        run: |
+          mkdir -p dist
+          cp ./*.html dist/
+          cp -R public/. dist/
+          cp -R assets dist/
+          cp generator.js dragonsData.js dist/
+          cp animation-engine.js dist/
+          find . -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) -exec cp -t dist {} +
+          cp manifest.json sw.js dist/
+          cp icon-192-1.png icon-512-1.png dist/
+
+      - name: Publish preview without replacing live game
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: preview
+          keep_files: true
