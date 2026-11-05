@@ -618,3 +618,24 @@ body {
     font-size: 8px !important;
   }
 }
+/* NEW FANTASY WORLD BACKGROUND */
+html, body {
+  background: #75d9ed !important;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 15% 15%, #fff9d6 0 3%, transparent 20%),
+    radial-gradient(ellipse at 85% 12%, #fff0b0 0 4%, transparent 22%),
+    radial-gradient(ellipse at 50% 45%, #b8f0d1, transparent 55%),
+    linear-gradient(180deg, #55c8ed 0%, #a5e8e7 35%, #a5df91 68%, #45a96d 100%) !important;
+  background-attachment: fixed !important;
+}
+
+.game-shell {
+  background:
+    radial-gradient(ellipse at 0% 50%, #269c6970, transparent 38%),
+    radial-gradient(ellipse at 100% 50%, #239a7270, transparent 38%),
+    linear-gradient(180deg, #82dcf222, #66be7e33) !important;
+  box-shadow: 0 0 55px #165c5d38 !important;
+}
