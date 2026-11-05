@@ -30,7 +30,7 @@ body {
 }
 
 .game-shell {
-  width: min(100%, 560px) !important;
+  width: min(100%, 1180px) !important;
   min-height: 100dvh !important;
   margin: auto !important;
   padding: 9px 10px calc(12px + env(safe-area-inset-bottom)) !important;
