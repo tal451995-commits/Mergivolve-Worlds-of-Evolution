@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="he" dir="rtl">
+ <link rel="stylesheet" href="./reference-ui.css?v=1">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -785,7 +786,6 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
  <script src="./assets/mergivolve/evolution-ui.js"></script>
  <script src="./assets/creatures/png-gallery.js"></script>
  <script src="generator.js"></script>
- 
 <script src="./assets/animation/animation-engine.js"></script>
 <script>
   if (window.MergivolveAnimationEngine) {
@@ -796,7 +796,6 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
   }
 </script>
 
- 
 <script>
 (() => {
   const openBtn = document.getElementById('world3dBtn');
@@ -831,10 +830,7 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
 
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
-
-    // Stop the 3D renderer while the preview is closed.
     frame.removeAttribute('src');
-
     document.body.style.overflow = previousOverflow;
 
     if (previousFocus && typeof previousFocus.focus === 'function') {
@@ -846,21 +842,15 @@ lang=state.lang||'he';render();save();setInterval(regenerate,15000);
   closeBtn.addEventListener('click', closeWorld3D);
 
   overlay.addEventListener('click', (event) => {
-    if (event.target === overlay) {
-      closeWorld3D();
-    }
+    if (event.target === overlay) closeWorld3D();
   });
 
   document.addEventListener('keydown', (event) => {
-    if (
-      event.key === 'Escape' &&
-      overlay.classList.contains('open')
-    ) {
+    if (event.key === 'Escape' && overlay.classList.contains('open')) {
       closeWorld3D();
     }
   });
 })();
 </script>
-
 </body>
 </html>
