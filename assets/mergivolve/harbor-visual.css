@@ -442,3 +442,49 @@ body {
   mix-blend-mode: screen;
   pointer-events: none;
 }
+/* MERGIVOLVE - NEW HOME SCREEN STRUCTURE */
+.game-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.topbar,
+.resource-row,
+.world-card,
+.goal-strip,
+.boost-status,
+.board-frame,
+.bottom-tools,
+.companion-strip {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.resource-row {
+  grid-template-columns: 1.15fr 1fr 1fr;
+}
+
+.board-frame {
+  width: 100%;
+}
+
+.board {
+  width: 100%;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.bottom-tools {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 370px) {
+  .board {
+    gap: 4px;
+  }
+
+  .game-shell {
+    padding-inline: 8px;
+  }
+}
