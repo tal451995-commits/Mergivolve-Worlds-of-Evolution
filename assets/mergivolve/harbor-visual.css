@@ -442,3 +442,8 @@ body {
   mix-blend-mode: screen;
   pointer-events: none;
 }
+.game-shell {
+  background-image: url('./merge-home-shell.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
