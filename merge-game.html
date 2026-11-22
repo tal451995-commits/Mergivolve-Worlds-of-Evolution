@@ -218,6 +218,7 @@
 </head>
 <body>
 <main class="game-shell" id="gameRoot">
+ <div class="home-header-group">
   <header class="topbar">
     <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 33 C7 31 6 19 9 9 C19 10 24 17 23 24 C26 14 31 10 35 11 C35 24 29 32 20 33Z" fill="#397448" stroke="#285b3a" stroke-width="1.5"/><path d="M10 12 Q19 19 20 32 M33 14 Q26 22 20 32" fill="none" stroke="#d7f18b" stroke-width="1.7" stroke-linecap="round"/><circle cx="20" cy="30" r="3" fill="#f2c65d"/></svg></div>
     <div class="brand-copy"><div class="brand-title">MERGIVOLVE</div><div class="brand-sub" data-i18n="subtitle">WORLDS OF EVOLUTION</div></div>
@@ -226,6 +227,8 @@
  aria-label="Settings" title="Settings">⚙</button><button class="icon-btn" id="soundBtn" aria-label="Sound">♫</button><button class="language-btn" id="languageBtn">EN</button></div>
   </header>
   <section class="resource-row" aria-label="Resources">
+   </div>
+<div class="home-world-group">
     <div class="resource"><div class="resource-top"><span data-i18n="energy">Energy</span><span class="resource-icon">⚡</span></div><div class="resource-value"><span id="energyVal">100</span><span style="font-size:10px;color:#8c9a7e"> / 100</span></div><div class="energy-bar"><div class="energy-fill" id="energyFill"></div></div><div class="resource-note" id="energyNote">Ready to explore</div></div>
     <div class="resource"><div class="resource-top"><span data-i18n="coins">Coins</span><span class="resource-icon">🪙</span></div><div class="resource-value" id="coinsVal">800</div><div class="resource-note" data-i18n="coinsNote">Earn with every merge</div></div>
     <div class="resource"><div class="resource-top"><span data-i18n="crystals">Crystals</span><span class="resource-icon">💎</span></div><div class="resource-value" id="gemsVal">12</div><div class="resource-note" data-i18n="gemsNote">Rare discoveries</div></div>
@@ -236,7 +239,11 @@
   </section>
   <section class="goal-strip"><div class="goal-badge">✨</div><div class="goal-copy"><div class="goal-title" data-i18n="goalTitle">Wake up the forest</div><div class="goal-sub" data-i18n="goalSub">Merge objects to discover new forms</div></div><div class="goal-count"><span id="mergeCount">0</span><span data-i18n="merges"> MERGES</span></div></section>
   <section class="boost-status" id="boostStatus" aria-live="polite"></section>
+ </div>
+<div class="home-board-group">
   <section class="board-frame" aria-label="Merge board"><div class="board" id="board" role="grid" aria-label="7 by 9 merge board"></div><div class="board-footer"><span><i class="hint-dot"></i><span data-i18n="boardTip">Drag or tap matching items</span></span><span><span id="emptyCount">18</span><span data-i18n="freeSpaces">spaces free</span></span></div></section>
+ </div>
+<div class="home-actions-group">
   <section class="bottom-tools" aria-label="Game actions">
     <button class="tool-btn primary" id="summonBtn"><span class="tool-icon">🌱</span><span class="tool-label" data-i18n="summon">Summon</span><span class="tool-sub" data-i18n="summonSub">Use 5 energy</span></button>
     <button class="tool-btn" id="shopBtn"><span class="tool-icon">🧺</span><span class="tool-label" data-i18n="shop">Forest shop</span><span class="tool-sub" data-i18n="shopSub">Upgrade tools</span></button>
@@ -245,6 +252,7 @@
   </section>
   <section class="companion-strip"><div class="companion-avatar" id="companionAvatar"></div><div class="companion-copy"><div class="companion-name" id="companionName">Sprig — Forest Wyrmling</div><div class="companion-desc" id="companionDesc">Every merge helps your companion grow.</div><div class="xp-bar"><span id="xpFill"></span></div></div><div class="companion-stage"><div data-i18n="growth">GROWTH</div><div id="stageText">1 / 4</div></div></section>
   <div class="tiny-footer" data-i18n="footer">A little merge. A whole new world. · Progress saves on this device</div>
+</div>
 </main>
  <div id="world3dOverlay" aria-hidden="true">
   <section
