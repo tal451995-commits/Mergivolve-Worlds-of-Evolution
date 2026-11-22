@@ -1,0 +1,36 @@
+
+/* Mergivolve - Home Screen Component Structure */
+
+.home-header-group,
+.home-world-group,
+.home-board-group,
+.home-actions-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+.home-header-group,
+.home-world-group,
+.home-board-group,
+.home-actions-group {
+  flex-shrink: 0;
+}
+
+.home-header-group {
+  z-index: 5;
+}
+
+.home-world-group {
+  z-index: 4;
+}
+
+.home-board-group {
+  z-index: 3;
+}
+
+.home-actions-group {
+  z-index: 2;
+}
